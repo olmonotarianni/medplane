@@ -1,0 +1,127 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#info-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 350px;
+    max-height: calc(100vh - 40px);
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    z-index: 2;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#info-panel h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#aircraft-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.aircraft-item {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 12px;
+    border-left: 4px solid #007bff;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.aircraft-item:hover {
+    transform: translateX(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.aircraft-item.interesting {
+    border-left-color: #dc3545;
+    background: #fff5f5;
+}
+
+.aircraft-item h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aircraft-item p {
+    margin: 4px 0;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+}
+
+.aircraft-item .highlight {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Custom popup styles */
+.leaflet-popup-content {
+    margin: 10px;
+}
+
+.leaflet-popup-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+}
+
+.leaflet-popup-content p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.leaflet-popup-content .highlight {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Scrollbar styles */
+#info-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+#info-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#info-panel::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+#info-panel::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

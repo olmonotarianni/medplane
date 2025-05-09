@@ -1,0 +1,259 @@
+// Initialize the map
+const map = L.map('map').setView([37.2, 11.2], 7);
+
+// Add OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+// Store aircraft markers and tracks
+const aircraftMarkers = new Map();
+const aircraftTracks = new Map();
+
+// Store monitoring point circles
+let monitoringPointCircles = [];
+
+// Aircraft renderer class for drawing detailed aircraft
+class AircraftRenderer {
+    constructor() {
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.size = 24; // Default size
+        this.canvas.width = this.size * 2;
+        this.canvas.height = this.size * 2;
+    }
+
+    /**
+     * Draw a simplified aircraft silhouette from top view
+     * @param {boolean} isLoitering - Whether the aircraft is flagged as loitering
+     * @param {number} heading - Aircraft heading in degrees
+     * @returns {HTMLCanvasElement} Canvas with the aircraft drawing
+     */
+    drawAircraft(isLoitering, heading = 0) {
+        const ctx = this.ctx;
+        const size = this.size;
+        const centerX = this.canvas.width / 2;
+        const centerY = this.canvas.height / 2;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Save context for rotation
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate((heading - 90) * Math.PI / 180); // 0 degrees = North
+
+        // Set color based on loitering status
+        const color = isLoitering ? '#dc3545' : '#007bff';
+        ctx.fillStyle = color;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.lineWidth = 1;
+
+        // Fuselage: long, thin rectangle, centered
+        const fuselageLength = size * 1.1;
+        const fuselageWidth = size * 0.22;
+        ctx.beginPath();
+        ctx.rect(-fuselageLength/2, -fuselageWidth/2, fuselageLength, fuselageWidth);
+        ctx.fill();
+        ctx.stroke();
+
+        // Wings: much wider and thicker, centered on fuselage, rotated 90 degrees
+        const wingSpan = size * 2.0;
+        const wingWidth = size * 0.35;
+        ctx.save();
+        ctx.rotate(Math.PI / 2); // Rotate 90 degrees
+        ctx.beginPath();
+        ctx.rect(-wingSpan/2, -wingWidth/2, wingSpan, wingWidth);
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Tail: larger triangle at rear end of fuselage
+        const tailBase = size * 0.6;
+        const tailHeight = size * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(-fuselageLength/2, 0); // rear center of fuselage
+        ctx.lineTo(-fuselageLength/2 - tailHeight, -tailBase/2);
+        ctx.lineTo(-fuselageLength/2 - tailHeight, tailBase/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Restore context
+        ctx.restore();
+
+        return this.canvas;
+    }
+
+    /**
+     * Create a Leaflet icon using the aircraft drawing
+     * @param {boolean} isLoitering - Whether the aircraft is loitering
+     * @param {number} heading - Aircraft heading in degrees
+     * @returns {L.Icon} Leaflet icon with the aircraft drawing
+     */
+    createIcon(isLoitering, heading = 0) {
+        const canvas = this.drawAircraft(isLoitering, heading);
+        const dataUrl = canvas.toDataURL();
+
+        // Force a unique icon className to avoid Leaflet caching issues
+        return L.icon({
+            iconUrl: dataUrl,
+            iconSize: [this.size * 2, this.size * 2],
+            iconAnchor: [this.size, this.size],
+            popupAnchor: [0, -this.size],
+            className: `aircraft-icon-${Math.random().toString(36).substr(2, 9)}`
+        });
+    }
+}
+
+// Initialize the aircraft renderer
+const aircraftRenderer = new AircraftRenderer();
+
+// Custom aircraft icon (legacy - keeping for fallback)
+const createAircraftIcon = (isInteresting) => {
+    return L.divIcon({
+        className: `aircraft-marker ${isInteresting ? 'interesting' : ''}`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8]
+    });
+};
+
+// Update aircraft positions and tracks
+function updateAircraft(data) {
+    const { aircraft, monitoringPoints } = data;
+
+    // Remove old monitoring point circles
+    monitoringPointCircles.forEach(circle => circle.remove());
+    monitoringPointCircles = [];
+
+    // Update monitoring points
+    monitoringPoints.forEach(point => {
+        const circle = L.circle([point.position.latitude, point.position.longitude], {
+            radius: point.radiusKm * 1000,
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.2
+        }).addTo(map);
+        monitoringPointCircles.push(circle);
+    });
+
+    // Update aircraft
+    aircraft.forEach(ac => {
+        const position = [ac.position.latitude, ac.position.longitude];
+        // Debug: log marker positions
+        console.log('Drawing marker for', ac.icao, 'at', position, ac.position);
+        const heading = ac.heading || 0;
+
+        // Update or create marker
+        if (aircraftMarkers.has(ac.icao)) {
+            // Remove the old marker from the map
+            const oldMarker = aircraftMarkers.get(ac.icao);
+            oldMarker.remove();
+            aircraftMarkers.delete(ac.icao);
+        }
+        // Create new aircraft icon
+        const icon = aircraftRenderer.createIcon(ac.is_loitering, heading);
+        const marker = L.marker(position, {
+            icon: icon
+        }).addTo(map);
+        // Set initial opacity based on monitoring status
+        const markerElement = marker.getElement();
+        if (markerElement) {
+            markerElement.style.opacity = ac.is_monitored ? '1' : '0.3';
+        }
+        // Add popup with more detailed information
+        marker.bindPopup(`
+            <h3>${ac.callsign || 'Unknown'} (${ac.icao})</h3>
+            <p>Position: ${ac.position.latitude.toFixed(4)}, ${ac.position.longitude.toFixed(4)}</p>
+            <p>Altitude: ${ac.altitude}ft</p>
+            <p>Speed: ${ac.speed}kts</p>
+            <p>Heading: ${ac.heading}°</p>
+            <p>Vertical Rate: ${ac.verticalRate}ft/min</p>
+            <p>Last Update: ${new Date(ac.lastUpdate).toLocaleTimeString()}</p>
+            ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
+            ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : `<p class="unmonitored">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
+        `);
+        aircraftMarkers.set(ac.icao, marker);
+
+        // Update track
+        if (ac.track && ac.track.length > 1) {
+            const trackPoints = ac.track.map(pt => [pt.latitude, pt.longitude]);
+            if (aircraftTracks.has(ac.icao)) {
+                const track = aircraftTracks.get(ac.icao);
+                track.setLatLngs(trackPoints);
+                track.setStyle({
+                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : '#999'),
+                    weight: 2,
+                    opacity: ac.is_monitored ? 0.7 : 0.3
+                });
+            } else {
+                const track = L.polyline(trackPoints, {
+                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : '#999'),
+                    weight: 2,
+                    opacity: ac.is_monitored ? 0.7 : 0.3
+                }).addTo(map);
+                aircraftTracks.set(ac.icao, track);
+            }
+        }
+    });
+
+    // Remove old markers and tracks
+    for (const [icao, marker] of aircraftMarkers) {
+        if (!aircraft.find(ac => ac.icao === icao)) {
+            marker.remove();
+            aircraftMarkers.delete(icao);
+            if (aircraftTracks.has(icao)) {
+                aircraftTracks.get(icao).remove();
+                aircraftTracks.delete(icao);
+            }
+        }
+    }
+
+    // Update aircraft list with all aircraft
+    updateAircraftList(aircraft);
+}
+
+// Update the aircraft information panel
+function updateAircraftList(aircraft) {
+    const container = document.getElementById('aircraft-list');
+    container.innerHTML = '';
+
+    if (aircraft.length === 0) {
+        container.innerHTML = '<p>No aircraft detected.</p>';
+        return;
+    }
+
+    // Sort aircraft by altitude (highest first)
+    aircraft.sort((a, b) => (b.altitude || 0) - (a.altitude || 0));
+
+    aircraft.forEach(ac => {
+        const item = document.createElement('div');
+        item.className = `aircraft-item ${ac.is_loitering ? 'interesting' : ''} ${ac.is_monitored ? 'monitored' : 'unmonitored'}`;
+        item.innerHTML = `
+            <h3>${ac.callsign || 'Unknown'} (${ac.icao})</h3>
+            <p>Position: ${ac.position.latitude.toFixed(4)}, ${ac.position.longitude.toFixed(4)}</p>
+            <p>Altitude: <span class="${ac.is_loitering ? 'highlight' : ''}">${ac.altitude}ft</span></p>
+            <p>Speed: <span class="${ac.is_loitering ? 'highlight' : ''}">${ac.speed}kts</span></p>
+            <p>Heading: ${ac.heading}°</p>
+            <p>Vertical Rate: ${ac.verticalRate}ft/min</p>
+            <p>Last Update: ${new Date(ac.lastUpdate).toLocaleTimeString()}</p>
+            ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
+            ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : '<p class="unmonitored">Outside Monitoring Area</p>'}
+        `;
+        container.appendChild(item);
+    });
+}
+
+// Fetch aircraft data periodically
+function fetchAircraftData() {
+    fetch('/api/aircraft')
+        .then(response => response.json())
+        .then(data => updateAircraft(data))
+        .catch(error => console.error('Error fetching aircraft data:', error));
+}
+
+// Update every 10 seconds
+setInterval(fetchAircraftData, 10000);
+
+// Initial fetch
+fetchAircraftData();
