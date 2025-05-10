@@ -10,8 +10,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 const aircraftMarkers = new Map();
 const aircraftTracks = new Map();
 
-// Store monitoring point circles
-let monitoringPointCircles = [];
+// Store monitoring area rectangle
+let monitoringAreaRect = null;
 
 // Aircraft renderer class for drawing detailed aircraft
 class AircraftRenderer {
@@ -116,7 +116,7 @@ class AircraftRenderer {
             iconSize: [iconSize, iconSize],
             iconAnchor: [iconSize / 2, iconSize / 2],
             popupAnchor: [0, -this.size],
-            className: `aircraft-icon-${Math.random().toString(36).substr(2, 9)}`
+            className: `aircraft-icon-${Math.random().toString(36).substring(2, 9)}`
         });
     }
 }
@@ -135,28 +135,27 @@ const createAircraftIcon = (isInteresting) => {
 
 // Update aircraft positions and tracks
 function updateAircraft(data) {
-    const { aircraft, monitoringPoints } = data;
+    const { aircraft, monitoringArea } = data;
 
-    // Remove old monitoring point circles
-    monitoringPointCircles.forEach(circle => circle.remove());
-    monitoringPointCircles = [];
-
-    // Update monitoring points
-    monitoringPoints.forEach(point => {
-        const circle = L.circle([point.position.latitude, point.position.longitude], {
-            radius: point.radiusKm * 1000,
+    // Update monitoring area if needed
+    if (monitoringArea && (!monitoringAreaRect || !monitoringAreaRect._map)) {
+        if (monitoringAreaRect) {
+            monitoringAreaRect.remove();
+        }
+        monitoringAreaRect = L.rectangle([
+            [monitoringArea.minLat, monitoringArea.minLon], // Southwest corner
+            [monitoringArea.maxLat, monitoringArea.maxLon]  // Northeast corner
+        ], {
             color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.2
+            weight: 2,
+            fillColor: 'red',
+            fillOpacity: 0.1
         }).addTo(map);
-        monitoringPointCircles.push(circle);
-    });
+    }
 
     // Update aircraft
     aircraft.forEach(ac => {
         const position = [ac.position.latitude, ac.position.longitude];
-        // Debug: log marker positions
-        console.log('Drawing marker for', ac.icao, 'at', position, ac.position);
         const heading = ac.heading || 0;
 
         // Remove and recreate marker for update

@@ -66,7 +66,7 @@ export class OpenSkyProvider implements ScannerProvider {
                     if (!state[6] || !state[5]) return null; // Skip if no position
                     return {
                         icao: state[0],
-                        callsign: state[1]?.trim() || undefined,
+                        callsign: state[1]?.trim() || null,
                         position: {
                             latitude: state[6],
                             longitude: state[5]
@@ -75,7 +75,11 @@ export class OpenSkyProvider implements ScannerProvider {
                         speed: state[9],
                         heading: state[10],
                         verticalRate: state[11],
-                        lastUpdate: state[4]
+                        lastUpdate: state[4],
+                        is_loitering: false,
+                        is_monitored: false,
+                        not_monitored_reason: null,
+                        track: []
                     };
                 })
                 .filter((aircraft): aircraft is Aircraft => aircraft !== null);

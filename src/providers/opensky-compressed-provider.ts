@@ -1,7 +1,7 @@
-import { ScannerProvider, ScanResult } from './base-provider';
-import { Aircraft } from '../types';
-import fetch from 'node-fetch';
 import { decompress } from '@mongodb-js/zstd';
+import fetch from 'node-fetch';
+import { Aircraft } from '../types';
+import { ScannerProvider, ScanResult } from './base-provider';
 
 interface OpenSkyState {
     icao24: string;
@@ -110,7 +110,7 @@ export class OpenSkyCompressedProvider implements ScannerProvider {
                 if (latitude !== 0 || longitude !== 0) {
                     aircraft.push({
                         icao: icao24,
-                        callsign: callsign || undefined,
+                        callsign: callsign || null,
                         position: {
                             latitude,
                             longitude
@@ -119,7 +119,11 @@ export class OpenSkyCompressedProvider implements ScannerProvider {
                         speed: velocity * 1.943844, // Convert m/s to knots
                         heading,
                         verticalRate: verticalRate * 196.85, // Convert m/s to ft/min
-                        lastUpdate
+                        lastUpdate,
+                        is_loitering: false,
+                        is_monitored: false,
+                        not_monitored_reason: null,
+                        track: []
                     });
                 }
             }

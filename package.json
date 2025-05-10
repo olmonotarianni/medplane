@@ -26,6 +26,10 @@
   },
   "dependencies": {
     "@mongodb-js/zstd": "^2.0.1",
+    "@turf/boolean-point-in-polygon": "^7.2.0",
+    "@turf/helpers": "^7.2.0",
+    "@turf/nearest-point-on-line": "^7.2.0",
+    "@turf/point-to-line-distance": "^7.2.0",
     "@types/node-fetch": "^2.6.12",
     "axios": "^1.9.0",
     "canvas": "^3.1.0",

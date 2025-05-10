@@ -1,12 +1,11 @@
 import express from 'express';
+import path from 'path';
+import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from './config';
 import { AircraftScanner } from './scanner';
-import { MapVisualizer } from './map-visualizer';
-import { SERVER_PORT } from './index';
 
 export class WebServer {
     private app: express.Application;
     private scanner: AircraftScanner | null = null;
-    private mapVisualizer: MapVisualizer | null = null;
 
     constructor() {
         this.app = express();
@@ -17,33 +16,30 @@ export class WebServer {
         this.scanner = scanner;
     }
 
-    public setMapVisualizer(visualizer: MapVisualizer) {
-        this.mapVisualizer = visualizer;
-    }
-
     private setupRoutes() {
-        // API endpoint to get all aircraft
-        this.app.get('/api/aircraft', (req, res) => {
+        // Serve the main page
+        this.app.get('/', (_, res) => {
+            res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+        });
+
+        // API endpoint for aircraft data
+        this.app.get('/api/aircraft', (_, res) => {
             if (!this.scanner) {
                 res.status(500).json({ error: 'Scanner not initialized' });
                 return;
             }
             res.json({
                 aircraft: this.scanner.getAircraft(),
-                monitoringPoints: this.scanner.getMonitoringPoints()
+                monitoringArea: SICILY_CHANNEL_BOUNDS,
+                thresholds: MONITORING_THRESHOLDS
             });
         });
 
-        // API endpoint to get map data
-        this.app.get('/api/map', (req, res) => {
-            if (!this.mapVisualizer) {
-                res.status(500).json({ error: 'Map visualizer not initialized' });
-                return;
-            }
+        // API endpoint for map configuration
+        this.app.get('/api/map', (_, res) => {
             res.json({
-                centerPoint: this.scanner?.getConfig().centerPoint,
-                scanRadius: this.scanner?.getConfig().scanRadius,
-                monitoringPoints: this.scanner?.getMonitoringPoints()
+                monitoringArea: SICILY_CHANNEL_BOUNDS,
+                thresholds: MONITORING_THRESHOLDS
             });
         });
 
@@ -51,7 +47,7 @@ export class WebServer {
         this.app.use(express.static('public'));
     }
 
-    public start(port: number = SERVER_PORT) {
+    public start(port: number) {
         this.app.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);
         });

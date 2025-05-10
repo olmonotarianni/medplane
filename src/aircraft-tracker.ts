@@ -29,7 +29,7 @@ export class AircraftTracker {
 
     updateAircraft(aircraft: Aircraft): void {
         const now = Date.now();
-        const existing = this.trackedAircraft.get(aircraft.icao24);
+        const existing = this.trackedAircraft.get(aircraft.icao);
 
         if (existing) {
             // Update existing aircraft
@@ -44,7 +44,7 @@ export class AircraftTracker {
             Object.assign(existing, aircraft);
         } else {
             // Add new aircraft
-            this.trackedAircraft.set(aircraft.icao24, {
+            this.trackedAircraft.set(aircraft.icao, {
                 ...aircraft,
                 headingHistory: [{ heading: aircraft.heading, timestamp: now }],
                 lastUpdate: now,

@@ -1,9 +1,8 @@
 import { EventEmitter } from 'events';
-import { Aircraft, Position, ScanConfig, MonitoringPoint } from './types';
-import { GeoUtils } from './utils';
 import { AircraftAnalyzer } from './aircraft-analyzer';
+import { SICILY_CHANNEL_BOUNDS } from './config';
 import { ScannerProvider } from './providers/base-provider';
-import haversine from 'haversine';
+import { Aircraft } from './types';
 
 export interface AircraftTrackPoint {
     latitude: number;
@@ -11,30 +10,19 @@ export interface AircraftTrackPoint {
     timestamp: number;
 }
 
+export interface TrackedAircraft extends Aircraft {
+    track: AircraftTrackPoint[];
+}
+
 export class AircraftScanner extends EventEmitter {
-    private config: ScanConfig;
     private intervalId?: NodeJS.Timeout;
-    private aircraft: Map<string, Aircraft & { track?: AircraftTrackPoint[] }> = new Map();
-    private monitoringPoints: MonitoringPoint[];
+    private aircraft: Map<string, TrackedAircraft> = new Map();
     private analyzer: AircraftAnalyzer;
+    private updateIntervalMs = 60000; // 1 minute default update interval
 
-    constructor(
-        config: ScanConfig,
-        monitoringPoints: MonitoringPoint[],
-        private provider: ScannerProvider
-    ) {
+    constructor(private provider: ScannerProvider) {
         super();
-        this.config = config;
-        this.monitoringPoints = monitoringPoints;
         this.analyzer = new AircraftAnalyzer();
-    }
-
-    getConfig(): ScanConfig {
-        return this.config;
-    }
-
-    getMonitoringPoints(): MonitoringPoint[] {
-        return this.monitoringPoints;
     }
 
     start(): void {
@@ -45,7 +33,7 @@ export class AircraftScanner extends EventEmitter {
         this.scan();
         this.intervalId = setInterval(() => {
             this.scan();
-        }, this.config.updateIntervalMs);
+        }, this.updateIntervalMs);
     }
 
     stop(): void {
@@ -57,8 +45,7 @@ export class AircraftScanner extends EventEmitter {
 
     private async scan(): Promise<void> {
         try {
-            const bounds = GeoUtils.radiusToLatLonBounds(this.config.centerPoint, this.config.scanRadius);
-            const result = await this.provider.scan(bounds);
+            const result = await this.provider.scan(SICILY_CHANNEL_BOUNDS);
 
             // DEBUG: log raw response
             console.log('Aircraft found:', result.aircraft.length, result.aircraft.slice(0, 3));
@@ -89,13 +76,18 @@ export class AircraftScanner extends EventEmitter {
         }
     }
 
-    private createTrackedAircraft(aircraft: Aircraft): Aircraft & { track?: AircraftTrackPoint[] } {
-        return { ...aircraft, track: [] };
+    private createTrackedAircraft(aircraft: Aircraft): TrackedAircraft {
+        return {
+            ...aircraft,
+            track: [],
+            is_loitering: false,
+            is_monitored: false,
+            not_monitored_reason: null
+        };
     }
 
-    private addTrackPoint(tracked: Aircraft & { track?: AircraftTrackPoint[] }, aircraft: Aircraft): void {
+    private addTrackPoint(tracked: TrackedAircraft, aircraft: Aircraft): void {
         const now = aircraft.lastUpdate ? aircraft.lastUpdate * 1000 : Date.now();
-        if (!tracked.track) tracked.track = [];
         tracked.track.push({
             latitude: aircraft.position.latitude,
             longitude: aircraft.position.longitude,
@@ -105,7 +97,7 @@ export class AircraftScanner extends EventEmitter {
         if (tracked.track.length > 50) tracked.track = tracked.track.slice(-50);
     }
 
-    private updateTrackedFields(tracked: Aircraft & { track?: AircraftTrackPoint[] }, aircraft: Aircraft): void {
+    private updateTrackedFields(tracked: TrackedAircraft, aircraft: Aircraft): void {
         tracked.position = aircraft.position;
         tracked.altitude = aircraft.altitude;
         tracked.speed = aircraft.speed;
@@ -115,14 +107,19 @@ export class AircraftScanner extends EventEmitter {
         tracked.callsign = aircraft.callsign;
     }
 
-    public getAircraft(): (Aircraft & { track?: AircraftTrackPoint[] })[] {
+    public getAircraft(): TrackedAircraft[] {
         return Array.from(this.aircraft.values());
     }
 
-    public getAircraftInRange(point: MonitoringPoint): Aircraft[] {
+    public getAircraftInBounds(): TrackedAircraft[] {
         return this.getAircraft().filter(aircraft => {
-            const distance = haversine(aircraft.position, point.position, { unit: 'km' });
-            return distance <= point.radiusKm;
+            const { latitude, longitude } = aircraft.position;
+            return (
+                latitude >= SICILY_CHANNEL_BOUNDS.minLat &&
+                latitude <= SICILY_CHANNEL_BOUNDS.maxLat &&
+                longitude >= SICILY_CHANNEL_BOUNDS.minLon &&
+                longitude <= SICILY_CHANNEL_BOUNDS.maxLon
+            );
         });
     }
 }
