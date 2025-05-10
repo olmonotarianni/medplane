@@ -42,7 +42,6 @@ export class AircraftScanner extends EventEmitter {
             console.warn('Scanner is already running');
             return;
         }
-
         this.scan();
         this.intervalId = setInterval(() => {
             this.scan();
@@ -79,10 +78,22 @@ export class AircraftScanner extends EventEmitter {
     public updateAircraft(aircraft: Aircraft): void {
         let tracked = this.aircraft.get(aircraft.icao);
         if (!tracked) {
-            tracked = { ...aircraft, track: [] };
+            tracked = this.createTrackedAircraft(aircraft);
         }
+        this.addTrackPoint(tracked, aircraft);
+        this.updateTrackedFields(tracked, aircraft);
+        this.analyzer.analyzeAircraft(tracked);
+        this.aircraft.set(aircraft.icao, tracked);
+        if (tracked.is_loitering) {
+            this.emit('loiteringAircraft', tracked);
+        }
+    }
 
-        // Add new track point
+    private createTrackedAircraft(aircraft: Aircraft): Aircraft & { track?: AircraftTrackPoint[] } {
+        return { ...aircraft, track: [] };
+    }
+
+    private addTrackPoint(tracked: Aircraft & { track?: AircraftTrackPoint[] }, aircraft: Aircraft): void {
         const now = aircraft.lastUpdate ? aircraft.lastUpdate * 1000 : Date.now();
         if (!tracked.track) tracked.track = [];
         tracked.track.push({
@@ -92,8 +103,9 @@ export class AircraftScanner extends EventEmitter {
         });
         // Keep only last 50 points
         if (tracked.track.length > 50) tracked.track = tracked.track.slice(-50);
+    }
 
-        // Update only the necessary fields, preserving track and other important data
+    private updateTrackedFields(tracked: Aircraft & { track?: AircraftTrackPoint[] }, aircraft: Aircraft): void {
         tracked.position = aircraft.position;
         tracked.altitude = aircraft.altitude;
         tracked.speed = aircraft.speed;
@@ -101,16 +113,6 @@ export class AircraftScanner extends EventEmitter {
         tracked.verticalRate = aircraft.verticalRate;
         tracked.lastUpdate = aircraft.lastUpdate;
         tracked.callsign = aircraft.callsign;
-
-        // Always run the analyzer to update monitoring status
-        this.analyzer.analyzeAircraft(tracked);
-
-        this.aircraft.set(aircraft.icao, tracked);
-
-        // Emit event if aircraft is loitering
-        if (tracked.is_loitering) {
-            this.emit('loiteringAircraft', tracked);
-        }
     }
 
     public getAircraft(): (Aircraft & { track?: AircraftTrackPoint[] })[] {
