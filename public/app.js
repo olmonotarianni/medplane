@@ -16,40 +16,55 @@ let monitoringPointCircles = [];
 // Aircraft renderer class for drawing detailed aircraft
 class AircraftRenderer {
     constructor() {
+        this.size = 18; // Display size
+        this.pixelRatio = window.devicePixelRatio || 1;
+        this.padding = 4; // Add padding to prevent clipping
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
-        this.size = 24; // Default size
-        this.canvas.width = this.size * 2;
-        this.canvas.height = this.size * 2;
+        this.canvas.width = (this.size * 2 + this.padding * 2) * this.pixelRatio;
+        this.canvas.height = (this.size * 2 + this.padding * 2) * this.pixelRatio;
+        this.ctx.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
     }
 
     /**
      * Draw a simplified aircraft silhouette from top view
      * @param {boolean} isLoitering - Whether the aircraft is flagged as loitering
+     * @param {boolean} isMonitored - Whether the aircraft is monitored
      * @param {number} heading - Aircraft heading in degrees
      * @returns {HTMLCanvasElement} Canvas with the aircraft drawing
      */
-    drawAircraft(isLoitering, heading = 0) {
+    drawAircraft(isLoitering, isMonitored, heading = 0) {
         const ctx = this.ctx;
         const size = this.size;
-        const centerX = this.canvas.width / 2;
-        const centerY = this.canvas.height / 2;
+        const centerX = (this.canvas.width / this.pixelRatio) / 2;
+        const centerY = (this.canvas.height / this.pixelRatio) / 2;
 
-        // Clear canvas
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Save context for rotation
         ctx.save();
         ctx.translate(centerX, centerY);
-        ctx.rotate((heading - 90) * Math.PI / 180); // 0 degrees = North
+        ctx.rotate((heading - 90) * Math.PI / 180);
 
-        // Set color based on loitering status
-        const color = isLoitering ? '#dc3545' : '#007bff';
+        let color, strokeColor, opacity;
+        if (isLoitering) {
+            color = '#dc3545'; // red
+            strokeColor = 'rgba(255,255,255,0.8)';
+            opacity = 1;
+        } else if (isMonitored) {
+            color = '#007bff'; // blue
+            strokeColor = 'rgba(255,255,255,0.8)';
+            opacity = 1;
+        } else {
+            color = '#888'; // solid gray
+            strokeColor = 'rgba(0,0,0,0)'; // no stroke
+            opacity = 1;
+        }
+        ctx.globalAlpha = opacity;
         ctx.fillStyle = color;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.strokeStyle = strokeColor;
         ctx.lineWidth = 1;
 
-        // Fuselage: long, thin rectangle, centered
+        // Fuselage
         const fuselageLength = size * 1.1;
         const fuselageWidth = size * 0.22;
         ctx.beginPath();
@@ -57,30 +72,30 @@ class AircraftRenderer {
         ctx.fill();
         ctx.stroke();
 
-        // Wings: much wider and thicker, centered on fuselage, rotated 90 degrees
+        // Wings
         const wingSpan = size * 2.0;
         const wingWidth = size * 0.35;
         ctx.save();
-        ctx.rotate(Math.PI / 2); // Rotate 90 degrees
+        ctx.rotate(Math.PI / 2);
         ctx.beginPath();
         ctx.rect(-wingSpan/2, -wingWidth/2, wingSpan, wingWidth);
         ctx.fill();
         ctx.stroke();
         ctx.restore();
 
-        // Tail: larger triangle at rear end of fuselage
+        // Tail
         const tailBase = size * 0.6;
         const tailHeight = size * 0.5;
         ctx.beginPath();
-        ctx.moveTo(-fuselageLength/2, 0); // rear center of fuselage
+        ctx.moveTo(-fuselageLength/2, 0);
         ctx.lineTo(-fuselageLength/2 - tailHeight, -tailBase/2);
         ctx.lineTo(-fuselageLength/2 - tailHeight, tailBase/2);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
 
-        // Restore context
         ctx.restore();
+        ctx.globalAlpha = 1;
 
         return this.canvas;
     }
@@ -88,18 +103,18 @@ class AircraftRenderer {
     /**
      * Create a Leaflet icon using the aircraft drawing
      * @param {boolean} isLoitering - Whether the aircraft is loitering
+     * @param {boolean} isMonitored - Whether the aircraft is monitored
      * @param {number} heading - Aircraft heading in degrees
      * @returns {L.Icon} Leaflet icon with the aircraft drawing
      */
-    createIcon(isLoitering, heading = 0) {
-        const canvas = this.drawAircraft(isLoitering, heading);
+    createIcon(isLoitering, isMonitored, heading = 0) {
+        const canvas = this.drawAircraft(isLoitering, isMonitored, heading);
         const dataUrl = canvas.toDataURL();
-
-        // Force a unique icon className to avoid Leaflet caching issues
+        const iconSize = (this.size * 2 + this.padding * 2);
         return L.icon({
             iconUrl: dataUrl,
-            iconSize: [this.size * 2, this.size * 2],
-            iconAnchor: [this.size, this.size],
+            iconSize: [iconSize, iconSize],
+            iconAnchor: [iconSize / 2, iconSize / 2],
             popupAnchor: [0, -this.size],
             className: `aircraft-icon-${Math.random().toString(36).substr(2, 9)}`
         });
@@ -144,15 +159,14 @@ function updateAircraft(data) {
         console.log('Drawing marker for', ac.icao, 'at', position, ac.position);
         const heading = ac.heading || 0;
 
-        // Update or create marker
+        // Remove and recreate marker for update
         if (aircraftMarkers.has(ac.icao)) {
-            // Remove the old marker from the map
             const oldMarker = aircraftMarkers.get(ac.icao);
             oldMarker.remove();
             aircraftMarkers.delete(ac.icao);
         }
         // Create new aircraft icon
-        const icon = aircraftRenderer.createIcon(ac.is_loitering, heading);
+        const icon = aircraftRenderer.createIcon(ac.is_loitering, ac.is_monitored, heading);
         const marker = L.marker(position, {
             icon: icon
         }).addTo(map);
@@ -182,13 +196,13 @@ function updateAircraft(data) {
                 const track = aircraftTracks.get(ac.icao);
                 track.setLatLngs(trackPoints);
                 track.setStyle({
-                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : '#999'),
+                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : 'rgba(120,120,120,0.5)'),
                     weight: 2,
                     opacity: ac.is_monitored ? 0.7 : 0.3
                 });
             } else {
                 const track = L.polyline(trackPoints, {
-                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : '#999'),
+                    color: ac.is_loitering ? '#dc3545' : (ac.is_monitored ? '#007bff' : 'rgba(120,120,120,0.5)'),
                     weight: 2,
                     opacity: ac.is_monitored ? 0.7 : 0.3
                 }).addTo(map);
@@ -228,17 +242,27 @@ function updateAircraftList(aircraft) {
 
     aircraft.forEach(ac => {
         const item = document.createElement('div');
-        item.className = `aircraft-item ${ac.is_loitering ? 'interesting' : ''} ${ac.is_monitored ? 'monitored' : 'unmonitored'}`;
+        let color = '';
+        if (ac.is_loitering) {
+            color = '#dc3545'; // red
+        } else if (ac.is_monitored) {
+            color = '#007bff'; // blue
+        } else {
+            color = '#888'; // gray
+        }
+        item.className = `aircraft-item`;
+        item.style.borderLeft = `4px solid ${color}`;
+        item.style.background = ac.is_loitering ? '#fff5f5' : (ac.is_monitored ? '#f8f9fa' : '#f3f3f3');
         item.innerHTML = `
-            <h3>${ac.callsign || 'Unknown'} (${ac.icao})</h3>
+            <h3 style="color:${color}">${ac.callsign || 'Unknown'} (${ac.icao})</h3>
             <p>Position: ${ac.position.latitude.toFixed(4)}, ${ac.position.longitude.toFixed(4)}</p>
-            <p>Altitude: <span class="${ac.is_loitering ? 'highlight' : ''}">${ac.altitude}ft</span></p>
-            <p>Speed: <span class="${ac.is_loitering ? 'highlight' : ''}">${ac.speed}kts</span></p>
+            <p>Altitude: <span style="color:${color}">${ac.altitude}ft</span></p>
+            <p>Speed: <span style="color:${color}">${ac.speed}kts</span></p>
             <p>Heading: ${ac.heading}°</p>
             <p>Vertical Rate: ${ac.verticalRate}ft/min</p>
             <p>Last Update: ${new Date(ac.lastUpdate).toLocaleTimeString()}</p>
-            ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
-            ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : '<p class="unmonitored">Outside Monitoring Area</p>'}
+            ${ac.is_loitering ? '<p class="highlight" style="color:#dc3545">Loitering Aircraft</p>' : ''}
+            ${ac.is_monitored ? '<p class="monitored" style="color:#007bff">Monitored Aircraft</p>' : `<p class="unmonitored" style="color:#888">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
         `;
         container.appendChild(item);
     });
