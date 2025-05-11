@@ -2,6 +2,7 @@
 export interface Position {
     latitude: number;
     longitude: number;
+    timestamp?: number;
 }
 
 export interface Aircraft {
@@ -14,6 +15,10 @@ export interface Aircraft {
     verticalRate: number;
     lastUpdate: number;
     is_loitering: boolean;
+    loitering_debug?: {
+        reason: string;
+        segments: { start: Position, end: Position }[];
+    };
     is_monitored: boolean;
     not_monitored_reason: string | null;
     track: Position[];

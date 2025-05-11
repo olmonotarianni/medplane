@@ -66,6 +66,283 @@ function generateStraightPath(): { lat: number, lon: number }[] {
     return points;
 }
 
+function testSpecialAircraft() {
+    const aircraft: Aircraft = {
+        "icao": "45b103",
+        "callsign": "DTR85M",
+        "position": {
+            "latitude": 35.490309,
+            "longitude": 12.280611
+        },
+        "altitude": 5525,
+        "speed": 220.8,
+        "heading": 167.98,
+        "verticalRate": -704,
+        "lastUpdate": 1746969093.904,
+        "is_loitering": false,
+        "is_monitored": true,
+        "not_monitored_reason": null,
+        "track": [
+            {
+                "latitude": 36.076309,
+                "longitude": 12.595997,
+                "timestamp": 1746968463823
+            },
+            {
+                "latitude": 36.064438,
+                "longitude": 12.591325,
+                "timestamp": 1746968473886
+            },
+            {
+                "latitude": 36.053079,
+                "longitude": 12.586884,
+                "timestamp": 1746968483866
+            },
+            {
+                "latitude": 36.041953,
+                "longitude": 12.582501,
+                "timestamp": 1746968493867
+            },
+            {
+                "latitude": 36.030361,
+                "longitude": 12.577943,
+                "timestamp": 1746968503878
+            },
+            {
+                "latitude": 36.019003,
+                "longitude": 12.573502,
+                "timestamp": 1746968513857
+            },
+            {
+                "latitude": 36.007736,
+                "longitude": 12.569103,
+                "timestamp": 1746968523867
+            },
+            {
+                "latitude": 35.996384,
+                "longitude": 12.564697,
+                "timestamp": 1746968533815
+            },
+            {
+                "latitude": 35.984985,
+                "longitude": 12.560234,
+                "timestamp": 1746968543865
+            },
+            {
+                "latitude": 35.973288,
+                "longitude": 12.555678,
+                "timestamp": 1746968553857
+            },
+            {
+                "latitude": 35.962116,
+                "longitude": 12.551354,
+                "timestamp": 1746968563908
+            },
+            {
+                "latitude": 35.953736,
+                "longitude": 12.548081,
+                "timestamp": 1746968573866
+            },
+            {
+                "latitude": 35.939346,
+                "longitude": 12.542439,
+                "timestamp": 1746968583873
+            },
+            {
+                "latitude": 35.928412,
+                "longitude": 12.538205,
+                "timestamp": 1746968593873
+            },
+            {
+                "latitude": 35.916595,
+                "longitude": 12.533569,
+                "timestamp": 1746968603870
+            },
+            {
+                "latitude": 35.907044,
+                "longitude": 12.529849,
+                "timestamp": 1746968613869
+            },
+            {
+                "latitude": 35.895593,
+                "longitude": 12.525408,
+                "timestamp": 1746968623873
+            },
+            {
+                "latitude": 35.883591,
+                "longitude": 12.520752,
+                "timestamp": 1746968633838
+            },
+            {
+                "latitude": 35.873853,
+                "longitude": 12.516934,
+                "timestamp": 1746968643877
+            },
+            {
+                "latitude": 35.862579,
+                "longitude": 12.512512,
+                "timestamp": 1746968653874
+            },
+            {
+                "latitude": 35.857635,
+                "longitude": 12.510624,
+                "timestamp": 1746968663862
+            },
+            {
+                "latitude": 35.846054,
+                "longitude": 12.506104,
+                "timestamp": 1746968673869
+            },
+            {
+                "latitude": 35.827744,
+                "longitude": 12.498951,
+                "timestamp": 1746968683860
+            },
+            {
+                "latitude": 35.827744,
+                "longitude": 12.498951,
+                "timestamp": 1746968693875
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968703877
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968713880
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968723864
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968733881
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968743881
+            },
+            {
+                "latitude": 35.81003,
+                "longitude": 12.491981,
+                "timestamp": 1746968753872
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968853896
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968863888
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968873884
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968883925
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968893822
+            },
+            {
+                "latitude": 35.671555,
+                "longitude": 12.375927,
+                "timestamp": 1746968903904
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968913895
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968923883
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968933883
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968943883
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968953886
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968963936
+            },
+            {
+                "latitude": 35.610947,
+                "longitude": 12.322025,
+                "timestamp": 1746968973888
+            },
+            {
+                "latitude": 35.502869,
+                "longitude": 12.277393,
+                "timestamp": 1746969033882
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969043891
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969053889
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969063906
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969073912
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969083886
+            },
+            {
+                "latitude": 35.490309,
+                "longitude": 12.280611,
+                "timestamp": 1746969093904
+            }
+        ]
+    }
+
+    // this plane should not be detected as loitering
+    const analyzer = new AircraftAnalyzer();
+    const result = analyzer.analyzeAircraft(aircraft);
+    console.log(`Test special aircraft: ${result ? 'PASSED' : 'FAILED'}`);
+    return result;
+}
+
 function testPath(analyzer: AircraftAnalyzer, points: { lat: number, lon: number }[], expectedLoitering: boolean): boolean {
     const aircraft = createTestAircraft('TEST1', Date.now() / 1000);
     let loiteringDetected = false;
@@ -109,6 +386,9 @@ export function runLoiteringTests(): void {
 
     console.log('\nTesting straight path:');
     allTestsPassed = testPath(analyzer, generateStraightPath(), false) && allTestsPassed;
+
+    console.log('\nTesting special aircraft:');
+    allTestsPassed = testSpecialAircraft() && allTestsPassed;
 
     console.log(`\nOverall test result: ${allTestsPassed ? 'PASSED' : 'FAILED'}`);
 }

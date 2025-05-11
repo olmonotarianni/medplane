@@ -133,6 +133,11 @@ export class AircraftAnalyzer {
         return true;
     }
 
+    /**
+     * Detects loitering behavior in an aircraft's trajectory.
+     * @param aircraft - The aircraft to analyze.
+     * @returns True if the aircraft is loitering, false otherwise.
+     */
     private detectLoitering(aircraft: Aircraft): boolean {
         interface Segment {
             start: Position;
@@ -177,6 +182,10 @@ export class AircraftAnalyzer {
         for (let i = 0; i < segments.length - 2; i++) {
             for (let j = i + 2; j < segments.length; j++) {
                 if (areIntersecting(segments[i], segments[j])) {
+                    aircraft.loitering_debug = {
+                        reason: 'Intersecting segments',
+                        segments: [segments[i], segments[j]]
+                    };
                     aircraft.is_loitering = true;
                     return true;
                 }
@@ -187,6 +196,11 @@ export class AircraftAnalyzer {
         return false;
     }
 
+    /**
+     * Analyzes an aircraft and updates its monitoring status and loitering detection.
+     * @param aircraft - The aircraft to analyze.
+     * @returns True if the aircraft is loitering, false otherwise.
+     */
     public analyzeAircraft(aircraft: Aircraft): boolean {
         const now = this.getCurrentTimestamp(aircraft);
         const trajectory = this.getOrCreateTrajectory(aircraft, now);
