@@ -18,7 +18,7 @@ export class AircraftScanner extends EventEmitter {
     private intervalId?: NodeJS.Timeout;
     private aircraft: Map<string, TrackedAircraft> = new Map();
     private analyzer: AircraftAnalyzer;
-    private updateIntervalMs = 60000; // 1 minute default update interval
+    private updateIntervalMs = 15000; // 15 seconds default update interval
 
     constructor(private provider: ScannerProvider) {
         super();
