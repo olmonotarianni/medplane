@@ -5,7 +5,7 @@ MedPlane is a real-time aircraft monitoring and analysis system focused on the c
 
 ## Key Features
 - **Real-time aircraft tracking:** Continuously scans and displays aircraft positions and tracks on an interactive map.
-- **Loitering detection:** Identifies aircraft that remain within a defined radius for an extended period.
+- **Loitering detection:** Identifies aircraft whose flight path intersects itself, indicating potential search or surveillance patterns.
 - **Behavioral analysis:** Flags aircraft based on:
   - Altitude (5,000–25,000 ft)
   - Speed (100–300 knots)
@@ -104,8 +104,9 @@ You can configure the following parameters in `config.ts`:
 - **Altitude:** 5,000–25,000 feet
 - **Speed:** 100–300 knots
 - **Loitering detection:**
-  - Maximum radius for detection
-  - Minimum duration within radius
+  - Self-intersecting flight path detection
+  - Minimum 4 points in trajectory
+  - Maximum trace age: 20 minutes
 - **Geographic bounds:** Sicily Channel (33°N-37°N, 10°E-16°E)
 - **Coastal distance:** Minimum 5km from coastline
 - **Cleanup intervals:**

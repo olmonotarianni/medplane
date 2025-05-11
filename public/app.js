@@ -125,9 +125,9 @@ class AircraftRenderer {
 const aircraftRenderer = new AircraftRenderer();
 
 // Custom aircraft icon (legacy - keeping for fallback)
-const createAircraftIcon = (isInteresting) => {
+const createAircraftIcon = () => {
     return L.divIcon({
-        className: `aircraft-marker ${isInteresting ? 'interesting' : ''}`,
+        className: `aircraft-marker`,
         iconSize: [16, 16],
         iconAnchor: [8, 8]
     });

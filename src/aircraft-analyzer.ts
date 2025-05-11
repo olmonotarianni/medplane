@@ -6,7 +6,6 @@ interface AircraftTrajectory {
     positions: Position[];
     timestamps: number[];
     lastUpdate: number;
-    isInteresting: boolean;
     outOfRangeSince?: number;
 }
 
@@ -19,6 +18,7 @@ export class AircraftAnalyzer {
     private static readonly MAX_RADIUS_KM = MONITORING_THRESHOLDS.loitering.maxRadius;
     private static readonly MAX_OUTOFRANGE_MS = 30 * 1000; // 30 sec
     private static readonly CLEANUP_THRESHOLD_MS = 15 * 60 * 1000; // 15 min
+    private static readonly MAX_TRACE_AGE_MS = 20 * 60 * 1000; // 20 min
     // Minimum distance from coast (km) to be considered over the sea
     private static readonly MIN_DISTANCE_FROM_COAST_KM = MONITORING_THRESHOLDS.coast.minDistance;
 
@@ -67,7 +67,7 @@ export class AircraftAnalyzer {
     private getOrCreateTrajectory(aircraft: Aircraft, now: number): AircraftTrajectory {
         let trajectory = this.trajectories.get(aircraft.icao);
         if (!trajectory) {
-            trajectory = { positions: [], timestamps: [], lastUpdate: now, isInteresting: false };
+            trajectory = { positions: [], timestamps: [], lastUpdate: now,  };
             this.trajectories.set(aircraft.icao, trajectory);
         }
         return trajectory;
@@ -80,8 +80,8 @@ export class AircraftAnalyzer {
     }
 
     private cleanupOldPoints(trajectory: AircraftTrajectory, now: number): void {
-        const tenMinutesAgo = now - 10 * 60 * 1000;
-        while (trajectory.timestamps.length && trajectory.timestamps[0] < tenMinutesAgo) {
+        const maxAge = now - AircraftAnalyzer.MAX_TRACE_AGE_MS;
+        while (trajectory.timestamps.length && trajectory.timestamps[0] < maxAge) {
             trajectory.positions.shift();
             trajectory.timestamps.shift();
         }
@@ -139,7 +139,6 @@ export class AircraftAnalyzer {
                 trajectory.outOfRangeSince !== undefined &&
                 now - trajectory.outOfRangeSince > AircraftAnalyzer.MAX_OUTOFRANGE_MS
             ) {
-                trajectory.isInteresting = false;
                 aircraft.is_loitering = false;
                 return false;
             }
@@ -149,17 +148,47 @@ export class AircraftAnalyzer {
         return true;
     }
 
+    private doLineSegmentsIntersect(p1: Position, p2: Position, p3: Position, p4: Position): boolean {
+        const x1 = p1.longitude, y1 = p1.latitude;
+        const x2 = p2.longitude, y2 = p2.latitude;
+        const x3 = p3.longitude, y3 = p3.latitude;
+        const x4 = p4.longitude, y4 = p4.latitude;
+
+        const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+        if (Math.abs(denom) < 1e-10) return false;
+
+        const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
+        const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
+
+        return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
+    }
+
     private detectLoitering(trajectory: AircraftTrajectory, aircraft: Aircraft): boolean {
-        const timeElapsed = trajectory.timestamps[trajectory.timestamps.length - 1] - trajectory.timestamps[0];
-        if (timeElapsed >= AircraftAnalyzer.LOITERING_THRESHOLD_MS) {
-            const radius = this.maxRadius(trajectory.positions);
-            if (radius < AircraftAnalyzer.MAX_RADIUS_KM) {
-                trajectory.isInteresting = true;
-                aircraft.is_loitering = true;
-                return true;
+        const positions = trajectory.positions;
+
+        if (positions.length < 4) {
+            aircraft.is_loitering = false;
+            return false;
+        }
+
+        for (let i = 0; i < positions.length - 3; i++) {
+            for (let j = i + 2; j < positions.length - 1; j++) {
+                if (!aircraft.is_monitored) continue;
+
+                const intersects = this.doLineSegmentsIntersect(
+                    positions[i],
+                    positions[i + 1],
+                    positions[j],
+                    positions[j + 1]
+                );
+
+                if (intersects) {
+                    aircraft.is_loitering = true;
+                    return true;
+                }
             }
         }
-        trajectory.isInteresting = false;
+
         aircraft.is_loitering = false;
         return false;
     }
@@ -180,13 +209,6 @@ export class AircraftAnalyzer {
         }
 
         return this.detectLoitering(trajectory, aircraft);
-    }
-
-    public getInterestingAircraft(): string[] {
-        // Retrieval O(1)
-        return Array.from(this.trajectories.entries())
-            .filter(([_, traj]) => traj.isInteresting)
-            .map(([icao]) => icao);
     }
 
     public cleanupOldAircraft(): void {
