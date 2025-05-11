@@ -236,8 +236,18 @@ function updateAircraftList(aircraft) {
         return;
     }
 
-    // Sort aircraft by altitude (highest first)
-    aircraft.sort((a, b) => (b.altitude || 0) - (a.altitude || 0));
+    // Sort aircraft by status (loitering -> monitored -> unmonitored) and then by altitude within each group
+    aircraft.sort((a, b) => {
+        // First sort by status
+        if (a.is_loitering !== b.is_loitering) {
+            return b.is_loitering ? 1 : -1; // Loitering aircraft first (red)
+        }
+        if (a.is_monitored !== b.is_monitored) {
+            return b.is_monitored ? 1 : -1; // Then monitored aircraft (blue)
+        }
+        // Within same status group, sort by altitude
+        return (b.altitude || 0) - (a.altitude || 0);
+    });
 
     aircraft.forEach(ac => {
         const item = document.createElement('div');
