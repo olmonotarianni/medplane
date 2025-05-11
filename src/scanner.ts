@@ -19,6 +19,7 @@ export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, TrackedAircraft> = new Map();
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 10000; // 10 seconds default update interval
+    private isScanning = false;
 
     constructor(private provider: ScannerProvider) {
         super();
@@ -30,9 +31,13 @@ export class AircraftScanner extends EventEmitter {
             console.warn('Scanner is already running');
             return;
         }
-        this.scan();
+
+        // Schedule the first scan
+        this.scheduleNextScan();
+
+        // Set up regular scanning interval
         this.intervalId = setInterval(() => {
-            this.scan();
+            this.scheduleNextScan();
         }, this.updateIntervalMs);
     }
 
@@ -40,6 +45,17 @@ export class AircraftScanner extends EventEmitter {
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = undefined;
+        }
+    }
+
+    private scheduleNextScan(): void {
+        if (!this.isScanning) {
+            this.isScanning = true;
+            this.scan().finally(() => {
+                this.isScanning = false;
+            });
+        } else {
+            console.log('Skipping scan - previous scan still in progress');
         }
     }
 

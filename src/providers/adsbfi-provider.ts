@@ -34,6 +34,9 @@ interface AdsbFiResponse {
 export class AdsbFiProvider implements ScannerProvider {
     private static readonly API_URL = 'https://opendata.adsb.fi/api/v2';
     private static readonly MAX_DISTANCE_NM = 250; // Maximum allowed distance in nautical miles
+    private static readonly MIN_REQUEST_INTERVAL_MS = 1000; // Minimum 1 second between requests
+
+    private lastRequestTime: number = 0;
 
     async scan(bounds: {
         minLat: number;
@@ -41,6 +44,16 @@ export class AdsbFiProvider implements ScannerProvider {
         minLon: number;
         maxLon: number;
     }): Promise<ScanResult> {
+        // Enforce rate limiting
+        const now = Date.now();
+        const timeSinceLastRequest = now - this.lastRequestTime;
+        if (timeSinceLastRequest < AdsbFiProvider.MIN_REQUEST_INTERVAL_MS) {
+            const waitTime = AdsbFiProvider.MIN_REQUEST_INTERVAL_MS - timeSinceLastRequest;
+            console.log(`Rate limiting: waiting ${waitTime}ms before next request`);
+            await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+        this.lastRequestTime = Date.now();
+
         // Calculate center point of the bounding box
         const centerLat = (bounds.minLat + bounds.maxLat) / 2;
         const centerLon = (bounds.minLon + bounds.maxLon) / 2;
