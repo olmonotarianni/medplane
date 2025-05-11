@@ -1,5 +1,5 @@
 import { SERVER_PORT } from './constants';
-import { OpenSkyProvider } from './providers/opensky-provider';
+import { AdsbFiProvider } from './providers/adsbfi-provider';
 import { AircraftScanner } from './scanner';
 import { WebServer } from './server';
 
@@ -8,7 +8,7 @@ export class App {
     private readonly server: WebServer;
 
     constructor() {
-        const provider = OpenSkyProvider.fromEnv();
+        const provider = new AdsbFiProvider();
         this.scanner = new AircraftScanner(provider);
         this.server = new WebServer();
 
