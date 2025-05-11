@@ -1,5 +1,4 @@
 import { Aircraft } from '../types';
-import { AdsbFiProvider } from './adsbfi-provider';
 import { ScannerProvider, ScanResult } from './base-provider';
 
 // OpenSky Network API aircraft state
@@ -65,7 +64,7 @@ export class OpenSkyProvider implements ScannerProvider {
         if (!username || !password) {
             throw new Error('OPENSKY_USERNAME and OPENSKY_PASSWORD must be set');
         }
-        return new AdsbFiProvider();
+        return new OpenSkyProvider({ username, password });
     }
 
     /**
