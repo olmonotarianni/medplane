@@ -4,7 +4,7 @@
   "description": "Mediterranean aircraft monitoring system",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "ts-node-dev src/index.ts",
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "watch": "tsc -w",
@@ -33,6 +33,7 @@
     "@types/node-fetch": "^2.6.12",
     "axios": "^1.9.0",
     "canvas": "^3.1.0",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "haversine": "^1.1.1",
     "node-fetch": "2.7.0",

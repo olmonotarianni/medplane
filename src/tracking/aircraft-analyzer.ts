@@ -1,6 +1,6 @@
-import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from './config';
-import { Aircraft, Position } from './types';
-import { GeoUtils } from './utils';
+import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from '../config';
+import { Aircraft, Position } from '../types';
+import { GeoUtils } from '../utils';
 
 interface AircraftTrajectory {
     positions: Position[];
@@ -14,8 +14,6 @@ export class AircraftAnalyzer {
     private static readonly ALTITUDE_RANGE = { min: 5000, max: 25000 }; // feet
     private static readonly SPEED_RANGE = { min: 100, max: 300 }; // knots
     // Loitering and cleanup thresholds
-    private static readonly LOITERING_THRESHOLD_MS = MONITORING_THRESHOLDS.loitering.minDuration * 1000;
-    private static readonly MAX_RADIUS_KM = MONITORING_THRESHOLDS.loitering.maxRadius;
     private static readonly MAX_OUTOFRANGE_MS = 30 * 1000; // 30 sec
     private static readonly CLEANUP_THRESHOLD_MS = 15 * 60 * 1000; // 15 min
     private static readonly MAX_TRACE_AGE_MS = 20 * 60 * 1000; // 20 min
@@ -46,19 +44,6 @@ export class AircraftAnalyzer {
         const distance = GeoUtils.minDistanceToCoastline(position);
         return distance !== null && distance >= AircraftAnalyzer.MIN_DISTANCE_FROM_COAST_KM;
     }
-
-    private calculateDistance(a: Position, b: Position): number {
-        return GeoUtils.calculateDistance(a, b);
-    }
-
-    private maxRadius(positions: Position[]): number {
-        if (positions.length < 2) return 0;
-        const lat = positions.reduce((sum, p) => sum + p.latitude, 0) / positions.length;
-        const lon = positions.reduce((sum, p) => sum + p.longitude, 0) / positions.length;
-        const centroid = { latitude: lat, longitude: lon };
-        return Math.max(...positions.map(p => this.calculateDistance(p, centroid)));
-    }
-
     private getCurrentTimestamp(aircraft: Aircraft): number {
         // lastUpdate is in seconds, convert to ms
         return aircraft.lastUpdate ? aircraft.lastUpdate * 1000 : Date.now();
@@ -148,41 +133,50 @@ export class AircraftAnalyzer {
         return true;
     }
 
-    private doLineSegmentsIntersect(p1: Position, p2: Position, p3: Position, p4: Position): boolean {
-        const x1 = p1.longitude, y1 = p1.latitude;
-        const x2 = p2.longitude, y2 = p2.latitude;
-        const x3 = p3.longitude, y3 = p3.latitude;
-        const x4 = p4.longitude, y4 = p4.latitude;
+    private detectLoitering(aircraft: Aircraft): boolean {
+        interface Segment {
+            start: Position;
+            end: Position;
+        }
 
-        const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-        if (Math.abs(denom) < 1e-10) return false;
+        function areIntersecting(segment1: Segment, segment2: Segment): boolean {
+            const x1 = segment1.start.longitude, y1 = segment1.start.latitude;
+            const x2 = segment1.end.longitude, y2 = segment1.end.latitude;
+            const x3 = segment2.start.longitude, y3 = segment2.start.latitude;
+            const x4 = segment2.end.longitude, y4 = segment2.end.latitude;
 
-        const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
-        const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
+            // Calculate the denominator
+            const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
 
-        return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
-    }
+            // If lines are parallel (or nearly parallel)
+            if (Math.abs(denom) < 1e-8) return false;
 
-    private detectLoitering(trajectory: AircraftTrajectory, aircraft: Aircraft): boolean {
-        const positions = trajectory.positions;
+            // Calculate intersection parameters
+            const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
+            const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
 
-        if (positions.length < 4) {
+            // Check if intersection occurs within both line segments
+            return (ua >= 0 && ua <= 1) && (ub >= 0 && ub <= 1);
+        }
+
+        // Create segments from track points
+        const segments: Segment[] = [];
+        for (let i = 1; i < aircraft.track.length; i++) {
+            const start = aircraft.track[i - 1];
+            const end = aircraft.track[i];
+            segments.push({ start, end });
+        }
+
+        // Need at least 4 points (3 segments) to have an intersection
+        if (segments.length < 3) {
             aircraft.is_loitering = false;
             return false;
         }
 
-        for (let i = 0; i < positions.length - 3; i++) {
-            for (let j = i + 2; j < positions.length - 1; j++) {
-                if (!aircraft.is_monitored) continue;
-
-                const intersects = this.doLineSegmentsIntersect(
-                    positions[i],
-                    positions[i + 1],
-                    positions[j],
-                    positions[j + 1]
-                );
-
-                if (intersects) {
+        // Check if any non-adjacent segments intersect
+        for (let i = 0; i < segments.length - 2; i++) {
+            for (let j = i + 2; j < segments.length; j++) {
+                if (areIntersecting(segments[i], segments[j])) {
                     aircraft.is_loitering = true;
                     return true;
                 }
@@ -208,7 +202,7 @@ export class AircraftAnalyzer {
             return false;
         }
 
-        return this.detectLoitering(trajectory, aircraft);
+        return this.detectLoitering(aircraft);
     }
 
     public cleanupOldAircraft(): void {

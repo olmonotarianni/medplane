@@ -1,0 +1,109 @@
+import { Aircraft, Position } from '../types';
+import { ScannerProvider, ScanResult } from './base-provider';
+
+// Internal types for adsb.fi API response
+interface AdsbFiAircraft {
+    hex: string;
+    flight?: string;
+    lat?: number;
+    lon?: number;
+    alt_baro?: number | 'ground';
+    gs?: number;
+    track?: number;
+    baro_rate?: number;
+    squawk?: string;
+    emergency?: string;
+    category?: string;
+    nav_qnh?: number;
+    nav_altitude_mcp?: number;
+    seen?: number;
+    rssi?: number;
+    type?: string;
+    r?: string;  // registration
+    t?: string;  // aircraft type
+    desc?: string;
+}
+
+interface AdsbFiResponse {
+    now: number;
+    aircraft: AdsbFiAircraft[];
+    resultCount: number;
+    ptime: number;
+}
+
+export class AdsbFiProvider implements ScannerProvider {
+    private static readonly API_URL = 'https://opendata.adsb.fi/api/v2';
+    private static readonly MAX_DISTANCE_NM = 250; // Maximum allowed distance in nautical miles
+
+    async scan(bounds: {
+        minLat: number;
+        maxLat: number;
+        minLon: number;
+        maxLon: number;
+    }): Promise<ScanResult> {
+        // Calculate center point of the bounding box
+        const centerLat = (bounds.minLat + bounds.maxLat) / 2;
+        const centerLon = (bounds.minLon + bounds.maxLon) / 2;
+
+        // Calculate distance in nautical miles (approximate)
+        const latDiff = bounds.maxLat - bounds.minLat;
+        const lonDiff = bounds.maxLon - bounds.minLon;
+        const distanceNM = Math.sqrt(latDiff * latDiff + lonDiff * lonDiff) * 60; // 1 degree ≈ 60 nautical miles
+
+        // Ensure we don't exceed the API's maximum distance
+        const requestDistanceNM = Math.min(distanceNM, AdsbFiProvider.MAX_DISTANCE_NM);
+
+        console.log('Making adsb.fi API request:');
+        console.log(`Center: ${centerLat}, ${centerLon}, Distance: ${requestDistanceNM} NM`);
+
+        try {
+            const url = `${AdsbFiProvider.API_URL}/lat/${centerLat}/lon/${centerLon}/dist/${requestDistanceNM}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`adsb.fi API error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json() as AdsbFiResponse;
+
+            // Convert adsb.fi aircraft format to our internal format
+            const aircraft = data.aircraft
+                .filter(a => a.lat !== undefined && a.lon !== undefined) // Only include aircraft with position data
+                .map(a => this.convertAircraft(a));
+
+            return {
+                timestamp: Math.floor(data.now),
+                aircraft
+            };
+        } catch (error) {
+            console.error('Error fetching data from adsb.fi:', error);
+            throw error;
+        }
+    }
+
+    private convertAircraft(a: AdsbFiAircraft): Aircraft {
+        const position: Position = {
+            latitude: a.lat!,
+            longitude: a.lon!
+        };
+
+        return {
+            icao: a.hex,
+            callsign: a.flight?.trim() || null,
+            position,
+            altitude: typeof a.alt_baro === 'number' ? a.alt_baro : 0,
+            speed: a.gs || 0,
+            heading: a.track || 0,
+            verticalRate: a.baro_rate || 0,
+            lastUpdate: Date.now() / 1000, // Current timestamp in seconds
+            is_loitering: false,
+            is_monitored: false,
+            not_monitored_reason: null,
+            track: [position]
+        };
+    }
+
+    static fromEnv(): AdsbFiProvider {
+        return new AdsbFiProvider();
+    }
+}

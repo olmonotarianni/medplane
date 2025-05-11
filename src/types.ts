@@ -1,29 +1,4 @@
-// OpenSky Network API aircraft state
-export type AircraftState = [
-    string,     // icao24
-    string,     // callsign
-    string,     // origin_country
-    number,     // time_position
-    number,     // last_contact
-    number,     // longitude
-    number,     // latitude
-    number,     // baro_altitude
-    boolean,    // on_ground
-    number,     // velocity
-    number,     // true_track
-    number,     // vertical_rate
-    number[],   // sensors
-    number,     // geo_altitude
-    string,     // squawk
-    boolean,    // spi
-    number      // position_source
-];
-
-export interface OpenSkyResponse {
-    time: number;
-    states: AircraftState[];
-}
-
+// Common types used across the application
 export interface Position {
     latitude: number;
     longitude: number;

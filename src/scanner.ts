@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { AircraftAnalyzer } from './aircraft-analyzer';
+import { AircraftAnalyzer } from './tracking/aircraft-analyzer';
 import { SICILY_CHANNEL_BOUNDS } from './config';
 import { ScannerProvider } from './providers/base-provider';
 import { Aircraft } from './types';
@@ -18,7 +18,7 @@ export class AircraftScanner extends EventEmitter {
     private intervalId?: NodeJS.Timeout;
     private aircraft: Map<string, TrackedAircraft> = new Map();
     private analyzer: AircraftAnalyzer;
-    private updateIntervalMs = 30000; // 30 seconds default update interval
+    private updateIntervalMs = 10000; // 10 seconds default update interval
 
     constructor(private provider: ScannerProvider) {
         super();

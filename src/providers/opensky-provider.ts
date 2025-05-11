@@ -1,5 +1,31 @@
-import { Aircraft, OpenSkyResponse } from '../types';
+import { Aircraft } from '../types';
 import { ScannerProvider, ScanResult } from './base-provider';
+
+// OpenSky Network API aircraft state
+type AircraftState = [
+    string,     // icao24
+    string,     // callsign
+    string,     // origin_country
+    number,     // time_position
+    number,     // last_contact
+    number,     // longitude
+    number,     // latitude
+    number,     // baro_altitude
+    boolean,    // on_ground
+    number,     // velocity
+    number,     // true_track
+    number,     // vertical_rate
+    number[],   // sensors
+    number,     // geo_altitude
+    string,     // squawk
+    boolean,    // spi
+    number      // position_source
+];
+
+interface OpenSkyResponse {
+    time: number;
+    states: AircraftState[];
+}
 
 /**
  * Authentication credentials for the OpenSky Network API.
@@ -28,8 +54,17 @@ export class OpenSkyProvider implements ScannerProvider {
     private readonly auth?: OpenSkyAuth;
     private static readonly API_URL = 'https://opensky-network.org/api/states/all';
 
-    constructor(auth?: OpenSkyAuth) {
+    private constructor(auth?: OpenSkyAuth) {
         this.auth = auth;
+    }
+
+    static fromEnv(): OpenSkyProvider {
+        const username = process.env.OPENSKY_USERNAME;
+        const password = process.env.OPENSKY_PASSWORD;
+        if (!username || !password) {
+            throw new Error('OPENSKY_USERNAME and OPENSKY_PASSWORD must be set');
+        }
+        return new OpenSkyProvider({ username, password });
     }
 
     /**
@@ -42,18 +77,51 @@ export class OpenSkyProvider implements ScannerProvider {
         minLon: number;
         maxLon: number;
     }): Promise<ScanResult> {
-        const authHeader = this.auth
-            ? Buffer.from(`${this.auth.username}:${this.auth.password}`).toString('base64')
-            : undefined;
         const url = `${OpenSkyProvider.API_URL}?lamin=${bounds.minLat}&lomin=${bounds.minLon}&lamax=${bounds.maxLat}&lomax=${bounds.maxLon}`;
+
+        console.log('Making OpenSky API request:');
+        console.log('URL:', url);
+        console.log('Auth:', this.auth ? 'Using credentials' : 'No credentials');
+
         try {
-            const response = await fetch(url, {
-                headers: authHeader ? { 'Authorization': `Basic ${authHeader}` } : undefined
-            });
+            // Match curl's basic auth approach
+            const options: RequestInit = {
+                method: 'GET',
+                headers: {
+                    'User-Agent': 'MedPlane/1.0'
+                }
+            };
+
+            if (this.auth) {
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Basic ${Buffer.from(`${this.auth.username}:${this.auth.password}`).toString('base64')}`
+                };
+            }
+
+            const response = await fetch(url, options);
+            console.log('OpenSky response status:', response.status, response.statusText);
+
             if (!response.ok) {
+                if (response.status === 401) {
+                    console.error('Authentication failed. Please check your OpenSky credentials.');
+                    console.error('Note: OpenSky API requires a registered account.');
+                    console.error('Register at: https://opensky-network.org/apidoc/');
+                    // Log the actual auth header being sent (with password obscured)
+                    if (this.auth) {
+                        const authHeader = `Basic ${Buffer.from(`${this.auth.username}:****`).toString('base64')}`;
+                        console.error('Auth header being sent:', authHeader);
+                    }
+                }
                 throw new Error(`OpenSky API error: ${response.status} ${response.statusText}`);
             }
+
             const data = await response.json() as OpenSkyResponse;
+            console.log('OpenSky data received:', {
+                time: data.time,
+                numStates: data.states?.length || 0
+            });
+
             if (!data.states) {
                 return {
                     aircraft: [],

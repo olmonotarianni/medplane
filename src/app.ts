@@ -8,7 +8,7 @@ export class App {
     private readonly server: WebServer;
 
     constructor() {
-        const provider = new OpenSkyProvider();
+        const provider = OpenSkyProvider.fromEnv();
         this.scanner = new AircraftScanner(provider);
         this.server = new WebServer();
 

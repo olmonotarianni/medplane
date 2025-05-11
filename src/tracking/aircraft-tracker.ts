@@ -1,5 +1,5 @@
-import { Aircraft, Position } from './types';
-import { GeoUtils } from './utils';
+import { Aircraft, Position } from '../types';
+import { GeoUtils } from '../utils';
 
 interface TrackedAircraft extends Aircraft {
     headingHistory: Array<{ heading: number; timestamp: number }>;
@@ -16,11 +16,16 @@ interface MonitoringPoint {
 
 export class AircraftTracker {
     private trackedAircraft: Map<string, TrackedAircraft> = new Map();
+    private monitoringPoints: MonitoringPoint[] = [];
     private maxHistorySize: number = 10; // Keep last 10 heading measurements
 
-    constructor() {
+    constructor(points: MonitoringPoint[]) {
+        this.monitoringPoints = points;
     }
 
+    addMonitoringPoint(point: MonitoringPoint): void {
+        this.monitoringPoints.push(point);
+    }
 
     updateAircraft(aircraft: Aircraft): void {
         const now = Date.now();

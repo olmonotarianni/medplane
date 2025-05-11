@@ -20,7 +20,7 @@ MedPlane is a real-time aircraft monitoring and analysis system focused on the c
 ## Technical Details
 - **Backend:** TypeScript/Node.js, Express server
 - **Frontend:** Leaflet.js for interactive mapping
-- **Data sources:** OpenSky Network API (with support for both standard and compressed endpoints)
+- **Data sources:** adsb.fi API (free, real-time aircraft data with 1Hz update rate)
 - **Geospatial analysis:** Haversine calculations for distance and loitering detection
 - **Docker support:** Easily deployable with the included Dockerfile
 - **Coastline data source:** Uses high-quality open coastline data from [simonepri/geo-maps](https://github.com/simonepri/geo-maps)
@@ -35,7 +35,7 @@ MedPlane is a real-time aircraft monitoring and analysis system focused on the c
 - **Backend Framework:**
   - `express`: Web server and API endpoints
   - `ws`: WebSocket server for real-time updates
-  - `node-fetch`: HTTP client for OpenSky API
+  - `node-fetch`: HTTP client for adsb.fi API
 
 - **TypeScript & Development:**
   - `typescript`: Type safety and modern JavaScript features
@@ -54,10 +54,12 @@ src/
 ├── config.ts             # Configuration settings
 ├── constants.ts          # Shared constants
 ├── index.ts             # Application entry point
-├── providers/           # Data providers (OpenSky)
+├── providers/           # Data providers (adsb.fi)
+│   ├── adsbfi-provider.ts # adsb.fi API provider
+│   └── base-provider.ts   # Provider interface
 ├── test/               # Test utilities
 │   ├── coast-distance.ts  # Coastline distance testing
-│   └── provider.ts       # OpenSky provider testing
+│   └── provider.ts       # Provider testing
 └── utils.ts             # Utility functions
 ```
 
@@ -82,7 +84,7 @@ Then open [http://localhost:3872](http://localhost:3872) in your browser.
 3. Visit [http://localhost:3872](http://localhost:3872)
 
 ### Testing Modes
-The application includes two testing modes:
+The application includes three testing modes:
 
 1. Coast Distance Testing:
    ```sh
@@ -94,7 +96,16 @@ The application includes two testing modes:
    ```sh
    yarn dev --test-airdata-provider
    ```
-   Tests the OpenSky Network provider by fetching and displaying current aircraft data.
+   Tests the adsb.fi provider by fetching and displaying current aircraft data.
+
+3. Loitering Detection Testing:
+   ```sh
+   yarn dev --test-loitering
+   ```
+   Tests the loitering detection algorithm using simulated flight paths:
+   - Figure-8 pattern (should detect loitering)
+   - Circular pattern (should detect loitering)
+   - Straight path (should not detect loitering)
 
 ## Configuration
 
@@ -115,7 +126,7 @@ You can configure the following parameters in `config.ts`:
 
 ### Server Settings
 - Port: 3872 (configurable)
-- Update frequency for aircraft data (configurable)
+- Update frequency for aircraft data (configurable, respects adsb.fi's 1 request/second rate limit)
 
 ## API Endpoints
 
@@ -130,11 +141,14 @@ You can configure the following parameters in `config.ts`:
 MedPlane is intended for humanitarian and research purposes, to assist in the detection of search and rescue or surveillance operations in the Mediterranean. It can help identify aircraft that may be monitoring or assisting migrant boats, supporting more effective response and coordination.
 
 ## Note
-This system is designed for humanitarian purposes and should be used in accordance with all relevant laws and regulations. 
+This system is designed for humanitarian purposes and should be used in accordance with all relevant laws and regulations. The adsb.fi API is used under their terms of service for non-commercial use.
 
 ## TODO
 - [ ] Add a notification system to notify the user when a aircraft is detected to be loitering
+- [ ] Implement rate limiting to ensure compliance with adsb.fi's 1 request/second limit
 
 ## Data Sources & Acknowledgments
 
-This project uses coastline data from [simonepri/geo-maps](https://github.com/simonepri/geo-maps) (MIT/Open Data Commons Public Domain Dedication and License).
+This project uses:
+- Aircraft data from [adsb.fi](https://adsb.fi) (free for non-commercial use)
+- Coastline data from [simonepri/geo-maps](https://github.com/simonepri/geo-maps) (MIT/Open Data Commons Public Domain Dedication and License)
