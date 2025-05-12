@@ -292,13 +292,19 @@ export function runLoiteringTests(): void {
     const analyzer = new AircraftAnalyzer();
 
     console.log('Testing figure-8 pattern:');
-    allTestsPassed = testPath(analyzer, generateFigureEightPath(), true) && allTestsPassed;
+    const fig8Passed = testPath(analyzer, generateFigureEightPath(), true);
+    console.log(`Test figure-8 pattern: ${fig8Passed ? 'PASSED' : 'FAILED'}`);
+    allTestsPassed = fig8Passed && allTestsPassed;
 
     console.log('\nTesting circular pattern:');
-    allTestsPassed = testPath(analyzer, generateCircularPath(), true) && allTestsPassed;
+    const circPassed = testPath(analyzer, generateCircularPath(), true);
+    console.log(`Test circular pattern: ${circPassed ? 'PASSED' : 'FAILED'}`);
+    allTestsPassed = circPassed && allTestsPassed;
 
     console.log('\nTesting straight path:');
-    allTestsPassed = testPath(analyzer, generateStraightPath(), false) && allTestsPassed;
+    const straightPassed = testPath(analyzer, generateStraightPath(), false);
+    console.log(`Test straight path: ${straightPassed ? 'PASSED' : 'FAILED'}`);
+    allTestsPassed = straightPassed && allTestsPassed;
 
     console.log('\nTesting special aircraft:');
     allTestsPassed = testSpecialAircraft() && allTestsPassed;
