@@ -1,6 +1,6 @@
 import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from '../config';
 import { Aircraft, Position } from '../types';
-import { GeoUtils } from '../utils';
+import { areIntersecting, GeoUtils, Segment } from '../utils';
 
 interface AircraftTrajectory {
     positions: Position[];
@@ -134,57 +134,31 @@ export class AircraftAnalyzer {
     }
 
     /**
-     * Detects loitering behavior in an aircraft's trajectory.
+     * Detects loitering behavior by checking if the aircraft's path crosses itself.
+     * A path crosses itself if any non-adjacent segments intersect.
+     *
      * @param aircraft - The aircraft to analyze.
-     * @returns True if the aircraft is loitering, false otherwise.
+     * @returns True if the aircraft's path crosses itself, false otherwise.
      */
     private detectLoitering(aircraft: Aircraft): boolean {
-        interface Segment {
-            start: Position;
-            end: Position;
-        }
-
-        function areIntersecting(segment1: Segment, segment2: Segment): boolean {
-            const x1 = segment1.start.longitude, y1 = segment1.start.latitude;
-            const x2 = segment1.end.longitude, y2 = segment1.end.latitude;
-            const x3 = segment2.start.longitude, y3 = segment2.start.latitude;
-            const x4 = segment2.end.longitude, y4 = segment2.end.latitude;
-
-            // Calculate the denominator
-            const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-
-            // If lines are parallel
-            if (Math.abs(denom) < 1e-12) return false;
-
-            // Calculate intersection parameters
-            const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
-            const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
-
-            // Check if intersection occurs within both line segments
-            return (ua >= 0 && ua <= 1) && (ub >= 0 && ub <= 1);
-        }
-
-        // Create segments from track points
-        const segments: Segment[] = [];
-        for (let i = 1; i < aircraft.track.length; i++) {
-            segments.push({
-                start: aircraft.track[i - 1],
-                end: aircraft.track[i]
-            });
-        }
-
-        // Need at least 4 points (3 segments) to have an intersection
-        if (segments.length < 3) {
+        // Need at least 4 points (3 segments) to have a crossing
+        if (aircraft.track.length < 4) {
             aircraft.is_loitering = false;
             return false;
         }
+
+        // Convert track points to segments
+        const segments = aircraft.track.slice(1).map((point, i) => ({
+            start: aircraft.track[i],
+            end: point
+        }));
 
         // Check if any non-adjacent segments intersect
         for (let i = 0; i < segments.length - 2; i++) {
             for (let j = i + 2; j < segments.length; j++) {
                 if (areIntersecting(segments[i], segments[j])) {
                     aircraft.loitering_debug = {
-                        reason: 'Intersecting segments',
+                        reason: 'Path crosses itself',
                         segments: [segments[i], segments[j]]
                     };
                     aircraft.is_loitering = true;
