@@ -145,16 +145,6 @@ export class AircraftAnalyzer {
         }
 
         function areIntersecting(segment1: Segment, segment2: Segment): boolean {
-            // First check if segments share any endpoints (adjacent segments or repeated points)
-            if (
-                Math.abs(segment1.start.latitude - segment2.start.latitude) < 1e-8 && Math.abs(segment1.start.longitude - segment2.start.longitude) < 1e-8 ||
-                Math.abs(segment1.start.latitude - segment2.end.latitude) < 1e-8 && Math.abs(segment1.start.longitude - segment2.end.longitude) < 1e-8 ||
-                Math.abs(segment1.end.latitude - segment2.start.latitude) < 1e-8 && Math.abs(segment1.end.longitude - segment2.start.longitude) < 1e-8 ||
-                Math.abs(segment1.end.latitude - segment2.end.latitude) < 1e-8 && Math.abs(segment1.end.longitude - segment2.end.longitude) < 1e-8
-            ) {
-                return false;  // Segments that share an endpoint are not considered intersecting
-            }
-
             const x1 = segment1.start.longitude, y1 = segment1.start.latitude;
             const x2 = segment1.end.longitude, y2 = segment1.end.latitude;
             const x3 = segment2.start.longitude, y3 = segment2.start.latitude;
@@ -163,32 +153,24 @@ export class AircraftAnalyzer {
             // Calculate the denominator
             const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
 
-            // If lines are parallel (or nearly parallel)
-            if (Math.abs(denom) < 1e-8) return false;
+            // If lines are parallel
+            if (Math.abs(denom) < 1e-12) return false;
 
             // Calculate intersection parameters
             const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
             const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
 
             // Check if intersection occurs within both line segments
-            return (ua > 0 && ua < 1) && (ub > 0 && ub < 1);  // Changed from >= and <= to > and < to avoid endpoint cases
+            return (ua >= 0 && ua <= 1) && (ub >= 0 && ub <= 1);
         }
 
-        // Create segments from track points, skipping repeated points
+        // Create segments from track points
         const segments: Segment[] = [];
         for (let i = 1; i < aircraft.track.length; i++) {
-            const start = aircraft.track[i - 1];
-            const end = aircraft.track[i];
-
-            // Skip segments where start and end are the same point
-            if (
-                Math.abs(start.latitude - end.latitude) < 1e-8 &&
-                Math.abs(start.longitude - end.longitude) < 1e-8
-            ) {
-                continue;
-            }
-
-            segments.push({ start, end });
+            segments.push({
+                start: aircraft.track[i - 1],
+                end: aircraft.track[i]
+            });
         }
 
         // Need at least 4 points (3 segments) to have an intersection
@@ -198,7 +180,6 @@ export class AircraftAnalyzer {
         }
 
         // Check if any non-adjacent segments intersect
-        // Skip adjacent segments since they share an endpoint and thus can only "intersect" at that shared point
         for (let i = 0; i < segments.length - 2; i++) {
             for (let j = i + 2; j < segments.length; j++) {
                 if (areIntersecting(segments[i], segments[j])) {
