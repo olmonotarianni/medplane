@@ -17,7 +17,7 @@ export class AircraftScanner extends EventEmitter {
     private intervalId?: NodeJS.Timeout;
     private aircraft: Map<string, TrackedAircraft> = new Map();
     private analyzer: AircraftAnalyzer;
-    private updateIntervalMs = 10000; // 10 seconds default update interval
+    private updateIntervalMs = 5000; // 5 seconds default update interval
     private isScanning = false;
     private loiteringStorage = getLoiteringStorage();
     private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
