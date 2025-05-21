@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { runCoastDistanceTests } from './test/coast-distance';
 import { runProviderTest } from './test/provider';
 import { runLoiteringTests } from './test/loitering-detection';
+import { testLoiteringEventCreation } from './test/loitering-event-test';
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ if (process.argv.includes('--test-coast-distance')) {
         });
 } else if (process.argv.includes('--test-loitering')) {
     runLoiteringTests();
+    process.exit(0);
+} else if (process.argv.includes('--test-loitering-events')) {
+    testLoiteringEventCreation();
     process.exit(0);
 } else {
     // Normal operation - start the application

@@ -2,11 +2,10 @@ import { EventEmitter } from 'events';
 import { AircraftAnalyzer } from './tracking/aircraft-analyzer';
 import { SICILY_CHANNEL_BOUNDS } from './config';
 import { ScannerProvider } from './providers/base-provider';
-import { Aircraft } from './types';
+import { Aircraft, ExtendedPosition, LoiteringEvent } from './types';
+import { getLoiteringStorage } from './storage/loitering-storage';
 
-export interface AircraftTrackPoint {
-    latitude: number;
-    longitude: number;
+export interface AircraftTrackPoint extends ExtendedPosition {
     timestamp: number;
 }
 
@@ -20,6 +19,7 @@ export class AircraftScanner extends EventEmitter {
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 10000; // 10 seconds default update interval
     private isScanning = false;
+    private loiteringStorage = getLoiteringStorage();
 
     constructor(private provider: ScannerProvider) {
         super();
@@ -85,11 +85,20 @@ export class AircraftScanner extends EventEmitter {
         }
         this.addTrackPoint(tracked, aircraft);
         this.updateTrackedFields(tracked, aircraft);
-        this.analyzer.analyzeAircraft(tracked);
-        this.aircraft.set(aircraft.icao, tracked);
-        if (tracked.is_loitering) {
+
+        // Check previous loitering state to detect changes
+        const wasLoitering = tracked.is_loitering;
+
+        // Analyze aircraft with the analyzer
+        const isLoiteringNow = this.analyzer.analyzeAircraft(tracked);
+
+        // If loitering is detected (new or continued)
+        if (isLoiteringNow) {
+            this.handleLoiteringDetection(tracked);
             this.emit('loiteringAircraft', tracked);
         }
+
+        this.aircraft.set(aircraft.icao, tracked);
     }
 
     private createTrackedAircraft(aircraft: Aircraft): TrackedAircraft {
@@ -104,13 +113,41 @@ export class AircraftScanner extends EventEmitter {
 
     private addTrackPoint(tracked: TrackedAircraft, aircraft: Aircraft): void {
         const now = aircraft.lastUpdate ? aircraft.lastUpdate * 1000 : Date.now();
-        tracked.track.push({
+
+        // Create the new track point
+        const newPoint = {
             latitude: aircraft.position.latitude,
             longitude: aircraft.position.longitude,
+            altitude: aircraft.altitude,
+            speed: aircraft.speed,
+            heading: aircraft.heading,
+            verticalRate: aircraft.verticalRate,
             timestamp: now
-        });
+        };
+
+        // Check if this point is different from the last point
+        const lastPoint = tracked.track[tracked.track.length - 1];
+        if (lastPoint) {
+            const isDuplicate =
+                lastPoint.latitude === newPoint.latitude &&
+                lastPoint.longitude === newPoint.longitude &&
+                lastPoint.altitude === newPoint.altitude &&
+                lastPoint.speed === newPoint.speed &&
+                lastPoint.heading === newPoint.heading &&
+                lastPoint.verticalRate === newPoint.verticalRate;
+
+            if (isDuplicate) {
+                return; // Skip adding duplicate point
+            }
+        }
+
+        // Add the new point
+        tracked.track.push(newPoint);
+
         // Keep only last 50 points
-        if (tracked.track.length > 50) tracked.track = tracked.track.slice(-50);
+        if (tracked.track.length > 50) {
+            tracked.track = tracked.track.slice(-50);
+        }
     }
 
     private updateTrackedFields(tracked: TrackedAircraft, aircraft: Aircraft): void {
@@ -137,5 +174,60 @@ export class AircraftScanner extends EventEmitter {
                 longitude <= SICILY_CHANNEL_BOUNDS.maxLon
             );
         });
+    }
+
+    private handleLoiteringDetection(aircraft: TrackedAircraft): void {
+        // Check if we already have an event for this aircraft
+        let event = this.loiteringStorage.getEventByIcao(aircraft.icao);
+        const now = Date.now();
+
+        if (event) {
+            // Update existing event
+            event.lastUpdated = now;
+            event.detectionCount += 1;
+
+            // Update aircraft state
+            event.aircraftState = {
+                altitude: aircraft.altitude,
+                speed: aircraft.speed,
+                heading: aircraft.heading,
+                verticalRate: aircraft.verticalRate,
+                position: { ...aircraft.position }
+            };
+
+            // Update track with the latest data
+            event.track = [...aircraft.track];
+        } else {
+            // Create new event
+            event = {
+                id: aircraft.icao, // Use ICAO as the ID
+                icao: aircraft.icao,
+                callsign: aircraft.callsign,
+                firstDetected: now,
+                lastUpdated: now,
+                detectionCount: 1,
+                intersectionPoints: [], // We don't need intersection points for basic loitering detection
+                aircraftState: {
+                    altitude: aircraft.altitude,
+                    speed: aircraft.speed,
+                    heading: aircraft.heading,
+                    verticalRate: aircraft.verticalRate,
+                    position: { ...aircraft.position }
+                },
+                track: [...aircraft.track]
+            };
+        }
+
+        // Store the event in memory
+        this.loiteringStorage.saveEvent(event);
+        console.log(`Loitering event ${event.id ? 'updated' : 'created'} for aircraft ${aircraft.icao}`);
+    }
+
+    public getLoiteringEvents(): LoiteringEvent[] {
+        return this.loiteringStorage.listEvents();
+    }
+
+    public getLoiteringEvent(icao: string): LoiteringEvent | undefined {
+        return this.loiteringStorage.getEventByIcao(icao);
     }
 }

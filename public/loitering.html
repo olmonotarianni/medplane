@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedPlane - Loitering Event Analysis</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #event-container {
+            display: flex;
+            flex-direction: row;
+            height: 100vh;
+        }
+        #event-map {
+            flex: 2;
+            height: 100%;
+        }
+        #event-info {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            border-left: 1px solid #ddd;
+            max-width: 400px;
+        }
+        .info-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .info-value {
+            margin-left: 10px;
+        }
+        .intersection-point {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e9f5ff;
+            border-radius: 4px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 5px 10px;
+            background-color: #0078d7;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            background-color: #0056a3;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 18px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="event-container">
+        <div id="event-map">
+            <div class="loading">Loading event data...</div>
+        </div>
+        <div id="event-info">
+            <a href="/" class="back-link">← Back to monitoring</a>
+            <h2>Loitering Event Analysis</h2>
+            <div id="event-details">
+                <div class="loading">Loading event details...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get event ID from URL
+            const urlParams = new URLSearchParams(window.location.pathname);
+            const eventId = window.location.pathname.split('/').pop();
+
+            if (!eventId) {
+                showError('No event ID provided');
+                return;
+            }
+
+            // Fetch the event data
+            fetchEvent(eventId);
+        });
+
+        async function fetchEvent(eventId) {
+            try {
+                const response = await fetch(`/api/loitering/${eventId}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch event: ${response.status} ${response.statusText}`);
+                }
+
+                const event = await response.json();
+                renderEvent(event);
+            } catch (error) {
+                showError(`Error loading event: ${error.message}`);
+            }
+        }
+
+        function showError(message) {
+            document.querySelector('#event-map .loading').innerHTML = `<div class="error">${message}</div>`;
+            document.querySelector('#event-details .loading').innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        function renderEvent(event) {
+            // Render event details
+            const detailsElement = document.getElementById('event-details');
+            detailsElement.innerHTML = createEventDetailsHTML(event);
+
+            // Initialize map
+            const mapElement = document.getElementById('event-map');
+            mapElement.innerHTML = ''; // Clear loading message
+
+            const map = L.map('event-map');
+
+            // Add base tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Plot the aircraft track
+            renderTrack(map, event);
+
+            // Plot intersection points
+            renderIntersections(map, event);
+
+            // Set map bounds to include the entire track
+            if (event.track && event.track.length > 0) {
+                const latlngs = event.track.map(point => [point.latitude, point.longitude]);
+                map.fitBounds(latlngs);
+            }
+        }
+
+        function createEventDetailsHTML(event) {
+            const date = new Date(event.firstDetected);
+            const lastDate = new Date(event.lastUpdated);
+
+            return `
+                <div class="info-section">
+                    <h3>Aircraft Information</h3>
+                    <p><span class="info-label">ICAO:</span> <span class="info-value">${event.icao}</span></p>
+                    <p><span class="info-label">Callsign:</span> <span class="info-value">${event.callsign || 'Unknown'}</span></p>
+                    <p><span class="info-label">First detected:</span> <span class="info-value">${date.toLocaleString()}</span></p>
+                    <p><span class="info-label">Last updated:</span> <span class="info-value">${lastDate.toLocaleString()}</span></p>
+                    <p><span class="info-label">Detection count:</span> <span class="info-value">${event.detectionCount}</span></p>
+                </div>
+
+                <div class="info-section">
+                    <h3>Aircraft Status</h3>
+                    <p><span class="info-label">Altitude:</span> <span class="info-value">${event.aircraftState.altitude} ft</span></p>
+                    <p><span class="info-label">Speed:</span> <span class="info-value">${event.aircraftState.speed} knots</span></p>
+                    <p><span class="info-label">Heading:</span> <span class="info-value">${event.aircraftState.heading.toFixed(1)}°</span></p>
+                    <p><span class="info-label">Vertical rate:</span> <span class="info-value">${event.aircraftState.verticalRate} ft/min</span></p>
+                    <p><span class="info-label">Position:</span> <span class="info-value">${event.aircraftState.position.latitude.toFixed(5)}, ${event.aircraftState.position.longitude.toFixed(5)}</span></p>
+                </div>
+
+                <div class="info-section">
+                    <h3>Loitering Information</h3>
+                    <p><span class="info-label">Track points:</span> <span class="info-value">${event.track.length}</span></p>
+                    <p><span class="info-label">Intersection points:</span> <span class="info-value">${event.intersectionPoints.length}</span></p>
+                </div>
+
+                <div class="info-section">
+                    <h3>Intersection Details</h3>
+                    ${renderIntersectionDetails(event.intersectionPoints)}
+                </div>
+            `;
+        }
+
+        function renderIntersectionDetails(intersectionPoints) {
+            if (!intersectionPoints || intersectionPoints.length === 0) {
+                return '<p>No intersection points recorded</p>';
+            }
+
+            return intersectionPoints.map((point, index) => {
+                const date = new Date(point.timestamp);
+                return `
+                    <div class="intersection-point">
+                        <h4>Intersection #${index + 1}</h4>
+                        <p><span class="info-label">Time:</span> <span class="info-value">${date.toLocaleString()}</span></p>
+                        <p><span class="info-label">Segment 1:</span> <span class="info-value">
+                            (${point.segments[0].start.latitude.toFixed(5)}, ${point.segments[0].start.longitude.toFixed(5)}) →
+                            (${point.segments[0].end.latitude.toFixed(5)}, ${point.segments[0].end.longitude.toFixed(5)})
+                        </span></p>
+                        <p><span class="info-label">Segment 2:</span> <span class="info-value">
+                            (${point.segments[1].start.latitude.toFixed(5)}, ${point.segments[1].start.longitude.toFixed(5)}) →
+                            (${point.segments[1].end.latitude.toFixed(5)}, ${point.segments[1].end.longitude.toFixed(5)})
+                        </span></p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderTrack(map, event) {
+            if (!event.track || event.track.length === 0) {
+                return;
+            }
+
+            // Create a polyline for the track
+            const latlngs = event.track.map(point => [point.latitude, point.longitude]);
+
+            // Create a gradient color from blue to red for the track (oldest to newest)
+            const trackLine = L.polyline(latlngs, {
+                color: '#4285F4',
+                weight: 3,
+                opacity: 0.8
+            }).addTo(map);
+
+            // Add start and end markers
+            const startIcon = L.divIcon({
+                html: '<div style="background-color: green; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                className: 'track-marker start-marker',
+                iconSize: [10, 10],
+                iconAnchor: [5, 5]
+            });
+
+            const endIcon = L.divIcon({
+                html: '<div style="background-color: red; width: 10px; height: 10px; border-radius: 50%;"></div>',
+                className: 'track-marker end-marker',
+                iconSize: [10, 10],
+                iconAnchor: [5, 5]
+            });
+
+            const firstPoint = event.track[0];
+            const lastPoint = event.track[event.track.length - 1];
+
+            L.marker([firstPoint.latitude, firstPoint.longitude], { icon: startIcon })
+                .addTo(map)
+                .bindPopup('Start of track');
+
+            L.marker([lastPoint.latitude, lastPoint.longitude], { icon: endIcon })
+                .addTo(map)
+                .bindPopup('End of track');
+        }
+
+        function renderIntersections(map, event) {
+            if (!event.intersectionPoints || event.intersectionPoints.length === 0) {
+                return;
+            }
+
+            // Add intersection markers
+            event.intersectionPoints.forEach((intersection, index) => {
+                // Create markers for the segments
+                const seg1Start = [intersection.segments[0].start.latitude, intersection.segments[0].start.longitude];
+                const seg1End = [intersection.segments[0].end.latitude, intersection.segments[0].end.longitude];
+                const seg2Start = [intersection.segments[1].start.latitude, intersection.segments[1].start.longitude];
+                const seg2End = [intersection.segments[1].end.latitude, intersection.segments[1].end.longitude];
+
+                // Draw segments with different colors
+                L.polyline([seg1Start, seg1End], { color: 'yellow', weight: 4, opacity: 0.8 }).addTo(map);
+                L.polyline([seg2Start, seg2End], { color: 'orange', weight: 4, opacity: 0.8 }).addTo(map);
+
+                // Calculate approximate intersection point (midpoint between segment midpoints)
+                const seg1Mid = [(seg1Start[0] + seg1End[0]) / 2, (seg1Start[1] + seg1End[1]) / 2];
+                const seg2Mid = [(seg2Start[0] + seg2End[0]) / 2, (seg2Start[1] + seg2End[1]) / 2];
+                const intersectionPoint = [(seg1Mid[0] + seg2Mid[0]) / 2, (seg1Mid[1] + seg2Mid[1]) / 2];
+
+                // Add marker at intersection
+                const intersectionIcon = L.divIcon({
+                    html: `<div style="background-color: red; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">${index + 1}</div>`,
+                    className: 'intersection-marker',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+
+                L.marker(intersectionPoint, { icon: intersectionIcon })
+                    .addTo(map)
+                    .bindPopup(`Intersection ${index + 1} detected at ${new Date(intersection.timestamp).toLocaleString()}`);
+            });
+        }
+    </script>
+</body>
+</html>

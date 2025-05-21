@@ -1,5 +1,5 @@
 import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from '../config';
-import { Aircraft, Position } from '../types';
+import { Aircraft, ExtendedPosition, Position } from '../types';
 import { areIntersecting, GeoUtils, Segment } from '../utils';
 
 interface AircraftTrajectory {
@@ -141,11 +141,19 @@ export class AircraftAnalyzer {
      * @returns True if the aircraft's path crosses itself, false otherwise.
      */
     private detectLoitering(aircraft: Aircraft): boolean {
-        // Need at least 4 points (3 segments) to have a crossing
-        if (aircraft.track.length < 4) {
-            aircraft.is_loitering = false;
-            return false;
-        }
+        // // TODO: we are currently using this to generate some loitering events to debug the loitering events
+        // if (aircraft.track.length > 4 && aircraft.is_monitored) {
+        //     aircraft.is_loitering = true;
+        //     aircraft.loitering_debug = {
+        //         reason: 'Debug mode: Track length > 4',
+        //         segments: [{
+        //             start: aircraft.track[0],
+        //             end: aircraft.track[aircraft.track.length - 1]
+        //         }]
+        //     };
+        //     return true;
+        // }
+        // return false;
 
         // Convert track points to segments
         const segments = aircraft.track.slice(1).map((point, i) => ({
@@ -165,6 +173,31 @@ export class AircraftAnalyzer {
                     return true;
                 }
             }
+        }
+
+        // Check for stationary loitering (aircraft staying in roughly the same area)
+        const stationaryThreshold = 0.01; // About 1km
+        let stationaryCount = 0;
+        let lastPosition = aircraft.track[0];
+
+        for (let i = 1; i < aircraft.track.length; i++) {
+            const current = aircraft.track[i];
+            const distance = GeoUtils.calculateDistance(lastPosition, current);
+
+            if (distance < stationaryThreshold) {
+                stationaryCount++;
+                if (stationaryCount >= 3) { // If aircraft stays in same area for 3+ points
+                    aircraft.loitering_debug = {
+                        reason: 'Aircraft stationary in same area',
+                        position: current
+                    };
+                    aircraft.is_loitering = true;
+                    return true;
+                }
+            } else {
+                stationaryCount = 0;
+            }
+            lastPosition = current;
         }
 
         aircraft.is_loitering = false;

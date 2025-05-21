@@ -280,8 +280,18 @@ function updateAircraftList(aircraft) {
 // Fetch aircraft data periodically
 function fetchAircraftData() {
     fetch('/api/aircraft')
-        .then(response => response.json())
-        .then(data => updateAircraft(data))
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data || !data.aircraft) {
+                throw new Error('Invalid response format');
+            }
+            updateAircraft(data);
+        })
         .catch(error => console.error('Error fetching aircraft data:', error));
 }
 

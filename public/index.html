@@ -6,6 +6,30 @@
     <title>MedPlane - Aircraft Monitoring</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #loitering-events {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+            z-index: 1000;
+        }
+        .events-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #0078d7;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .events-link:hover {
+            background-color: #0056a3;
+        }
+    </style>
 </head>
 <body>
     <div id="map"></div>
@@ -14,7 +38,51 @@
         <div id="aircraft-list"></div>
     </div>
 
+    <div id="loitering-events">
+        <h3>Recent Loitering Events</h3>
+        <div id="events-summary">
+            <div class="loading">Loading events...</div>
+        </div>
+        <a href="/events" class="events-link">View All Events</a>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch loitering events summary
+            fetch('/api/loitering')
+                .then(response => response.json())
+                .then(events => {
+                    const summaryContainer = document.getElementById('events-summary');
+                    if (!Array.isArray(events) || events.length === 0) {
+                        summaryContainer.innerHTML = '<p>No loitering events detected yet.</p>';
+                        return;
+                    }
+
+                    // Show the 5 most recent events
+                    const recentEvents = events
+                        .sort((a, b) => b.lastUpdated - a.lastUpdated)
+                        .slice(0, 5);
+
+                    summaryContainer.innerHTML = `
+                        <div class="recent-events">
+                            ${recentEvents.map(event => `
+                                <div class="event-item">
+                                    <strong>${event.callsign || 'Unknown'} (${event.icao})</strong>
+                                    <p>Last updated: ${new Date(event.lastUpdated).toLocaleString()}</p>
+                                    <p>Detection count: ${event.detectionCount}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    document.getElementById('events-summary').innerHTML =
+                        '<p class="error">Error loading events</p>';
+                });
+        });
+    </script>
 </body>
 </html>
