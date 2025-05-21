@@ -20,6 +20,7 @@ export class AircraftScanner extends EventEmitter {
     private updateIntervalMs = 10000; // 10 seconds default update interval
     private isScanning = false;
     private loiteringStorage = getLoiteringStorage();
+    private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
 
     constructor(private provider: ScannerProvider) {
         super();
@@ -38,7 +39,29 @@ export class AircraftScanner extends EventEmitter {
         // Set up regular scanning interval
         this.intervalId = setInterval(() => {
             this.scheduleNextScan();
+            this.cleanupInactiveAircraft(); // Add cleanup on each interval
         }, this.updateIntervalMs);
+    }
+
+    private cleanupInactiveAircraft(): void {
+        const now = Date.now();
+        const inactiveThreshold = now - this.INACTIVITY_THRESHOLD_MS;
+
+        // Find and remove inactive aircraft
+        for (const [icao, aircraft] of this.aircraft.entries()) {
+            const lastUpdate = aircraft.lastUpdate ? aircraft.lastUpdate * 1000 : 0;
+            if (lastUpdate < inactiveThreshold) {
+                console.log(`Removing inactive aircraft ${icao} (last update: ${new Date(lastUpdate).toISOString()})`);
+                this.aircraft.delete(icao);
+
+                // Also remove any associated loitering events
+                const event = this.loiteringStorage.getEventByIcao(icao);
+                if (event) {
+                    console.log(`Removing loitering event for inactive aircraft ${icao}`);
+                    this.loiteringStorage.deleteEvent(event.id);
+                }
+            }
+        }
     }
 
     stop(): void {
