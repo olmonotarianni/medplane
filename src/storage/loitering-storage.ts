@@ -2,6 +2,15 @@ import { LoiteringEvent } from '../types';
 
 class LoiteringStorage {
     private events: Map<string, LoiteringEvent> = new Map();
+    private readonly EVENT_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+    private cleanupIntervalId?: NodeJS.Timeout;
+
+    constructor() {
+        // Set up periodic cleanup
+        this.cleanupIntervalId = setInterval(() => {
+            this.cleanupOldEvents();
+        }, 60 * 60 * 1000); // Run cleanup every hour
+    }
 
     public saveEvent(event: LoiteringEvent): void {
         this.events.set(event.id, event);
@@ -25,6 +34,30 @@ class LoiteringStorage {
 
     public clear(): void {
         this.events.clear();
+    }
+
+    private cleanupOldEvents(): void {
+        const now = Date.now();
+        const expiryThreshold = now - this.EVENT_EXPIRY_MS;
+        let cleanedCount = 0;
+
+        for (const [id, event] of this.events.entries()) {
+            if (event.lastUpdated < expiryThreshold) {
+                this.events.delete(id);
+                cleanedCount++;
+            }
+        }
+
+        if (cleanedCount > 0) {
+            console.log(`Cleaned up ${cleanedCount} expired loitering events`);
+        }
+    }
+
+    public destroy(): void {
+        if (this.cleanupIntervalId) {
+            clearInterval(this.cleanupIntervalId);
+            this.cleanupIntervalId = undefined;
+        }
     }
 }
 
