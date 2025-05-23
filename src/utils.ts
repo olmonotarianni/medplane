@@ -228,79 +228,53 @@ export interface Segment {
     start: Position;
     end: Position;
 }
-
 /**
- * Determines if two line segments truly intersect.
+ * Determines whether two geographic segments intersect strictly within their bounds.
  *
- * Two segments are considered intersecting if and only if:
- * 1. They cross each other at a point that is not an endpoint of either segment
- * 2. They overlap along a shared portion (colinear case)
+ * Criteria:
+ * - Excludes intersections that occur at endpoints.
+ * - Handles floating-point imprecision with EPSILON.
+ * - Rejects degenerate segments (zero-length).
+ * - Uses geometric orientation and cross product logic.
  *
- * Important cases:
- * - Segments that only share an endpoint are NOT considered intersecting
- * - Segments that are parallel but don't overlap are NOT considered intersecting
- * - Segments that are degenerate (points) are NOT considered intersecting
- * - Segments that overlap along a portion ARE considered intersecting
- *
- * @param seg1 First line segment
- * @param seg2 Second line segment
- * @returns true if the segments truly intersect, false otherwise
+ * @param seg1 The first segment
+ * @param seg2 The second segment
+ * @returns true if the segments intersect, false otherwise
  */
+
 export function areIntersecting(seg1: Segment, seg2: Segment): boolean {
-    const EPSILON = 1e-12;
+    const EPSILON = 1e-10;
 
-    const x1 = seg1.start.longitude, y1 = seg1.start.latitude;
-    const x2 = seg1.end.longitude, y2 = seg1.end.latitude;
-    const x3 = seg2.start.longitude, y3 = seg2.start.latitude;
-    const x4 = seg2.end.longitude, y4 = seg2.end.latitude;
+    // Convert to vector-friendly point format
+    type Point = { x: number, y: number };
+    const A: Point = { x: seg1.start.longitude, y: seg1.start.latitude };
+    const B: Point = { x: seg1.end.longitude, y: seg1.end.latitude };
+    const C: Point = { x: seg2.start.longitude, y: seg2.start.latitude };
+    const D: Point = { x: seg2.end.longitude, y: seg2.end.latitude };
 
-    // Reject degenerate segments (points)
-    const isPoint = (x: number, y: number, x2: number, y2: number) =>
-        Math.abs(x - x2) < EPSILON && Math.abs(y - y2) < EPSILON;
-
-    if (isPoint(x1, y1, x2, y2) || isPoint(x3, y3, x4, y4)) {
-        return false; // One of the segments is a point
+    // Return cross product of (p1 -> p2) × (p1 -> p3)
+    function cross(p1: Point, p2: Point, p3: Point): number {
+        return (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x);
     }
 
-    // Check if segments share endpoints - if they do, they're not considered intersecting
-    const endpointsMatch = (xa: number, ya: number, xb: number, yb: number) =>
-        Math.abs(xa - xb) < EPSILON && Math.abs(ya - yb) < EPSILON;
+    // Check if two points are effectively the same
+    function isSame(p1: Point, p2: Point): boolean {
+        return Math.abs(p1.x - p2.x) < EPSILON && Math.abs(p1.y - p2.y) < EPSILON;
+    }
 
+    // Reject degenerate segments or if they share an endpoint
     if (
-        endpointsMatch(x1, y1, x3, y3) || endpointsMatch(x1, y1, x4, y4) ||
-        endpointsMatch(x2, y2, x3, y3) || endpointsMatch(x2, y2, x4, y4)
+        isSame(A, B) || isSame(C, D) ||
+        isSame(A, C) || isSame(A, D) || isSame(B, C) || isSame(B, D)
     ) {
-        return false; // Segments share an endpoint, not considered intersecting
+        return false;
     }
 
-    // Compute denominator
-    const denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+    const d1 = cross(C, D, A);
+    const d2 = cross(C, D, B);
+    const d3 = cross(A, B, C);
+    const d4 = cross(A, B, D);
 
-    // Parallel or colinear
-    if (Math.abs(denom) < EPSILON) {
-        // Check colinearity via cross product
-        const cross = (x: number, y: number, x0: number, y0: number) =>
-            (x - x0) * (y2 - y1) - (y - y0) * (x2 - x1);
-
-        if (Math.abs(cross(x3, y3, x1, y1)) > EPSILON) {
-            return false; // Parallel but not colinear
-        }
-
-        // For colinear segments, check if they overlap
-        const inRange = (a: number, b: number, c: number) => Math.min(a, b) <= c + EPSILON && c <= Math.max(a, b) + EPSILON;
-
-        return (
-            (inRange(x1, x2, x3) && inRange(y1, y2, y3)) ||
-            (inRange(x1, x2, x4) && inRange(y1, y2, y4)) ||
-            (inRange(x3, x4, x1) && inRange(y3, y4, y1)) ||
-            (inRange(x3, x4, x2) && inRange(y3, y4, y2))
-        );
-    }
-
-    // Compute intersection parameters
-    const ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
-    const ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
-
-    // Check if intersection occurs within both line segments (but not at endpoints)
-    return ua > 0 && ua < 1 && ub > 0 && ub < 1;
+    // Proper intersection (segments cross each other)
+    return d1 * d2 < -EPSILON && d3 * d4 < -EPSILON;
 }
