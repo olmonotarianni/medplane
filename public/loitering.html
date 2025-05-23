@@ -7,26 +7,6 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="/styles.css">
     <style>
-        /* Remove body and html rules, keep only page-specific styles */
-        #event-container {
-            display: flex;
-            flex-direction: row;
-            height: 100vh;
-        }
-        #event-map {
-            flex: 2;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        #event-info {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: #f5f5f5;
-            border-left: 1px solid #ddd;
-            max-width: 400px;
-        }
         .info-section {
             margin-bottom: 20px;
             border-bottom: 1px solid #ddd;
@@ -43,7 +23,6 @@
             margin-bottom: 10px;
             padding: 10px;
             background-color: #e9f5ff;
-            border-radius: 4px;
         }
         .back-link {
             display: inline-block;
@@ -71,11 +50,11 @@
     </style>
 </head>
 <body>
-    <div id="event-container">
-        <div id="event-map">
+    <div id="main-container">
+        <div id="map">
             <div class="loading">Loading event data...</div>
         </div>
-        <div id="event-info">
+        <div id="info-panel">
             <a href="/" class="back-link">← Back to monitoring</a>
             <h2>Loitering Event Analysis</h2>
             <div id="event-details">
@@ -115,7 +94,7 @@
         }
 
         function showError(message) {
-            document.querySelector('#event-map .loading').innerHTML = `<div class="error">${message}</div>`;
+            document.querySelector('#map .loading').innerHTML = `<div class="error">${message}</div>`;
             document.querySelector('#event-details .loading').innerHTML = `<div class="error">${message}</div>`;
         }
 
@@ -125,10 +104,10 @@
             detailsElement.innerHTML = createEventDetailsHTML(event);
 
             // Initialize map
-            const mapElement = document.getElementById('event-map');
+            const mapElement = document.getElementById('map');
             mapElement.innerHTML = ''; // Clear loading message
 
-            const map = L.map('event-map');
+            const map = L.map('map');
 
             // Add base tile layer
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

@@ -1,5 +1,7 @@
 // Initialize the map
-const map = L.map('map').setView([37.2, 11.2], 7);
+const map = L.map('map');
+// Fit to Sicily Channel bounds before any data loads
+map.fitBounds([[33, 10], [38, 18]]);
 
 // Add OpenStreetMap tiles
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -12,6 +14,7 @@ const aircraftTracks = new Map();
 
 // Store monitoring area rectangle
 let monitoringAreaRect = null;
+let hasFitToMonitoringArea = false;
 
 // Aircraft renderer class for drawing detailed aircraft
 class AircraftRenderer {
@@ -151,6 +154,10 @@ function updateAircraft(data) {
             fillColor: 'red',
             fillOpacity: 0.1
         }).addTo(map);
+        if (!hasFitToMonitoringArea) {
+            map.fitBounds(monitoringAreaRect.getBounds());
+            hasFitToMonitoringArea = true;
+        }
     }
 
     // Update aircraft

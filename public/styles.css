@@ -1,32 +1,38 @@
 html, body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    color: #222;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
 }
 
 #map {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    flex: 2 1 0;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
     z-index: 1;
 }
 
 #info-panel {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 350px;
-    max-height: calc(100vh - 40px);
-    background: white;
-    border-radius: 8px;
+    flex: 1 1 320px;
+    max-width: 400px;
+    min-width: 320px;
+    background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 20px;
     z-index: 2;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    border-left: 1px solid #ddd;
 }
 
 #info-panel h2 {
@@ -49,7 +55,7 @@ html, body {
 
 .aircraft-item {
     background: #f8f9fa;
-    border-radius: 6px;
+    border-radius: 0;
     padding: 6px 10px;
     border-left: 4px solid #007bff;
     font-size: 12px;
@@ -197,7 +203,7 @@ html, body {
 
 #loitering-events {
     background: #fff;
-    border-radius: 4px;
+    border-radius: 0;
     padding: 15px;
     margin-top: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -221,7 +227,7 @@ html, body {
 .event-item {
     padding: 10px;
     background: #f5f5f5;
-    border-radius: 4px;
+    border-radius: 0;
     border-left: 4px solid #0078d7;
 }
 
@@ -283,4 +289,33 @@ html, body {
     max-width: 100%;
     overflow-x: auto;
     margin-bottom: 12px;
+}
+
+/* Remove border-radius from all panel-like elements */
+.aircraft-item,
+#loitering-events,
+.event-item,
+.intersection-point {
+    border-radius: 0 !important;
+}
+
+#info-panel, .info-section {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    color: #222;
+}
+
+#info-panel h2, .info-section h3 {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 20px;
+    color: #222;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+#info-panel p, .info-section p, .info-label, .info-value, .aircraft-item, .aircraft-item p, .aircraft-item span {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    color: #222;
 }

@@ -9,7 +9,6 @@ export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, Aircraft> = new Map();
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 10000; // 10 seconds default update interval
-    private isScanning = false;
     private loiteringStorage = getLoiteringStorage();
     private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
     private running = false;
