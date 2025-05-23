@@ -34,55 +34,67 @@
 <body>
     <div id="map"></div>
     <div id="info-panel">
-        <h2>Aircraft Information</h2>
-        <div id="aircraft-list"></div>
-    </div>
-
-    <div id="loitering-events">
-        <h3>Recent Loitering Events</h3>
-        <div id="events-summary">
+        <h2>Loitering Events</h2>
+        <div id="events-table-container">
             <div class="loading">Loading events...</div>
         </div>
-        <a href="/events" class="events-link">View All Events</a>
+        <h2>Aircraft Information</h2>
+        <div id="aircraft-list"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Fetch loitering events summary
-            fetch('/api/loitering')
-                .then(response => response.json())
-                .then(events => {
-                    const summaryContainer = document.getElementById('events-summary');
-                    if (!Array.isArray(events) || events.length === 0) {
-                        summaryContainer.innerHTML = '<p>No loitering events detected yet.</p>';
-                        return;
-                    }
-
-                    // Show the 5 most recent events
-                    const recentEvents = events
-                        .sort((a, b) => b.lastUpdated - a.lastUpdated)
-                        .slice(0, 5);
-
-                    summaryContainer.innerHTML = `
-                        <div class="recent-events">
-                            ${recentEvents.map(event => `
-                                <div class="event-item">
-                                    <strong>${event.callsign || 'Unknown'} (${event.icao})</strong>
-                                    <p>Last updated: ${new Date(event.lastUpdated).toLocaleString()}</p>
-                                    <p>Detection count: ${event.detectionCount}</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                    document.getElementById('events-summary').innerHTML =
-                        '<p class="error">Error loading events</p>';
-                });
+            // Fetch loitering events for the sidebar table
+            fetchEvents();
         });
+
+        async function fetchEvents() {
+            try {
+                const response = await fetch('/api/loitering');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch events: ${response.status} ${response.statusText}`);
+                }
+                const events = await response.json();
+                renderEventsTable(events);
+            } catch (error) {
+                document.getElementById('events-table-container').innerHTML = `<div class="error">Error loading events: ${error.message}</div>`;
+            }
+        }
+
+        function renderEventsTable(events) {
+            const container = document.getElementById('events-table-container');
+            if (!Array.isArray(events) || events.length === 0) {
+                container.innerHTML = '<p>No loitering events have been detected yet.</p>';
+                return;
+            }
+            container.innerHTML = `
+                <table class="events-table compact">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Callsign</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${events.map(event => {
+                            const dateObj = new Date(event.firstDetected);
+                            return `
+                            <tr>
+                                <td title="${dateObj.toLocaleString()}">${dateObj.toLocaleDateString()}</td>
+                                <td>${dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                                <td>${event.callsign || 'Unknown'}</td>
+                                <td><a href="/loitering/${event.id}" class="view-link" target="_blank">View</a></td>
+                            </tr>
+                        `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
     </script>
 </body>
 </html>

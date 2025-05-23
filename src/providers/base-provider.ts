@@ -1,7 +1,12 @@
-import { Aircraft } from '../types';
+import { ExtendedPosition } from '../types';
+
+export interface ScanAircraft extends ExtendedPosition {
+    icao: string;
+    callsign: string;
+}
 
 export interface ScanResult {
-    aircraft: Aircraft[];
+    aircraft: ScanAircraft[];
     timestamp: number;
 }
 

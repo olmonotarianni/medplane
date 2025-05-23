@@ -13,31 +13,26 @@ const mockProvider: ScannerProvider = {
 function createLoiteringAircraft(): Aircraft {
     // Create a simple track that forms an "X" pattern
     // Using obvious coordinates for easy debugging
+    const now = Date.now() / 1000;
     return {
         icao: "LOITER1",
         callsign: "TEST123",
-        position: { latitude: 42.0, longitude: 14.0 },
-        altitude: 10000,
-        speed: 200,
-        heading: 90,
-        verticalRate: 0,
-        lastUpdate: Date.now() / 1000,
         is_monitored: true,
         is_loitering: false,
         not_monitored_reason: null,
         track: [
             // First segment: top-left to bottom-right
-            { latitude: 42.0, longitude: 13.0 },  // Start point
-            { latitude: 41.5, longitude: 13.5 },  // Mid point
-            { latitude: 41.0, longitude: 14.0 },  // End point
+            { latitude: 42.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 41.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
             // Second segment: top-right to bottom-left
-            { latitude: 42.0, longitude: 15.0 },  // Start point
-            { latitude: 41.5, longitude: 14.5 },  // Mid point
-            { latitude: 41.0, longitude: 14.0 },  // End point (intersects with first segment)
+            { latitude: 42.0, longitude: 15.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 41.5, longitude: 14.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
             // Third segment: back to start
-            { latitude: 41.0, longitude: 14.0 },  // Start point
-            { latitude: 41.5, longitude: 13.5 },  // Mid point
-            { latitude: 42.0, longitude: 13.0 }   // End point (back to start)
+            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 41.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 42.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 }
         ]
     };
 }
@@ -72,8 +67,7 @@ export function testLoiteringEventCreation(): void {
     console.log('After scanner update:', {
         icao: aircraft.icao,
         callsign: aircraft.callsign,
-        is_loitering: aircraft.is_loitering,
-        loitering_debug: aircraft.loitering_debug
+        is_loitering: aircraft.is_loitering
     });
 
     // Check if a loitering event was created
@@ -97,8 +91,6 @@ export function testLoiteringEventCreation(): void {
     if (events.length > 0) {
         console.log('\nTesting event update...');
         const updatedAircraft = createLoiteringAircraft();
-        updatedAircraft.altitude = 12000; // Change some data
-        updatedAircraft.speed = 250;
         scanner.updateAircraft(updatedAircraft);
 
         // Check if the event was updated
@@ -108,8 +100,6 @@ export function testLoiteringEventCreation(): void {
             console.log('Updated event:', {
                 id: updatedEvent.id,
                 icao: updatedEvent.icao,
-                altitude: updatedEvent.aircraftState.altitude,
-                speed: updatedEvent.aircraftState.speed,
                 detectionCount: updatedEvent.detectionCount
             });
         }

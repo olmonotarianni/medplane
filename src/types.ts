@@ -6,6 +6,7 @@ export interface Position {
 
 // Extended position with attitude data
 export interface ExtendedPosition extends Position {
+    // Timestamp in seconds
     timestamp: number;
     altitude: number;
     speed: number;
@@ -16,14 +17,13 @@ export interface ExtendedPosition extends Position {
 export interface Aircraft {
     icao: string;
     callsign: string | null;
-    lastUpdate: number;
     // Monitoring status (updated by the analyzer, tells whether the aircraft is eligible for loitering detection)
     is_monitored: boolean;
     // Loitering status (updated by the analyzer, tells whether the aircraft track crosses itself, and if so, it is loitering)
     is_loitering: boolean;
     // Reason for not being monitored (updated by the analyzer, tells why the aircraft is not monitored)
     not_monitored_reason: string | null;
-    // Track of the aircraft
+    // Track of the aircraft (first point is the newest, last point is the oldest)
     track: ExtendedPosition[];
 }
 

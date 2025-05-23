@@ -19,7 +19,7 @@ export async function runProviderTest(): Promise<void> {
             console.log(`\nAircraft ${index + 1}:`);
             console.log('ICAO:', aircraft.icao);
             console.log('Callsign:', aircraft.callsign);
-            console.log('Position:', aircraft.position);
+            console.log('Position:', { latitude: aircraft.latitude, longitude: aircraft.longitude });
             console.log('Altitude:', aircraft.altitude);
             console.log('Speed:', aircraft.speed);
             console.log('Heading:', aircraft.heading);

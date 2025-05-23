@@ -1,4 +1,4 @@
-body {
+html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -50,15 +50,84 @@ body {
 .aircraft-item {
     background: #f8f9fa;
     border-radius: 6px;
-    padding: 12px;
+    padding: 6px 10px;
     border-left: 4px solid #007bff;
-    font-size: 13px;
+    font-size: 12px;
+    margin-bottom: 4px;
+    cursor: pointer;
     transition: all 0.2s ease;
+    min-height: 28px;
+    display: flex;
+    flex-direction: column;
+}
+
+.aircraft-item.expanded {
+    background: #e9f5ff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    z-index: 2;
+    padding: 16px 16px 16px 18px;
+    font-size: 13px;
+    min-height: 90px;
+    border: 1px solid #b3d8ff;
+}
+
+.aircraft-item .aircraft-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.aircraft-item .aircraft-callsign {
+    font-weight: bold;
+    color: #333;
+    font-size: 13px;
+    margin-right: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aircraft-item .aircraft-alt {
+    color: #007bff;
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+.aircraft-item .aircraft-speed {
+    color: #888;
+    font-size: 12px;
+}
+
+.aircraft-item .aircraft-status {
+    font-size: 11px;
+    margin-left: 6px;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.aircraft-item .aircraft-status.monitored {
+    color: #007bff;
+    font-weight: normal;
+}
+
+.aircraft-item .aircraft-details {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #444;
+    display: none;
+}
+
+.aircraft-item.expanded .aircraft-details {
+    display: block;
+}
+
+.aircraft-item .aircraft-details p {
+    margin: 2px 0;
 }
 
 .aircraft-item:hover {
-    transform: translateX(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: #f3f6fa;
 }
 
 .aircraft-item.interesting {
@@ -190,4 +259,28 @@ body {
 .error {
     color: #d32f2f;
     font-style: italic;
+}
+
+.events-table.compact {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.events-table.compact th, .events-table.compact td {
+    padding: 3px 6px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #eee;
+}
+.events-table.compact th {
+    background: #f5f5f5;
+    font-weight: bold;
+}
+#events-table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    margin-bottom: 12px;
 }

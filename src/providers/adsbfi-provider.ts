@@ -1,5 +1,5 @@
 import { Aircraft, Position } from '../types';
-import { ScannerProvider, ScanResult } from './base-provider';
+import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
 
 // Internal types for adsb.fi API response
 interface AdsbFiAircraft {
@@ -79,41 +79,42 @@ export class AdsbFiProvider implements ScannerProvider {
 
             const data = await response.json() as AdsbFiResponse;
 
-            // Convert adsb.fi aircraft format to our internal format
-            const aircraft = data.aircraft
-                .filter(a => a.lat !== undefined && a.lon !== undefined) // Only include aircraft with position data
-                .map(a => this.convertAircraft(a));
+            // Use the 'now' field from the API response as the timestamp
+            const snapshotTimestamp = Math.floor(data.now);
+
+            // Convert adsb.fi aircraft format to ScanAircraft (snapshot, no history)
+            const aircraft: ScanAircraft[] = data.aircraft
+                .filter(a => a.lat !== undefined && a.lon !== undefined)
+                .map(a => {
+                    const seenPos = typeof a.seen === 'number' ? a.seen : undefined;
+                    const positionTimestamp = seenPos !== undefined ? snapshotTimestamp - seenPos : snapshotTimestamp;
+                    return {
+                        icao: a.hex,
+                        callsign: a.flight?.trim() || '',
+                        latitude: a.lat!,
+                        longitude: a.lon!,
+                        timestamp: positionTimestamp,
+                        altitude: typeof a.alt_baro === 'number' ? a.alt_baro : 0,
+                        speed: a.gs || 0,
+                        heading: a.track || 0,
+                        verticalRate: a.baro_rate || 0
+                    };
+                })
+                .filter(ac =>
+                    ac.latitude >= bounds.minLat &&
+                    ac.latitude <= bounds.maxLat &&
+                    ac.longitude >= bounds.minLon &&
+                    ac.longitude <= bounds.maxLon
+                );
 
             return {
-                timestamp: Math.floor(data.now),
+                timestamp: snapshotTimestamp,
                 aircraft
             };
         } catch (error) {
             console.error('Error fetching data from adsb.fi:', error);
             throw error;
         }
-    }
-
-    private convertAircraft(a: AdsbFiAircraft): Aircraft {
-        const position: Position = {
-            latitude: a.lat!,
-            longitude: a.lon!
-        };
-
-        return {
-            icao: a.hex,
-            callsign: a.flight?.trim() || null,
-            position,
-            altitude: typeof a.alt_baro === 'number' ? a.alt_baro : 0,
-            speed: a.gs || 0,
-            heading: a.track || 0,
-            verticalRate: a.baro_rate || 0,
-            lastUpdate: Date.now() / 1000, // Current timestamp in seconds
-            is_loitering: false,
-            is_monitored: false,
-            not_monitored_reason: null,
-            track: [position]
-        };
     }
 
     static fromEnv(): AdsbFiProvider {

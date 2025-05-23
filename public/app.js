@@ -155,8 +155,9 @@ function updateAircraft(data) {
 
     // Update aircraft
     aircraft.forEach(ac => {
-        const position = [ac.position.latitude, ac.position.longitude];
-        const heading = ac.heading || 0;
+        const latest = ac.track && ac.track[0] ? ac.track[0] : {};
+        const position = [latest.latitude, latest.longitude];
+        const heading = latest.heading || 0;
 
         // Remove and recreate marker for update
         if (aircraftMarkers.has(ac.icao)) {
@@ -177,12 +178,12 @@ function updateAircraft(data) {
         // Add popup with more detailed information
         marker.bindPopup(`
             <h3>${ac.callsign || 'Unknown'} (${ac.icao})</h3>
-            <p>Position: ${ac.position.latitude.toFixed(4)}, ${ac.position.longitude.toFixed(4)}</p>
-            <p>Altitude: ${ac.altitude}ft</p>
-            <p>Speed: ${ac.speed}kts</p>
-            <p>Heading: ${ac.heading}°</p>
-            <p>Vertical Rate: ${ac.verticalRate}ft/min</p>
-            <p>Last Update: ${new Date(ac.lastUpdate).toLocaleTimeString()}</p>
+            <p>Position: ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
+            <p>Altitude: ${latest.altitude}ft</p>
+            <p>Speed: ${latest.speed}kts</p>
+            <p>Heading: ${latest.heading}°</p>
+            <p>Vertical Rate: ${latest.verticalRate}ft/min</p>
+            <p>Last Update: ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
             ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
             ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : `<p class="unmonitored">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
         `);
@@ -246,11 +247,22 @@ function updateAircraftList(aircraft) {
             return b.is_monitored ? 1 : -1; // Then monitored aircraft (blue)
         }
         // Within same status group, sort by altitude
-        return (b.altitude || 0) - (a.altitude || 0);
+        return (b.track && b.track[0]?.altitude || 0) - (a.track && a.track[0]?.altitude || 0);
     });
 
+    let expandedIcao = null;
+    // If already expanded, keep it expanded after update
+    if (window._expandedAircraftIcao) {
+        expandedIcao = window._expandedAircraftIcao;
+    }
+
     aircraft.forEach(ac => {
+        const latest = ac.track && ac.track[0] ? ac.track[0] : {};
         const item = document.createElement('div');
+        item.className = 'aircraft-item' + (expandedIcao === ac.icao ? ' expanded' : '');
+        item.tabIndex = 0;
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-expanded', expandedIcao === ac.icao ? 'true' : 'false');
         let color = '';
         if (ac.is_loitering) {
             color = '#dc3545'; // red
@@ -259,20 +271,32 @@ function updateAircraftList(aircraft) {
         } else {
             color = '#888'; // gray
         }
-        item.className = `aircraft-item`;
-        item.style.borderLeft = `4px solid ${color}`;
-        item.style.background = ac.is_loitering ? '#fff5f5' : (ac.is_monitored ? '#f8f9fa' : '#f3f3f3');
+        // Compact main row
         item.innerHTML = `
-            <h3 style="color:${color}">${ac.callsign || 'Unknown'} (${ac.icao})</h3>
-            <p>Position: ${ac.position.latitude.toFixed(4)}, ${ac.position.longitude.toFixed(4)}</p>
-            <p>Altitude: <span style="color:${color}">${ac.altitude}ft</span></p>
-            <p>Speed: <span style="color:${color}">${ac.speed}kts</span></p>
-            <p>Heading: ${ac.heading}°</p>
-            <p>Vertical Rate: ${ac.verticalRate}ft/min</p>
-            <p>Last Update: ${new Date(ac.lastUpdate).toLocaleTimeString()}</p>
-            ${ac.is_loitering ? '<p class="highlight" style="color:#dc3545">Loitering Aircraft</p>' : ''}
-            ${ac.is_monitored ? '<p class="monitored" style="color:#007bff">Monitored Aircraft</p>' : `<p class="unmonitored" style="color:#888">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
+            <div class="aircraft-main">
+                <span class="aircraft-callsign" style="color:${color}">${ac.callsign || ac.icao}</span>
+                <span class="aircraft-alt">${latest.altitude ?? '?'} ft</span>
+                <span class="aircraft-speed">${latest.speed ?? '?'} kts</span>
+                <span class="aircraft-status${ac.is_monitored ? ' monitored' : ''}">
+                    ${ac.is_loitering ? 'Loitering' : (ac.is_monitored ? 'Monitored' : 'Unmonitored')}
+                </span>
+            </div>
+            <div class="aircraft-details">
+                <p><b>Position:</b> ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
+                <p><b>Heading:</b> ${latest.heading ?? '?'}°</p>
+                <p><b>Vertical Rate:</b> ${latest.verticalRate ?? '?'} ft/min</p>
+                <p><b>Last Update:</b> ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
+                ${ac.not_monitored_reason ? `<p><b>Reason:</b> ${ac.not_monitored_reason}</p>` : ''}
+            </div>
         `;
+        item.addEventListener('click', () => {
+            if (window._expandedAircraftIcao === ac.icao) {
+                window._expandedAircraftIcao = null;
+            } else {
+                window._expandedAircraftIcao = ac.icao;
+            }
+            updateAircraftList(aircraft);
+        });
         container.appendChild(item);
     });
 }

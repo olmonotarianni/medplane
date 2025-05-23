@@ -1,5 +1,5 @@
 import { Aircraft } from '../types';
-import { ScannerProvider, ScanResult } from './base-provider';
+import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
 
 // OpenSky Network API aircraft state
 type AircraftState = [
@@ -128,29 +128,29 @@ export class OpenSkyProvider implements ScannerProvider {
                     timestamp: data.time
                 };
             }
-            const aircraft: Aircraft[] = data.states
-                .map((state): Aircraft | null => {
+            const aircraft: ScanAircraft[] = data.states
+                .map((state): ScanAircraft | null => {
                     // OpenSky: [5]=longitude, [6]=latitude
                     if (!state[6] || !state[5]) return null; // Skip if no position
                     return {
                         icao: state[0],
-                        callsign: state[1]?.trim() || null,
-                        position: {
-                            latitude: state[6],
-                            longitude: state[5]
-                        },
+                        callsign: state[1]?.trim() || '',
+                        latitude: state[6],
+                        longitude: state[5],
+                        timestamp: state[4],
                         altitude: state[7],
                         speed: state[9],
                         heading: state[10],
-                        verticalRate: state[11],
-                        lastUpdate: state[4],
-                        is_loitering: false,
-                        is_monitored: false,
-                        not_monitored_reason: null,
-                        track: []
+                        verticalRate: state[11]
                     };
                 })
-                .filter((aircraft): aircraft is Aircraft => aircraft !== null);
+                .filter((aircraft): aircraft is ScanAircraft => aircraft !== null)
+                .filter(ac =>
+                    ac.latitude >= bounds.minLat &&
+                    ac.latitude <= bounds.maxLat &&
+                    ac.longitude >= bounds.minLon &&
+                    ac.longitude <= bounds.maxLon
+                );
             return {
                 aircraft,
                 timestamp: data.time
