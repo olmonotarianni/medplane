@@ -113,10 +113,10 @@ export class AircraftScanner extends EventEmitter {
         const wasLoitering = tracked.is_loitering;
 
         // Analyze aircraft with the analyzer
-        const isLoiteringNow = this.analyzer.analyzeAircraft(tracked);
+        this.analyzer.analyzeAircraft(tracked);
 
         // If loitering is detected (new or continued)
-        if (isLoiteringNow) {
+        if (tracked.is_loitering) {
             this.handleLoiteringDetection(tracked);
             this.emit('loiteringAircraft', tracked);
         }

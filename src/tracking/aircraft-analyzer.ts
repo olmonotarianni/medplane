@@ -1,6 +1,6 @@
 import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from '../config';
-import { Aircraft, ExtendedPosition, Position } from '../types';
-import { areIntersecting, GeoUtils, Segment } from '../utils';
+import { Aircraft, Position } from '../types';
+import { areIntersecting, GeoUtils } from '../utils';
 
 interface AircraftTrajectory {
     positions: Position[];
@@ -24,19 +24,19 @@ export class AircraftAnalyzer {
 
     private isInSicilyChannel(position: Position): boolean {
         return position.latitude >= SICILY_CHANNEL_BOUNDS.minLat &&
-               position.latitude <= SICILY_CHANNEL_BOUNDS.maxLat &&
-               position.longitude >= SICILY_CHANNEL_BOUNDS.minLon &&
-               position.longitude <= SICILY_CHANNEL_BOUNDS.maxLon;
+            position.latitude <= SICILY_CHANNEL_BOUNDS.maxLat &&
+            position.longitude >= SICILY_CHANNEL_BOUNDS.minLon &&
+            position.longitude <= SICILY_CHANNEL_BOUNDS.maxLon;
     }
 
     private isInTargetAltitude(altitude: number): boolean {
         return altitude >= MONITORING_THRESHOLDS.altitude.min &&
-               altitude <= MONITORING_THRESHOLDS.altitude.max;
+            altitude <= MONITORING_THRESHOLDS.altitude.max;
     }
 
     private isInTargetSpeed(speed: number): boolean {
         return speed >= MONITORING_THRESHOLDS.speed.min &&
-               speed <= MONITORING_THRESHOLDS.speed.max;
+            speed <= MONITORING_THRESHOLDS.speed.max;
     }
 
     private isOverSea(position: Position): boolean {
@@ -52,7 +52,7 @@ export class AircraftAnalyzer {
     private getOrCreateTrajectory(aircraft: Aircraft, now: number): AircraftTrajectory {
         let trajectory = this.trajectories.get(aircraft.icao);
         if (!trajectory) {
-            trajectory = { positions: [], timestamps: [], lastUpdate: now,  };
+            trajectory = { positions: [], timestamps: [], lastUpdate: now, };
             this.trajectories.set(aircraft.icao, trajectory);
         }
         return trajectory;
@@ -117,6 +117,15 @@ export class AircraftAnalyzer {
         aircraft.not_monitored_reason = null;
     }
 
+    /**
+     * This function will be used to handle the out of range status of an aircraft.
+     * It will be called when the aircraft is monitored and will be used to check if the aircraft is out of range.
+     * If the aircraft is out of range, it will be set to not monitored and the loitering status will be reset.
+     * @param aircraft - The aircraft to handle.
+     * @param trajectory - The trajectory of the aircraft.
+     * @param now - The current timestamp.
+     * @returns True if the aircraft is out of range, false otherwise.
+     */
     private handleOutOfRange(aircraft: Aircraft, trajectory: AircraftTrajectory, now: number): boolean {
         if (!aircraft.is_monitored) {
             if (!trajectory.outOfRangeSince) trajectory.outOfRangeSince = now;
@@ -133,27 +142,8 @@ export class AircraftAnalyzer {
         return true;
     }
 
-    /**
-     * Detects loitering behavior by checking if the aircraft's path crosses itself.
-     * A path crosses itself if any non-adjacent segments intersect.
-     *
-     * @param aircraft - The aircraft to analyze.
-     * @returns True if the aircraft's path crosses itself, false otherwise.
-     */
-    private detectLoitering(aircraft: Aircraft): boolean {
-        // // TODO: we are currently using this to generate some loitering events to debug the loitering events
-        // if (aircraft.track.length > 4 && aircraft.is_monitored) {
-        //     aircraft.is_loitering = true;
-        //     aircraft.loitering_debug = {
-        //         reason: 'Debug mode: Track length > 4',
-        //         segments: [{
-        //             start: aircraft.track[0],
-        //             end: aircraft.track[aircraft.track.length - 1]
-        //         }]
-        //     };
-        //     return true;
-        // }
-        // return false;
+    static isLoitering(aircraft: Aircraft): boolean {
+
 
         // Convert track points to segments
         const segments = aircraft.track.slice(1).map((point, i) => ({
@@ -175,41 +165,16 @@ export class AircraftAnalyzer {
             }
         }
 
-        // Check for stationary loitering (aircraft staying in roughly the same area)
-        const stationaryThreshold = 0.01; // About 1km
-        let stationaryCount = 0;
-        let lastPosition = aircraft.track[0];
-
-        for (let i = 1; i < aircraft.track.length; i++) {
-            const current = aircraft.track[i];
-            const distance = GeoUtils.calculateDistance(lastPosition, current);
-
-            if (distance < stationaryThreshold) {
-                stationaryCount++;
-                if (stationaryCount >= 3) { // If aircraft stays in same area for 3+ points
-                    aircraft.loitering_debug = {
-                        reason: 'Aircraft stationary in same area',
-                        position: current
-                    };
-                    aircraft.is_loitering = true;
-                    return true;
-                }
-            } else {
-                stationaryCount = 0;
-            }
-            lastPosition = current;
-        }
-
-        aircraft.is_loitering = false;
         return false;
     }
+
 
     /**
      * Analyzes an aircraft and updates its monitoring status and loitering detection.
      * @param aircraft - The aircraft to analyze.
      * @returns True if the aircraft is loitering, false otherwise.
      */
-    public analyzeAircraft(aircraft: Aircraft): boolean {
+    public analyzeAircraft(aircraft: Aircraft): void {
         const now = this.getCurrentTimestamp(aircraft);
         const trajectory = this.getOrCreateTrajectory(aircraft, now);
         this.updateTrajectory(trajectory, aircraft.position, now);
@@ -221,10 +186,10 @@ export class AircraftAnalyzer {
         this.setMonitoringStatus(aircraft, inArea, inAltitudeRange, inSpeedRange);
 
         if (!this.handleOutOfRange(aircraft, trajectory, now)) {
-            return false;
+            return;
         }
 
-        return this.detectLoitering(aircraft);
+        aircraft.is_loitering = AircraftAnalyzer.isLoitering(aircraft);
     }
 
     public cleanupOldAircraft(): void {

@@ -228,14 +228,14 @@ function testSpecialAircraft() {
     }
 
     const analyzer = new AircraftAnalyzer();
-    const result = analyzer.analyzeAircraft(aircraft);
-    if (result) {
+    analyzer.updateAircraftLoitering(aircraft);
+    if (aircraft.is_loitering) {
         console.log('Test special aircraft: FAILED');
         console.log('  loitering_debug:', JSON.stringify(aircraft.loitering_debug, null, 2));
     } else {
         console.log('Test special aircraft: PASSED');
     }
-    return !result;
+    return !aircraft.is_loitering;
 }
 
 function testSpecialAircraft2() {
@@ -538,38 +538,38 @@ function testSpecialAircraft2() {
     }
 
     const analyzer = new AircraftAnalyzer();
-    const result = analyzer.analyzeAircraft(aircraft);
-    if (result) {
+    analyzer.updateAircraftLoitering(aircraft);
+    if (aircraft.is_loitering) {
         console.log('Test special aircraft: FAILED');
         console.log('  loitering_debug:', JSON.stringify(aircraft.loitering_debug, null, 2));
     } else {
         console.log('Test special aircraft: PASSED');
     }
-    return !result;
+    return !aircraft.is_loitering;
 }
 
-function testPath(analyzer: AircraftAnalyzer, points: { lat: number, lon: number }[], expectedLoitering: boolean): boolean {
-    const aircraft = createTestAircraft('TEST1', Date.now() / 1000);
-    let loiteringDetected = false;
-    const baseTime = Date.now() / 1000;
+function generateAircraft(points: { lat: number, lon: number }[]) {
+    const aircraft: Aircraft = {
+        icao: "TEST1",
+        callsign: "TEST1",
+        track: points.map(pt => ({ latitude: pt.lat, longitude: pt.lon })),
+        position: { latitude: points[0].lat, longitude: points[0].lon },
+        altitude: 10000,
+        speed: 200,
+        heading: 90,
+        verticalRate: 0,
+        lastUpdate: Date.now() / 1000,
+        is_monitored: true,
+        is_loitering: false,
+        not_monitored_reason: null
+    };
+    return aircraft;
+}
 
-    // Feed points into the analyzer
-    points.forEach((point, index) => {
-        const position = { latitude: point.lat, longitude: point.lon };
-        aircraft.position = position;
-        aircraft.track.push(position);
-        aircraft.lastUpdate = baseTime + (index * 30); // 30 seconds between points
-
-        if (analyzer.analyzeAircraft(aircraft)) {
-            loiteringDetected = true;
-        }
-    });
-
-    const result = loiteringDetected === expectedLoitering;
-    if (!result && aircraft.loitering_debug) {
-        console.log('  loitering_debug:', JSON.stringify(aircraft.loitering_debug, null, 2));
-    }
-    return result;
+function runLoiteringTest(aircraft: Aircraft, expectedLoitering: boolean) {
+    const isLoitering = AircraftAnalyzer.isLoitering(aircraft);
+    console.log(`Test path: ${isLoitering === expectedLoitering ? 'PASSED' : 'FAILED'}`);
+    return isLoitering === expectedLoitering;
 }
 
 function testNonLoiteringStraightAircraft() {
@@ -589,57 +589,11 @@ function testNonLoiteringStraightAircraft() {
         not_monitored_reason: null,
         track: straightPoints.map(pt => ({ latitude: pt.lat, longitude: pt.lon }))
     };
-    const analyzer = new AircraftAnalyzer();
-    const result = analyzer.analyzeAircraft(aircraft);
-    console.log(`Test non-loitering straight aircraft: ${!result ? 'PASSED' : 'FAILED'}`);
-    return !result;
+    const isLoitering = AircraftAnalyzer.isLoitering(aircraft);
+    console.log(`Test non-loitering straight aircraft: ${!isLoitering ? 'PASSED' : 'FAILED'}`);
+    return !isLoitering;
 }
 
-function testAltitudeTracking() {
-    // Create an aircraft with a simple straight path but varying altitude
-    const straightPoints = generateStraightPath().slice(0, 5); // Just use first 5 points
-    const aircraft: Aircraft = {
-        icao: "ALT001",
-        callsign: "ALT001",
-        position: { latitude: straightPoints[0].lat, longitude: straightPoints[0].lon },
-        altitude: 10000,
-        speed: 250,
-        heading: 90,
-        verticalRate: 500,
-        lastUpdate: Date.now() / 1000,
-        is_monitored: true,
-        is_loitering: false,
-        not_monitored_reason: null,
-        track: []
-    };
-
-    const analyzer = new AircraftAnalyzer();
-
-    console.log('Testing altitude tracking in aircraft path:');
-
-    // Add each point to the track with changing altitude and speed
-    straightPoints.forEach((point, i) => {
-        // Update aircraft properties with new values
-        aircraft.position = { latitude: point.lat, longitude: point.lon };
-        aircraft.altitude = 10000 + (i * 500); // Climbing by 500ft each point
-        aircraft.speed = 250 - (i * 10);       // Slowing down by 10kts each point
-        aircraft.heading = 90 + (i * 2);       // Turning slightly right
-        aircraft.verticalRate = 500 + (i * 100); // Increasing climb rate
-
-        // Analyze the aircraft (this will add the point to the track with all attitude data)
-        analyzer.analyzeAircraft(aircraft);
-
-        // Print the latest track point with full attitude data
-        if (aircraft.track.length > 0) {
-            const latest = aircraft.track[aircraft.track.length-1];
-            console.log(`Point ${i}: lat=${latest.latitude.toFixed(4)}, lon=${latest.longitude.toFixed(4)}, ` +
-                         `alt=${latest.altitude}ft, speed=${latest.speed}kts, heading=${latest.heading}°, vrate=${latest.verticalRate}ft/min`);
-        }
-    });
-
-    console.log(`Aircraft track contains ${aircraft.track.length} points with full attitude data`);
-    return true;
-}
 
 // Create a class to test loitering events
 class TestEventTracker {

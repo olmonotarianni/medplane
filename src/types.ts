@@ -2,34 +2,28 @@
 export interface Position {
     latitude: number;
     longitude: number;
-    timestamp?: number;
 }
 
 // Extended position with attitude data
 export interface ExtendedPosition extends Position {
-    altitude?: number;
-    speed?: number;
-    heading?: number;
-    verticalRate?: number;
+    timestamp: number;
+    altitude: number;
+    speed: number;
+    heading: number;
+    verticalRate: number;
 }
 
 export interface Aircraft {
     icao: string;
     callsign: string | null;
-    position: Position;
-    altitude: number;
-    speed: number;
-    heading: number;
-    verticalRate: number;
     lastUpdate: number;
-    is_loitering: boolean;
-    loitering_debug?: {
-        reason: string;
-        segments?: { start: Position; end: Position; }[];
-        position?: Position;
-    };
+    // Monitoring status (updated by the analyzer, tells whether the aircraft is eligible for loitering detection)
     is_monitored: boolean;
+    // Loitering status (updated by the analyzer, tells whether the aircraft track crosses itself, and if so, it is loitering)
+    is_loitering: boolean;
+    // Reason for not being monitored (updated by the analyzer, tells why the aircraft is not monitored)
     not_monitored_reason: string | null;
+    // Track of the aircraft
     track: ExtendedPosition[];
 }
 
