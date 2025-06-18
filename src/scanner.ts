@@ -4,6 +4,7 @@ import { SICILY_CHANNEL_BOUNDS } from './config';
 import { ScannerProvider } from './providers/base-provider';
 import { Aircraft, ExtendedPosition, LoiteringEvent } from './types';
 import { getLoiteringStorage } from './storage/loitering-storage';
+import { EmailNotifier } from './notifications/email-notifier';
 
 export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, Aircraft> = new Map();
@@ -12,10 +13,12 @@ export class AircraftScanner extends EventEmitter {
     private loiteringStorage = getLoiteringStorage();
     private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
     private running = false;
+    private emailNotifier: EmailNotifier;
 
     constructor(private provider: ScannerProvider) {
         super();
         this.analyzer = new AircraftAnalyzer();
+        this.emailNotifier = EmailNotifier.getInstance();
     }
 
     async start(): Promise<void> {
@@ -129,10 +132,11 @@ export class AircraftScanner extends EventEmitter {
         return Array.from(this.aircraft.values());
     }
 
-    private handleLoiteringDetection(aircraft: Aircraft): void {
+    private async handleLoiteringDetection(aircraft: Aircraft): Promise<void> {
         // Check if we already have an event for this aircraft
         let event = this.loiteringStorage.getEventByIcao(aircraft.icao);
         const now = Date.now();
+        const isNewEvent = !event;
 
         if (event) {
             // Update existing event
@@ -186,6 +190,19 @@ export class AircraftScanner extends EventEmitter {
         // Store the event in memory
         this.loiteringStorage.saveEvent(event);
         console.log(`Loitering event ${event.id ? 'updated' : 'created'} for aircraft ${aircraft.icao}`);
+
+        // Send email notification for new events
+        if (isNewEvent) {
+            try {
+                await this.emailNotifier.sendEmail({
+                    to: 'gcmrzz@gmail.com',
+                    subject: `Loitering aircraft detected: ${aircraft.icao}`,
+                    body: `Please see the event details at the following link: https://medplane.gufoe.it/loitering/${event.id}`
+                });
+            } catch (error) {
+                console.error('Failed to send email notification:', error);
+            }
+        }
     }
 
     public getLoiteringEvents(): LoiteringEvent[] {
