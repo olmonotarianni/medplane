@@ -286,7 +286,9 @@ html, body {
     font-weight: bold;
 }
 #events-table-container {
+    flex-shrink: 0;
     max-width: 100%;
+    max-height: 50%;
     overflow-x: auto;
     margin-bottom: 12px;
 }

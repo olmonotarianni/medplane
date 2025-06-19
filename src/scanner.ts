@@ -4,7 +4,7 @@ import { SICILY_CHANNEL_BOUNDS } from './config';
 import { ScannerProvider } from './providers/base-provider';
 import { Aircraft, ExtendedPosition, LoiteringEvent } from './types';
 import { getLoiteringStorage } from './storage/loitering-storage';
-import { EmailNotifier } from './notifications/email-notifier';
+import { TelegramNotifier } from './notifications/telegram-notifier';
 
 export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, Aircraft> = new Map();
@@ -13,12 +13,12 @@ export class AircraftScanner extends EventEmitter {
     private loiteringStorage = getLoiteringStorage();
     private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
     private running = false;
-    private emailNotifier: EmailNotifier;
+    private telegramNotifier: TelegramNotifier;
 
     constructor(private provider: ScannerProvider) {
         super();
         this.analyzer = new AircraftAnalyzer();
-        this.emailNotifier = EmailNotifier.getInstance();
+        this.telegramNotifier = TelegramNotifier.getInstance();
     }
 
     async start(): Promise<void> {
@@ -191,16 +191,14 @@ export class AircraftScanner extends EventEmitter {
         this.loiteringStorage.saveEvent(event);
         console.log(`Loitering event ${event.id ? 'updated' : 'created'} for aircraft ${aircraft.icao}`);
 
-        // Send email notification for new events
+        // Send Telegram notification for new events
         if (isNewEvent) {
             try {
-                await this.emailNotifier.sendEmail({
-                    to: 'gcmrzz@gmail.com',
-                    subject: `Loitering aircraft detected: ${aircraft.icao}`,
-                    body: `Please see the event details at the following link: https://medplane.gufoe.it/loitering/${event.id}`
+                await this.telegramNotifier.sendNotification({
+                    markdown: `Loitering aircraft detected: ${aircraft.icao}\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
                 });
             } catch (error) {
-                console.error('Failed to send email notification:', error);
+                console.error('Failed to send Telegram notification:', error);
             }
         }
     }

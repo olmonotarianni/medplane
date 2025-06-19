@@ -6,6 +6,7 @@ MedPlane is a real-time aircraft monitoring and analysis system focused on the c
 ## Key Features
 - **Real-time aircraft tracking:** Continuously scans and displays aircraft positions and tracks on an interactive map.
 - **Loitering detection:** Identifies aircraft whose flight path intersects itself, indicating potential search or surveillance patterns.
+- **Telegram notifications:** Sends instant notifications to a Telegram group when loitering aircraft are detected.
 - **Behavioral analysis:** Flags aircraft based on:
   - Altitude (5,000–25,000 ft)
   - Speed (100–300 knots)
@@ -79,37 +80,65 @@ Then open [http://localhost:3872](http://localhost:3872) in your browser.
    ```
 2. Start the server:
    ```sh
-   yarn dev
+   yarn start
    ```
 3. Visit [http://localhost:3872](http://localhost:3872)
 
 ### Testing Modes
-The application includes three testing modes:
+The application includes several testing modes:
 
 1. Coast Distance Testing:
    ```sh
-   yarn dev --test-coast-distance
+   yarn start --test-coast-distance
    ```
    Tests the distance calculation from predefined points to the nearest coastline.
 
 2. Provider Testing:
    ```sh
-   yarn dev --test-airdata-provider
+   yarn start --test-airdata-provider
    ```
    Tests the adsb.fi provider by fetching and displaying current aircraft data.
 
 3. Loitering Detection Testing:
    ```sh
-   yarn dev --test-loitering
+   yarn start --test-loitering
    ```
    Tests the loitering detection algorithm using simulated flight paths:
    - Figure-8 pattern (should detect loitering)
    - Circular pattern (should detect loitering)
    - Straight path (should not detect loitering)
 
+4. Telegram Notification Testing:
+   ```sh
+   yarn start --test-telegram
+   ```
+   Tests the Telegram notification system by sending a test message.
+
+5. Telegram Update Listener:
+   ```sh
+   yarn start --test-telegram-updates
+   ```
+   Starts listening for incoming Telegram updates. Send messages to your bot to see them displayed in the console. Press Ctrl+C to stop.
+
+6. Telegram Bot Info:
+   ```sh
+   yarn start --test-telegram-bot-info
+   ```
+   Displays information about your Telegram bot (ID, name, username).
+
 ## Configuration
 
-You can configure the following parameters in `config.ts`:
+### Environment Variables
+Set the following environment variables for Telegram notifications:
+
+- `TELEGRAM_BOT_TOKEN`: Your Telegram bot token (get from @BotFather)
+- `TELEGRAM_CHAT_ID`: The chat ID of your Telegram group or channel
+
+Copy `config.example.env` to `.env` and fill in your actual values:
+```sh
+cp config.example.env .env
+# Edit .env with your actual Telegram bot token and chat ID
+```
 
 ### Monitoring Thresholds
 - **Altitude:** 5,000–25,000 feet
@@ -144,7 +173,7 @@ MedPlane is intended for humanitarian and research purposes, to assist in the de
 This system is designed for humanitarian purposes and should be used in accordance with all relevant laws and regulations. The adsb.fi API is used under their terms of service for non-commercial use.
 
 ## TODO
-- [ ] Add a notification system to notify the user when a aircraft is detected to be loitering
+- [x] Add a notification system to notify the user when a aircraft is detected to be loitering (Telegram)
 - [ ] Implement rate limiting to ensure compliance with adsb.fi's 1 request/second limit
 
 ## Data Sources & Acknowledgments

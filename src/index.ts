@@ -4,14 +4,14 @@ import { runCoastDistanceTests } from './test/coast-distance';
 import { runProviderTest } from './test/provider';
 import { runLoiteringTests } from './test/loitering-detection';
 import { testLoiteringEventCreation } from './test/loitering-event-test';
-import { EmailNotifier } from './notifications/email-notifier';
+import { TelegramNotifier } from './notifications/telegram-notifier';
+import { TelegramUpdateListener } from './notifications/telegram-update-listener';
 
 dotenv.config();
 
-// Initialize email notifier
-const emailNotifier = EmailNotifier.getInstance();
-emailNotifier.initialize();
-console.log('Email notifications enabled using sendmail');
+// Initialize Telegram notifier
+const telegramNotifier = TelegramNotifier.getInstance();
+telegramNotifier.initialize();
 
 // Check command line arguments for test modes
 if (process.argv.includes('--test-coast-distance')) {
@@ -31,18 +31,40 @@ if (process.argv.includes('--test-coast-distance')) {
 } else if (process.argv.includes('--test-loitering-events')) {
     testLoiteringEventCreation();
     process.exit(0);
-} else if (process.argv.includes('--test-email')) {
-    emailNotifier.sendEmail({
-        to: 'gcmrzz@gmail.com',
-        subject: 'Test email',
-        body: 'This is a test email'
+} else if (process.argv.includes('--test-telegram')) {
+    telegramNotifier.sendNotification({
+        markdown: 'Bro, it\'s working! I\'m alive! 🙌'
+    }).finally(() => {
+        process.exit(0);
     });
-    process.exit(0);
+} else if (process.argv.includes('--test-telegram-updates')) {
+    const listener = new TelegramUpdateListener();
+
+    // Handle graceful shutdown
+    process.on('SIGINT', async () => {
+        console.log('\n🛑 Shutting down...');
+        await listener.stopListening();
+        process.exit(0);
+    });
+
+    // Start listening for updates
+    listener.startListening().catch((error) => {
+        console.error('Failed to start update listener:', error);
+        process.exit(1);
+    });
+} else if (process.argv.includes('--test-telegram-bot-info')) {
+    const listener = new TelegramUpdateListener();
+    listener.startListening().then(async () => {
+        await listener.getBotInfo();
+        await listener.stopListening();
+        process.exit(0);
+    }).catch((error) => {
+        console.error('Failed to get bot info:', error);
+        process.exit(1);
+    });
 } else {
-    emailNotifier.sendEmail({
-        to: 'gcmrzz@gmail.com',
-        subject: 'MedPlane',
-        body: 'MedPlane is running!'
+    telegramNotifier.sendNotification({
+        markdown: 'Ok, we\'re up and running! 🚀'
     });
     // Normal operation - start the application
     const app = new App();

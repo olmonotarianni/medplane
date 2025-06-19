@@ -32,12 +32,14 @@
     "@turf/nearest-point-on-line": "^7.2.0",
     "@turf/point-to-line-distance": "^7.2.0",
     "@types/node-fetch": "^2.6.12",
+    "@types/node-telegram-bot-api": "^0.64.9",
     "axios": "^1.9.0",
     "canvas": "^3.1.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "haversine": "^1.1.1",
     "node-fetch": "2.7.0",
+    "node-telegram-bot-api": "^0.66.0",
     "uuid": "^11.1.0",
     "zstd-codec": "^0.1.5"
   }
