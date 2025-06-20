@@ -28,9 +28,14 @@ export class AircraftScanner extends EventEmitter {
         }
         this.running = true;
         while (this.running) {
-            await this.scan();
-            this.cleanupInactiveAircraft();
-            await new Promise(resolve => setTimeout(resolve, this.updateIntervalMs));
+            try {
+                await this.scan();
+                this.cleanupInactiveAircraft();
+            } catch (error) {
+                console.error('Error in scanner:', error);
+            } finally {
+                await new Promise(resolve => setTimeout(resolve, this.updateIntervalMs));
+            }
         }
     }
 
