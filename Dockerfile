@@ -1,18 +1,33 @@
-# Use official Node.js LTS image
-FROM node:20
+# ---- Build Stage ----
+FROM node:20-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-# Copy the rest of the application code
 COPY . .
+RUN yarn build
 
-# Expose the application port
+# ---- Production Stage ----
+FROM node:20-slim
+
+WORKDIR /app
+
+# Copy only production dependencies
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --production
+
+# Copy built app and static files
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/config.example.env ./
+
+ENV NODE_ENV=production
 EXPOSE 3872
 
-# Start the development server
-CMD ["yarn", "start"]
+# Use a non-root user for security
+RUN useradd --user-group --create-home --shell /bin/false appuser
+USER appuser
+
+CMD ["node", "dist/index.js"]
