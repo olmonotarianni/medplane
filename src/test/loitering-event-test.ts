@@ -3,6 +3,7 @@ import { ScannerProvider } from '../providers/base-provider';
 import { getLoiteringStorage } from '../storage/loitering-storage';
 import { Aircraft, LoiteringEvent } from '../types';
 import { areIntersecting, Segment } from '../utils';
+import { logger } from '../logger';
 
 // Mock provider for testing
 const mockProvider: ScannerProvider = {
@@ -39,7 +40,7 @@ function createLoiteringAircraft(): Aircraft {
 
 // Test the loitering event creation functionality directly
 export function testLoiteringEventCreation(): void {
-    console.log('Testing loitering event creation...');
+    logger.debug('Testing loitering event creation...');
 
     // Clear any existing events
     const loiteringStorage = getLoiteringStorage();
@@ -50,7 +51,7 @@ export function testLoiteringEventCreation(): void {
 
     // Create a loitering aircraft and update it through the scanner
     const aircraft = createLoiteringAircraft();
-    console.log('Initial aircraft state:', {
+    logger.debug('Initial aircraft state:', {
         icao: aircraft.icao,
         callsign: aircraft.callsign,
         is_loitering: aircraft.is_loitering,
@@ -64,7 +65,7 @@ export function testLoiteringEventCreation(): void {
     scanner.updateAircraft(aircraft);
 
     // Check if the aircraft is now detected as loitering
-    console.log('After scanner update:', {
+    logger.debug('After scanner update:', {
         icao: aircraft.icao,
         callsign: aircraft.callsign,
         is_loitering: aircraft.is_loitering
@@ -72,10 +73,10 @@ export function testLoiteringEventCreation(): void {
 
     // Check if a loitering event was created
     const events = loiteringStorage.listEvents();
-    console.log(`Loitering events created: ${events.length}`);
+    logger.debug(`Loitering events created: ${events.length}`);
 
     events.forEach((event: LoiteringEvent) => {
-        console.log('Loitering event:', {
+        logger.debug('Loitering event:', {
             id: event.id,
             icao: event.icao,
             callsign: event.callsign,
@@ -89,7 +90,7 @@ export function testLoiteringEventCreation(): void {
 
     // Create a new aircraft with the same ICAO to test updating existing events
     if (events.length > 0) {
-        console.log('\nTesting event update...');
+        logger.debug('\nTesting event update...');
         const updatedAircraft = createLoiteringAircraft();
         scanner.updateAircraft(updatedAircraft);
 
@@ -97,7 +98,7 @@ export function testLoiteringEventCreation(): void {
         const updatedEvents = loiteringStorage.listEvents();
         if (updatedEvents.length > 0) {
             const updatedEvent = updatedEvents[0];
-            console.log('Updated event:', {
+            logger.debug('Updated event:', {
                 id: updatedEvent.id,
                 icao: updatedEvent.icao,
                 detectionCount: updatedEvent.detectionCount
@@ -105,13 +106,13 @@ export function testLoiteringEventCreation(): void {
         }
     }
 
-    console.log('\nLoitering event test complete.');
+    logger.debug('\nLoitering event test complete.');
 }
 
 // Helper function to check if the aircraft track has intersecting segments
 function checkIntersections(track: any[]): void {
     if (track.length < 4) {
-        console.log('Track too short to have intersections');
+        logger.debug('Track too short to have intersections');
         return;
     }
 
@@ -125,21 +126,21 @@ function checkIntersections(track: any[]): void {
     }
 
     // Check all non-adjacent segment pairs for intersections
-    console.log('Checking for intersecting segments...');
+    logger.debug('Checking for intersecting segments...');
     let foundIntersection = false;
 
     for (let i = 0; i < segments.length - 2; i++) {
         for (let j = i + 2; j < segments.length; j++) {
             if (areIntersecting(segments[i], segments[j])) {
-                console.log(`Intersection found between segments ${i} and ${j}:`);
-                console.log('Segment 1:', JSON.stringify(segments[i]));
-                console.log('Segment 2:', JSON.stringify(segments[j]));
+                logger.debug(`Intersection found between segments ${i} and ${j}:`);
+                logger.debug('Segment 1:', JSON.stringify(segments[i]));
+                logger.debug('Segment 2:', JSON.stringify(segments[j]));
                 foundIntersection = true;
             }
         }
     }
 
     if (!foundIntersection) {
-        console.log('No intersecting segments found in the track');
+        logger.debug('No intersecting segments found in the track');
     }
 }

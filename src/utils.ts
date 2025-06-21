@@ -2,6 +2,7 @@ import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import { point } from '@turf/helpers';
 import coastlineData from '../data/countries-coastline-2km5.geo.json';
 import { GeoJSONData, GeoJSONGeometry, Position } from './types';
+import { logger } from './logger';
 
 // Type guards
 function isPolygonGeometry(geometry: GeoJSONGeometry | null): geometry is GeoJSONGeometry & { type: "Polygon" } {
@@ -15,23 +16,23 @@ function isMultiPolygonGeometry(geometry: GeoJSONGeometry | null): geometry is G
 // Load and validate coastline data
 let coastlineGeojson: GeoJSONData | null = null;
 try {
-    console.log('Loading coastline data...');
+    logger.debug('Loading coastline data...');
     if (!coastlineData) {
-        console.error('Coastline data is null or undefined');
+        logger.error('Coastline data is null or undefined');
     } else if (!Array.isArray(coastlineData.features)) {
-        console.error('Invalid coastline GeoJSON format - features is not an array');
-        console.log('Coastline data type:', typeof coastlineData);
-        console.log('Coastline data keys:', Object.keys(coastlineData));
+        logger.error('Invalid coastline GeoJSON format - features is not an array');
+        logger.info('Coastline data type:', typeof coastlineData);
+        logger.info('Coastline data keys:', Object.keys(coastlineData));
     } else {
         // Validate the data structure matches our types
         const validData = coastlineData as unknown as GeoJSONData;
         if (validData.type === "FeatureCollection") {
             coastlineGeojson = validData;
-            console.log(`Successfully loaded coastline data with ${validData.features.length} features`);
+            logger.info(`Successfully loaded coastline data with ${validData.features.length} features`);
         }
     }
 } catch (e) {
-    console.error('Could not parse coastline GeoJSON:', e);
+    logger.error('Could not parse coastline GeoJSON:', e);
 }
 
 export class GeoUtils {
@@ -136,12 +137,12 @@ export class GeoUtils {
         } catch (error) {
             if (error instanceof Error) {
                 if (error.name === 'AbortError') {
-                    console.error('Timeout while calculating distance from land');
+                    logger.error('Timeout while calculating distance from land');
                 } else {
-                    console.error('Error calculating distance from land:', error.message);
+                    logger.error('Error calculating distance from land:', error.message);
                 }
             } else {
-                console.error('Unknown error calculating distance from land');
+                logger.error('Unknown error calculating distance from land');
             }
             return null;
         }
@@ -171,7 +172,7 @@ export class GeoUtils {
                     }
                 }
             } catch (e) {
-                console.warn('Error checking point in polygon:', e);
+                logger.warn('Error checking point in polygon:', e);
                 continue;
             }
         }

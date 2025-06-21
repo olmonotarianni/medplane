@@ -1,5 +1,6 @@
 import { Aircraft, Position } from '../types';
 import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
+import { logger } from '../logger';
 
 // Internal types for adsb.fi API response
 interface AdsbFiAircraft {
@@ -49,7 +50,7 @@ export class AdsbFiProvider implements ScannerProvider {
         const timeSinceLastRequest = now - this.lastRequestTime;
         if (timeSinceLastRequest < AdsbFiProvider.MIN_REQUEST_INTERVAL_MS) {
             const waitTime = AdsbFiProvider.MIN_REQUEST_INTERVAL_MS - timeSinceLastRequest;
-            console.log(`Rate limiting: waiting ${waitTime}ms before next request`);
+            logger.debug(`Rate limiting: waiting ${waitTime}ms before next request`);
             await new Promise(resolve => setTimeout(resolve, waitTime));
         }
         this.lastRequestTime = Date.now();
@@ -66,8 +67,8 @@ export class AdsbFiProvider implements ScannerProvider {
         // Ensure we don't exceed the API's maximum distance
         const requestDistanceNM = Math.min(distanceNM, AdsbFiProvider.MAX_DISTANCE_NM);
 
-        console.log('Making adsb.fi API request:');
-        console.log(`Center: ${centerLat}, ${centerLon}, Distance: ${requestDistanceNM} NM`);
+        logger.debug('Making adsb.fi API request:');
+        logger.debug(`Center: ${centerLat}, ${centerLon}, Distance: ${requestDistanceNM} NM`);
 
         try {
             const url = `${AdsbFiProvider.API_URL}/lat/${centerLat}/lon/${centerLon}/dist/${requestDistanceNM}`;
@@ -112,7 +113,7 @@ export class AdsbFiProvider implements ScannerProvider {
                 aircraft
             };
         } catch (error) {
-            console.error('Error fetching data from adsb.fi:', error);
+            logger.error('Error fetching data from adsb.fi:', error);
             throw error;
         }
     }

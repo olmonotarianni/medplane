@@ -1,5 +1,6 @@
 import { Aircraft } from '../types';
 import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
+import { logger } from '../logger';
 
 // OpenSky Network API aircraft state
 type AircraftState = [
@@ -79,9 +80,9 @@ export class OpenSkyProvider implements ScannerProvider {
     }): Promise<ScanResult> {
         const url = `${OpenSkyProvider.API_URL}?lamin=${bounds.minLat}&lomin=${bounds.minLon}&lamax=${bounds.maxLat}&lomax=${bounds.maxLon}`;
 
-        console.log('Making OpenSky API request:');
-        console.log('URL:', url);
-        console.log('Auth:', this.auth ? 'Using credentials' : 'No credentials');
+        logger.debug('Making OpenSky API request:');
+        logger.debug('URL:', url);
+        logger.debug('Auth:', this.auth ? 'Using credentials' : 'No credentials');
 
         try {
             // Match curl's basic auth approach
@@ -100,24 +101,24 @@ export class OpenSkyProvider implements ScannerProvider {
             }
 
             const response = await fetch(url, options);
-            console.log('OpenSky response status:', response.status, response.statusText);
+            logger.debug('OpenSky response status:', response.status, response.statusText);
 
             if (!response.ok) {
                 if (response.status === 401) {
-                    console.error('Authentication failed. Please check your OpenSky credentials.');
-                    console.error('Note: OpenSky API requires a registered account.');
-                    console.error('Register at: https://opensky-network.org/apidoc/');
+                    logger.error('Authentication failed. Please check your OpenSky credentials.');
+                    logger.error('Note: OpenSky API requires a registered account.');
+                    logger.error('Register at: https://opensky-network.org/apidoc/');
                     // Log the actual auth header being sent (with password obscured)
                     if (this.auth) {
                         const authHeader = `Basic ${Buffer.from(`${this.auth.username}:****`).toString('base64')}`;
-                        console.error('Auth header being sent:', authHeader);
+                        logger.error('Auth header being sent:', authHeader);
                     }
                 }
                 throw new Error(`OpenSky API error: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json() as OpenSkyResponse;
-            console.log('OpenSky data received:', {
+            logger.debug('OpenSky data received:', {
                 time: data.time,
                 numStates: data.states?.length || 0
             });
@@ -156,7 +157,7 @@ export class OpenSkyProvider implements ScannerProvider {
                 timestamp: data.time
             };
         } catch (error) {
-            console.error('Failed to fetch aircraft from OpenSky:', error);
+            logger.error('Failed to fetch aircraft from OpenSky:', error);
             return {
                 aircraft: [],
                 timestamp: Date.now() / 1000 // fallback to current time in seconds

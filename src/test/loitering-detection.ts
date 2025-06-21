@@ -1,5 +1,6 @@
 import { AircraftAnalyzer } from '../aircraft-analyzer';
 import { Aircraft, ExtendedPosition, Position } from '../types';
+import { logger } from '../logger';
 
 
 function generateAircraft(points: Position[]): Aircraft {
@@ -28,7 +29,7 @@ function generateAircraft(points: Position[]): Aircraft {
 
 function runLoiteringTest(aircraft: Aircraft, expectedLoitering: boolean) {
     const isLoitering = AircraftAnalyzer.hasIntersectingTrack(aircraft);
-    console.log(`Test path: ${isLoitering === expectedLoitering ? 'PASSED' : 'FAILED'}`);
+    logger.debug(`Test path: ${isLoitering === expectedLoitering ? 'PASSED' : 'FAILED'}`);
     return isLoitering === expectedLoitering;
 }
 

@@ -2,6 +2,7 @@ import { SERVER_PORT } from './constants';
 import { AdsbFiProvider } from './providers/adsbfi-provider';
 import { AircraftScanner } from './scanner';
 import { WebServer } from './server';
+import { logger } from './logger';
 
 export class App {
     private readonly scanner: AircraftScanner;
@@ -21,19 +22,19 @@ export class App {
 
     private setupAircraftLogging(): void {
         this.scanner.on('interestingAircraft', (aircraft) => {
-            console.log('Interesting aircraft detected:');
-            console.log(`ICAO: ${aircraft.icao}`);
-            console.log(`Callsign: ${aircraft.callsign || 'unknown'}`);
-            console.log(`Position: ${aircraft.position.latitude}, ${aircraft.position.longitude}`);
-            console.log(`Altitude: ${aircraft.altitude}ft, Speed: ${aircraft.speed}kts`);
-            console.log('---');
+            logger.debug('Interesting aircraft detected:');
+            logger.debug(`ICAO: ${aircraft.icao}`);
+            logger.debug(`Callsign: ${aircraft.callsign || 'unknown'}`);
+            logger.debug(`Position: ${aircraft.position.latitude}, ${aircraft.position.longitude}`);
+            logger.debug(`Altitude: ${aircraft.altitude}ft, Speed: ${aircraft.speed}kts`);
+            logger.debug('---');
         });
     }
 
     public start(): void {
-        console.log('Starting AircraftScanner...');
+        logger.info('Starting AircraftScanner...');
         this.scanner.start();
-        console.log('AircraftScanner started.');
+        logger.info('AircraftScanner started.');
 
         // Start the server
         this.server.start(SERVER_PORT);

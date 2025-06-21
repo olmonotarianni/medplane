@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from './config';
 import { AircraftScanner } from './scanner';
+import { logger } from './logger';
 
 export class WebServer {
     private app: express.Application;
@@ -82,7 +83,7 @@ export class WebServer {
 
     public start(port: number) {
         this.app.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}`);
+            logger.info(`Server running at http://localhost:${port}`);
         });
     }
 }

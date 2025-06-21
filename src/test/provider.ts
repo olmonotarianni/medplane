@@ -1,32 +1,33 @@
 import { AdsbFiProvider } from '../providers/adsbfi-provider';
 import { SICILY_CHANNEL_BOUNDS } from '../config';
+import { logger } from '../logger';
 
 export async function runProviderTest(): Promise<void> {
-    console.log('Running in test mode - fetching aircraft data...');
+    logger.debug('Running in test mode - fetching aircraft data...');
 
     try {
         const provider = AdsbFiProvider.fromEnv();
-        console.log('\nInitiating API call...');
+        logger.debug('\nInitiating API call...');
 
         const result = await provider.scan(SICILY_CHANNEL_BOUNDS);
-        console.log('\nAPI call completed successfully.');
-        console.log('\nAircraft Data:');
-        console.log('Timestamp:', new Date(result.timestamp * 1000).toISOString());
-        console.log('Number of aircraft:', result.aircraft.length);
+        logger.debug('\nAPI call completed successfully.');
+        logger.debug('\nAircraft Data:');
+        logger.debug('Timestamp:', new Date(result.timestamp * 1000).toISOString());
+        logger.debug('Number of aircraft:', result.aircraft.length);
 
         // Print details of first 3 aircraft
         result.aircraft.slice(0, 3).forEach((aircraft, index) => {
-            console.log(`\nAircraft ${index + 1}:`);
-            console.log('ICAO:', aircraft.icao);
-            console.log('Callsign:', aircraft.callsign);
-            console.log('Position:', { latitude: aircraft.latitude, longitude: aircraft.longitude });
-            console.log('Altitude:', aircraft.altitude);
-            console.log('Speed:', aircraft.speed);
-            console.log('Heading:', aircraft.heading);
-            console.log('Vertical Rate:', aircraft.verticalRate);
+            logger.debug(`\nAircraft ${index + 1}:`);
+            logger.debug('ICAO:', aircraft.icao);
+            logger.debug('Callsign:', aircraft.callsign);
+            logger.debug('Position:', { latitude: aircraft.latitude, longitude: aircraft.longitude });
+            logger.debug('Altitude:', aircraft.altitude);
+            logger.debug('Speed:', aircraft.speed);
+            logger.debug('Heading:', aircraft.heading);
+            logger.debug('Vertical Rate:', aircraft.verticalRate);
         });
     } catch (error) {
-        console.error('\nTest failed:', error);
+        logger.error('\nTest failed:', error);
         throw error;
     }
 }
