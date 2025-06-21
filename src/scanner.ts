@@ -5,6 +5,23 @@ import { ScannerProvider } from './providers/base-provider';
 import { Aircraft, ExtendedPosition, LoiteringEvent } from './types';
 import { getLoiteringStorage } from './storage/loitering-storage';
 import { TelegramNotifier } from './notifications/telegram-notifier';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const STORAGE_DIR = path.join(process.cwd(), 'storage');
+const AIRCRAFT_FILE = path.join(STORAGE_DIR, 'aircraft-states.json');
+
+function ensureStorageDir() {
+    if (!fs.existsSync(STORAGE_DIR)) {
+        fs.mkdirSync(STORAGE_DIR, { recursive: true });
+    }
+}
+
+function atomicWriteFileSync(filePath: string, data: string) {
+    const tmpPath = filePath + '.tmp';
+    fs.writeFileSync(tmpPath, data);
+    fs.renameSync(tmpPath, filePath);
+}
 
 export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, Aircraft> = new Map();
@@ -19,6 +36,31 @@ export class AircraftScanner extends EventEmitter {
         super();
         this.analyzer = new AircraftAnalyzer();
         this.telegramNotifier = TelegramNotifier.getInstance();
+        ensureStorageDir();
+        this.loadAircraftFromDisk();
+    }
+
+    private saveAircraftToDisk() {
+        try {
+            ensureStorageDir();
+            const arr = Array.from(this.aircraft.values());
+            atomicWriteFileSync(AIRCRAFT_FILE, JSON.stringify(arr, null, 2));
+        } catch (err) {
+            console.error('Failed to save aircraft states to disk:', err);
+        }
+    }
+
+    private loadAircraftFromDisk() {
+        try {
+            if (fs.existsSync(AIRCRAFT_FILE)) {
+                const data = fs.readFileSync(AIRCRAFT_FILE, 'utf-8');
+                const arr: Aircraft[] = JSON.parse(data);
+                this.aircraft = new Map(arr.map(ac => [ac.icao, ac]));
+                console.log(`Loaded ${arr.length} aircraft states from disk.`);
+            }
+        } catch (err) {
+            console.error('Failed to load aircraft states from disk:', err);
+        }
     }
 
     async start(): Promise<void> {
@@ -47,14 +89,17 @@ export class AircraftScanner extends EventEmitter {
     private cleanupInactiveAircraft(): void {
         const now = Date.now();
         const inactiveThreshold = now - this.INACTIVITY_THRESHOLD_MS;
+        let removed = false;
         for (const [icao, aircraft] of this.aircraft.entries()) {
             const latest = aircraft.track[0]?.timestamp ? aircraft.track[0].timestamp * 1000 : 0;
             if (latest < inactiveThreshold) {
                 console.log(`Removing inactive aircraft ${icao} (last update: ${new Date(latest).toISOString()})`);
                 this.aircraft.delete(icao);
+                removed = true;
                 // Note: Loitering events are preserved for 7 days regardless of aircraft activity
             }
         }
+        if (removed) this.saveAircraftToDisk();
     }
 
     private async scan(): Promise<void> {
@@ -98,6 +143,7 @@ export class AircraftScanner extends EventEmitter {
         if (!tracked) {
             // New aircraft, add to map
             this.aircraft.set(aircraft.icao, aircraft);
+            this.saveAircraftToDisk();
             tracked = aircraft;
         } else {
             // Existing: update track (prepend new point if different)
@@ -112,6 +158,7 @@ export class AircraftScanner extends EventEmitter {
                 prev.verticalRate !== latest.verticalRate) {
                 tracked.track.unshift(latest);
                 if (tracked.track.length > 50) tracked.track.length = 50;
+                this.saveAircraftToDisk();
             }
             tracked.callsign = aircraft.callsign;
         }

@@ -1,4 +1,21 @@
 import { LoiteringEvent } from '../types';
+import * as fs from 'fs';
+import * as path from 'path';
+
+const STORAGE_DIR = path.join(process.cwd(), 'storage');
+const EVENTS_FILE = path.join(STORAGE_DIR, 'loitering-events.json');
+
+function ensureStorageDir() {
+    if (!fs.existsSync(STORAGE_DIR)) {
+        fs.mkdirSync(STORAGE_DIR, { recursive: true });
+    }
+}
+
+function atomicWriteFileSync(filePath: string, data: string) {
+    const tmpPath = filePath + '.tmp';
+    fs.writeFileSync(tmpPath, data);
+    fs.renameSync(tmpPath, filePath);
+}
 
 class LoiteringStorage {
     private events: Map<string, LoiteringEvent> = new Map();
@@ -6,14 +23,40 @@ class LoiteringStorage {
     private cleanupIntervalId?: NodeJS.Timeout;
 
     constructor() {
+        ensureStorageDir();
+        this.loadFromDisk();
         // Set up periodic cleanup
         this.cleanupIntervalId = setInterval(() => {
             this.cleanupOldEvents();
         }, 60 * 60 * 1000); // Run cleanup every hour
     }
 
+    private saveToDisk() {
+        try {
+            ensureStorageDir();
+            const arr = Array.from(this.events.values());
+            atomicWriteFileSync(EVENTS_FILE, JSON.stringify(arr, null, 2));
+        } catch (err) {
+            console.error('Failed to save loitering events to disk:', err);
+        }
+    }
+
+    private loadFromDisk() {
+        try {
+            if (fs.existsSync(EVENTS_FILE)) {
+                const data = fs.readFileSync(EVENTS_FILE, 'utf-8');
+                const arr: LoiteringEvent[] = JSON.parse(data);
+                this.events = new Map(arr.map(ev => [ev.id, ev]));
+                console.log(`Loaded ${arr.length} loitering events from disk.`);
+            }
+        } catch (err) {
+            console.error('Failed to load loitering events from disk:', err);
+        }
+    }
+
     public saveEvent(event: LoiteringEvent): void {
         this.events.set(event.id, event);
+        this.saveToDisk();
     }
 
     public getEvent(id: string): LoiteringEvent | undefined {
@@ -30,10 +73,12 @@ class LoiteringStorage {
 
     public deleteEvent(id: string): void {
         this.events.delete(id);
+        this.saveToDisk();
     }
 
     public clear(): void {
         this.events.clear();
+        this.saveToDisk();
     }
 
     private cleanupOldEvents(): void {
@@ -53,13 +98,7 @@ class LoiteringStorage {
 
         if (cleanedCount > 0) {
             console.log(`Cleaned up ${cleanedCount} expired loitering events (${this.events.size} events remaining)`);
-        }
-    }
-
-    public destroy(): void {
-        if (this.cleanupIntervalId) {
-            clearInterval(this.cleanupIntervalId);
-            this.cleanupIntervalId = undefined;
+            this.saveToDisk();
         }
     }
 
@@ -71,6 +110,13 @@ class LoiteringStorage {
         const event = this.events.get(eventId);
         if (!event) return null;
         return Date.now() - event.lastUpdated;
+    }
+
+    public destroy(): void {
+        if (this.cleanupIntervalId) {
+            clearInterval(this.cleanupIntervalId);
+            this.cleanupIntervalId = undefined;
+        }
     }
 }
 
