@@ -7,6 +7,7 @@ import { getLoiteringStorage } from './storage/loitering-storage';
 import { TelegramNotifier } from './notifications/telegram-notifier';
 import * as fs from 'fs';
 import * as path from 'path';
+import { logger } from './logger';
 
 const STORAGE_DIR = path.join(process.cwd(), 'storage');
 const AIRCRAFT_FILE = path.join(STORAGE_DIR, 'aircraft-states.json');
@@ -46,7 +47,7 @@ export class AircraftScanner extends EventEmitter {
             const arr = Array.from(this.aircraft.values());
             atomicWriteFileSync(AIRCRAFT_FILE, JSON.stringify(arr, null, 2));
         } catch (err) {
-            console.error('Failed to save aircraft states to disk:', err);
+            logger.error('Failed to save aircraft states to disk:', err);
         }
     }
 
@@ -56,26 +57,26 @@ export class AircraftScanner extends EventEmitter {
                 const data = fs.readFileSync(AIRCRAFT_FILE, 'utf-8');
                 const arr: Aircraft[] = JSON.parse(data);
                 this.aircraft = new Map(arr.map(ac => [ac.icao, ac]));
-                console.log(`Loaded ${arr.length} aircraft states from disk.`);
+                logger.info(`Loaded ${arr.length} aircraft states from disk.`);
             }
         } catch (err) {
-            console.error('Failed to load aircraft states from disk:', err);
+            logger.error('Failed to load aircraft states from disk:', err);
         }
     }
 
     async start(): Promise<void> {
         if (this.running) {
-            console.warn('Scanner is already running');
+            logger.warn('Scanner is already running');
             return;
         }
         this.running = true;
-        console.log(`Scanner started with ${this.loiteringStorage.getEventCount()} existing loitering events`);
+        logger.info(`Scanner started with ${this.loiteringStorage.getEventCount()} existing loitering events`);
         while (this.running) {
             try {
                 await this.scan();
                 this.cleanupInactiveAircraft();
             } catch (error) {
-                console.error('Error in scanner:', error);
+                logger.error('Error in scanner:', error);
             } finally {
                 await new Promise(resolve => setTimeout(resolve, this.updateIntervalMs));
             }
@@ -93,7 +94,6 @@ export class AircraftScanner extends EventEmitter {
         for (const [icao, aircraft] of this.aircraft.entries()) {
             const latest = aircraft.track[0]?.timestamp ? aircraft.track[0].timestamp * 1000 : 0;
             if (latest < inactiveThreshold) {
-                console.log(`Removing inactive aircraft ${icao} (last update: ${new Date(latest).toISOString()})`);
                 this.aircraft.delete(icao);
                 removed = true;
                 // Note: Loitering events are preserved for 7 days regardless of aircraft activity
@@ -105,9 +105,6 @@ export class AircraftScanner extends EventEmitter {
     private async scan(): Promise<void> {
         try {
             const result = await this.provider.scan(SICILY_CHANNEL_BOUNDS);
-
-            // DEBUG: log raw response
-            console.log('Aircraft found:', result.aircraft.length, result.aircraft.slice(0, 3));
 
             // Update aircraft data and check for interesting patterns
             result.aircraft.forEach(scanAc => {
@@ -133,7 +130,7 @@ export class AircraftScanner extends EventEmitter {
 
             this.emit('scan', result.aircraft);
         } catch (error) {
-            console.error('Error scanning aircraft:', error);
+            logger.error('Error scanning aircraft:', error);
             this.emit('error', error);
         }
     }
@@ -237,16 +234,16 @@ export class AircraftScanner extends EventEmitter {
 
         // Store the event in memory
         this.loiteringStorage.saveEvent(event);
-        console.log(`Loitering event ${isNewEvent ? 'created' : 'updated'} for aircraft ${aircraft.icao} (total events: ${this.loiteringStorage.getEventCount()})`);
 
         // Send Telegram notification for new events
         if (isNewEvent) {
+            logger.info(`🚨 New loitering event detected: ${aircraft.icao}`);
             try {
                 await this.telegramNotifier.sendNotification({
                     markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
                 });
             } catch (error) {
-                console.error('Failed to send Telegram notification:', error);
+                logger.error('Failed to send Telegram notification:', error);
             }
         }
     }

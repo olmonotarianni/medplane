@@ -1,6 +1,7 @@
 import { LoiteringEvent } from '../types';
 import * as fs from 'fs';
 import * as path from 'path';
+import { logger } from '../logger';
 
 const STORAGE_DIR = path.join(process.cwd(), 'storage');
 const EVENTS_FILE = path.join(STORAGE_DIR, 'loitering-events.json');
@@ -37,7 +38,7 @@ class LoiteringStorage {
             const arr = Array.from(this.events.values());
             atomicWriteFileSync(EVENTS_FILE, JSON.stringify(arr, null, 2));
         } catch (err) {
-            console.error('Failed to save loitering events to disk:', err);
+            logger.error('Failed to save loitering events to disk:', err);
         }
     }
 
@@ -47,10 +48,10 @@ class LoiteringStorage {
                 const data = fs.readFileSync(EVENTS_FILE, 'utf-8');
                 const arr: LoiteringEvent[] = JSON.parse(data);
                 this.events = new Map(arr.map(ev => [ev.id, ev]));
-                console.log(`Loaded ${arr.length} loitering events from disk.`);
+                logger.info(`Loaded ${arr.length} loitering events from disk.`);
             }
         } catch (err) {
-            console.error('Failed to load loitering events from disk:', err);
+            logger.error('Failed to load loitering events from disk:', err);
         }
     }
 
@@ -88,16 +89,13 @@ class LoiteringStorage {
 
         for (const [id, event] of this.events.entries()) {
             if (event.lastUpdated < expiryThreshold) {
-                const eventAge = now - event.lastUpdated;
-                const eventAgeDays = Math.round(eventAge / (24 * 60 * 60 * 1000));
-                console.log(`Cleaning up expired loitering event for ${event.icao} (age: ${eventAgeDays} days, last updated: ${new Date(event.lastUpdated).toISOString()})`);
                 this.events.delete(id);
                 cleanedCount++;
             }
         }
 
         if (cleanedCount > 0) {
-            console.log(`Cleaned up ${cleanedCount} expired loitering events (${this.events.size} events remaining)`);
+            logger.info(`Cleaned up ${cleanedCount} expired loitering events`);
             this.saveToDisk();
         }
     }

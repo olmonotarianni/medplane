@@ -1,4 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
+import { logger } from '../logger';
 
 export class TelegramNotifier {
     private static instance: TelegramNotifier;
@@ -11,10 +12,10 @@ export class TelegramNotifier {
         this.chatId = process.env.TELEGRAM_CHAT_ID || '';
 
         if (!this.botToken) {
-            console.warn('Telegram configuration missing. Set TELEGRAM_BOT_TOKEN environment variable.');
+            logger.warn('Telegram configuration missing. Set TELEGRAM_BOT_TOKEN environment variable.');
         }
         if (!this.chatId) {
-            console.warn('Telegram configuration missing. Set TELEGRAM_CHAT_ID environment variable.');
+            logger.warn('Telegram configuration missing. Set TELEGRAM_CHAT_ID environment variable.');
         }
     }
 
@@ -29,31 +30,25 @@ export class TelegramNotifier {
         if (this.botToken && this.chatId) {
             try {
                 this.bot = new TelegramBot(this.botToken, { polling: false });
-                console.log('Telegram notifications enabled');
+                logger.info('Telegram notifications enabled');
             } catch (error) {
-                console.error('Failed to initialize Telegram bot:', error);
+                logger.error('Failed to initialize Telegram bot:', error);
             }
         } else {
-            console.log('Telegram notifications disabled - missing configuration');
+            logger.info('Telegram notifications disabled - missing configuration');
         }
     }
 
     public async sendMessage(message: string): Promise<void> {
         if (!this.bot) {
-            console.warn('Cannot send Telegram message - bot not initialized');
+            logger.warn('Cannot send Telegram message - bot not initialized');
             return;
         }
 
         try {
-            console.log('Sending Telegram message:', message);
-            await this.bot.sendMessage(this.chatId, message, { parse_mode: 'Markdown' });
-            console.log('Telegram message sent successfully');
+            await this.bot.sendMessage(this.chatId, message, { parse_mode: 'HTML' });
         } catch (error) {
-            if (error instanceof Error) {
-                console.error('Failed to send Telegram message:', error.message);
-            } else {
-                console.error('Failed to send Telegram message:', error);
-            }
+            logger.error('Failed to send Telegram message:', error);
         }
     }
 
