@@ -240,7 +240,7 @@ export class AircraftScanner extends EventEmitter {
             logger.info(`🚨 New loitering event detected: ${aircraft.icao}`);
             try {
                 await this.telegramNotifier.sendNotification({
-                    markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click (here)[https://medplane.gufoe.it/loitering/${event.id}] to see the event details`
+                    markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
                 });
             } catch (error) {
                 logger.error('Failed to send Telegram notification:', error);

@@ -46,7 +46,7 @@ export class TelegramNotifier {
         }
 
         try {
-            await this.bot.sendMessage(this.chatId, message, { parse_mode: 'HTML' });
+            await this.bot.sendMessage(this.chatId, message, { parse_mode: 'Markdown' });
         } catch (error) {
             logger.error('Failed to send Telegram message:', error);
         }
