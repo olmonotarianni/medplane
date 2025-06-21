@@ -21,6 +21,7 @@ RUN yarn install --frozen-lockfile --production
 # Copy built app and static files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/data ./data
 COPY --from=builder /app/config.example.env ./
 
 ENV NODE_ENV=production
