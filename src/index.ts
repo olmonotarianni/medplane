@@ -110,9 +110,9 @@ import { logger } from './logger';
         logger.info('=====================================\n');
         process.exit(0);
     } else {
-        await telegramNotifier.sendNotification({
-            markdown: 'MedPlane updated to new version! 🚀'
-        });
+        // await telegramNotifier.sendNotification({
+        //     markdown: 'MedPlane updated to new version! 🚀'
+        // });
         // Normal operation - start the application
         const app = new App();
         app.start();
