@@ -43,13 +43,16 @@ class LoiteringStorage {
 
         for (const [id, event] of this.events.entries()) {
             if (event.lastUpdated < expiryThreshold) {
+                const eventAge = now - event.lastUpdated;
+                const eventAgeDays = Math.round(eventAge / (24 * 60 * 60 * 1000));
+                console.log(`Cleaning up expired loitering event for ${event.icao} (age: ${eventAgeDays} days, last updated: ${new Date(event.lastUpdated).toISOString()})`);
                 this.events.delete(id);
                 cleanedCount++;
             }
         }
 
         if (cleanedCount > 0) {
-            console.log(`Cleaned up ${cleanedCount} expired loitering events`);
+            console.log(`Cleaned up ${cleanedCount} expired loitering events (${this.events.size} events remaining)`);
         }
     }
 
@@ -58,6 +61,16 @@ class LoiteringStorage {
             clearInterval(this.cleanupIntervalId);
             this.cleanupIntervalId = undefined;
         }
+    }
+
+    public getEventCount(): number {
+        return this.events.size;
+    }
+
+    public getEventAge(eventId: string): number | null {
+        const event = this.events.get(eventId);
+        if (!event) return null;
+        return Date.now() - event.lastUpdated;
     }
 }
 

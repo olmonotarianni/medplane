@@ -62,6 +62,31 @@ if (process.argv.includes('--test-coast-distance')) {
         console.error('Failed to get bot info:', error);
         process.exit(1);
     });
+} else if (process.argv.includes('--test-loitering-events-list')) {
+    const { getLoiteringStorage } = require('./storage/loitering-storage');
+    const storage = getLoiteringStorage();
+    const events = storage.listEvents();
+
+    console.log(`\n=== LOITERING EVENTS (${events.length} total) ===`);
+    if (events.length === 0) {
+        console.log('No loitering events found.');
+    } else {
+        events.forEach((event: any, index: number) => {
+            const age = Date.now() - event.lastUpdated;
+            const ageDays = Math.round(age / (24 * 60 * 60 * 1000));
+            const ageHours = Math.round(age / (60 * 60 * 1000));
+            console.log(`${index + 1}. ${event.icao} (${event.callsign || 'N/A'})`);
+            console.log(`   ID: ${event.id}`);
+            console.log(`   Age: ${ageDays} days, ${ageHours} hours`);
+            console.log(`   First detected: ${new Date(event.firstDetected).toISOString()}`);
+            console.log(`   Last updated: ${new Date(event.lastUpdated).toISOString()}`);
+            console.log(`   Detection count: ${event.detectionCount}`);
+            console.log(`   URL: https://medplane.gufoe.it/loitering/${event.id}`);
+            console.log('');
+        });
+    }
+    console.log('=====================================\n');
+    process.exit(0);
 } else {
     telegramNotifier.sendNotification({
         markdown: 'Ok, we\'re up and running! 🚀'

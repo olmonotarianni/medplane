@@ -27,6 +27,7 @@ export class AircraftScanner extends EventEmitter {
             return;
         }
         this.running = true;
+        console.log(`Scanner started with ${this.loiteringStorage.getEventCount()} existing loitering events`);
         while (this.running) {
             try {
                 await this.scan();
@@ -51,12 +52,7 @@ export class AircraftScanner extends EventEmitter {
             if (latest < inactiveThreshold) {
                 console.log(`Removing inactive aircraft ${icao} (last update: ${new Date(latest).toISOString()})`);
                 this.aircraft.delete(icao);
-                // Also remove any associated loitering events
-                const event = this.loiteringStorage.getEventByIcao(icao);
-                if (event) {
-                    console.log(`Removing loitering event for inactive aircraft ${icao}`);
-                    this.loiteringStorage.deleteEvent(event.id);
-                }
+                // Note: Loitering events are preserved for 7 days regardless of aircraft activity
             }
         }
     }
@@ -194,13 +190,13 @@ export class AircraftScanner extends EventEmitter {
 
         // Store the event in memory
         this.loiteringStorage.saveEvent(event);
-        console.log(`Loitering event ${event.id ? 'updated' : 'created'} for aircraft ${aircraft.icao}`);
+        console.log(`Loitering event ${isNewEvent ? 'created' : 'updated'} for aircraft ${aircraft.icao} (total events: ${this.loiteringStorage.getEventCount()})`);
 
         // Send Telegram notification for new events
         if (isNewEvent) {
             try {
                 await this.telegramNotifier.sendNotification({
-                    markdown: `Loitering aircraft detected: ${aircraft.icao}\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
+                    markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
                 });
             } catch (error) {
                 console.error('Failed to send Telegram notification:', error);

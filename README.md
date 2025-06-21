@@ -126,6 +126,12 @@ The application includes several testing modes:
    ```
    Displays information about your Telegram bot (ID, name, username).
 
+7. Loitering Events List:
+   ```sh
+   yarn start --test-loitering-events-list
+   ```
+   Lists all current loitering events with their ages and details for debugging.
+
 ## Configuration
 
 ### Environment Variables
