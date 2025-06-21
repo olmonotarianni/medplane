@@ -14,7 +14,6 @@ import { logger } from './logger';
     // Initialize Telegram notifier
     const telegramNotifier = TelegramNotifier.getInstance();
     telegramNotifier.initialize();
-    logger.info('Telegram notifications enabled');
 
     // Check command line arguments for test modes
     if (process.argv.includes('--test-coast-distance')) {
@@ -85,7 +84,7 @@ import { logger } from './logger';
         process.exit(0);
     } else {
         await telegramNotifier.sendNotification({
-            markdown: 'MedPlane is running!'
+            markdown: 'MedPlane updated to new version! 🚀'
         });
         // Normal operation - start the application
         const app = new App();
