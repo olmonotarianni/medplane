@@ -30,6 +30,7 @@ export class AircraftScanner extends EventEmitter {
     private updateIntervalMs = 10000; // 10 seconds default update interval
     private loiteringStorage = getLoiteringStorage();
     private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
+    private readonly TRACK_RETENTION_MS = 20 * 60 * 1000; // 20 minutes of track retention
     private running = false;
     private telegramNotifier: TelegramNotifier;
 
@@ -154,7 +155,7 @@ export class AircraftScanner extends EventEmitter {
                 prev.heading !== latest.heading ||
                 prev.verticalRate !== latest.verticalRate) {
                 tracked.track.unshift(latest);
-                if (tracked.track.length > 50) tracked.track.length = 50;
+                this.cleanupOldTrackPoints(tracked);
                 this.saveAircraftToDisk();
             }
             tracked.callsign = aircraft.callsign;
@@ -173,6 +174,17 @@ export class AircraftScanner extends EventEmitter {
         }
     }
 
+    private cleanupOldTrackPoints(aircraft: Aircraft): void {
+        const now = Date.now();
+        const cutoffTime = now - this.TRACK_RETENTION_MS;
+
+        // Remove track points older than 20 minutes
+        aircraft.track = aircraft.track.filter(point => {
+            const pointTime = point.timestamp * 1000; // Convert to milliseconds
+            return pointTime > cutoffTime;
+        });
+    }
+
     public getAircraft(): Aircraft[] {
         return Array.from(this.aircraft.values());
     }
@@ -182,6 +194,7 @@ export class AircraftScanner extends EventEmitter {
         let event = this.loiteringStorage.getEventByIcao(aircraft.icao);
         const now = Date.now();
         const isNewEvent = !event;
+        const TRACK_WINDOW_MS = 30 * 60 * 1000; // 30 minutes
 
         if (event) {
             // Update existing event
@@ -203,18 +216,34 @@ export class AircraftScanner extends EventEmitter {
                 };
             }
 
-            // Update track with the latest data
-            event.track = [...aircraft.track];
+            // Only update the track if within 20 minutes after firstDetected
+            if (now <= event.firstDetected + TRACK_WINDOW_MS) {
+                const windowStart = (event.firstDetected - TRACK_WINDOW_MS) / 1000; // seconds
+                const windowEnd = (event.firstDetected + TRACK_WINDOW_MS) / 1000; // seconds
+                event.track = aircraft.track.filter(point =>
+                    point.timestamp >= windowStart && point.timestamp <= windowEnd
+                );
+                logger.debug(`Updated loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
+            } else {
+                logger.debug(`Loitering event for ${aircraft.icao} is now outside update window; track not updated.`);
+            }
         } else {
             // Create new event
             const latestPosition = aircraft.track[0];
             if (!latestPosition) return;
 
+            const firstDetected = now;
+            const windowStart = (firstDetected - TRACK_WINDOW_MS) / 1000; // seconds
+            const windowEnd = (firstDetected + TRACK_WINDOW_MS) / 1000; // seconds
+            const track = aircraft.track.filter(point =>
+                point.timestamp >= windowStart && point.timestamp <= windowEnd
+            );
+
             event = {
                 id: aircraft.icao, // Use ICAO as the ID
                 icao: aircraft.icao,
                 callsign: aircraft.callsign,
-                firstDetected: now,
+                firstDetected,
                 lastUpdated: now,
                 detectionCount: 1,
                 intersectionPoints: [], // We don't need intersection points for basic loitering detection
@@ -228,8 +257,9 @@ export class AircraftScanner extends EventEmitter {
                         longitude: latestPosition.longitude
                     }
                 },
-                track: [...aircraft.track]
+                track
             };
+            logger.debug(`Created new loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
         }
 
         // Store the event in memory
@@ -237,7 +267,7 @@ export class AircraftScanner extends EventEmitter {
 
         // Send Telegram notification for new events
         if (isNewEvent) {
-            logger.info(`🚨 New loitering event detected: ${aircraft.icao}`);
+            logger.info(`🚨 New loitering event detected: ${aircraft.icao} (${event.track.length} track points)`);
             try {
                 await this.telegramNotifier.sendNotification({
                     markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`

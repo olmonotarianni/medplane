@@ -76,7 +76,34 @@ import { logger } from './logger';
                 logger.info(`   First detected: ${new Date(event.firstDetected).toISOString()}`);
                 logger.info(`   Last updated: ${new Date(event.lastUpdated).toISOString()}`);
                 logger.info(`   Detection count: ${event.detectionCount}`);
+                logger.info(`   Track points: ${event.track?.length || 0}`);
                 logger.info(`   URL: https://medplane.gufoe.it/loitering/${event.id}`);
+                logger.info('');
+            });
+        }
+        logger.info('=====================================\n');
+        process.exit(0);
+    } else if (process.argv.includes('--test-track-info')) {
+        const { getLoiteringStorage } = require('./storage/loitering-storage');
+        const storage = getLoiteringStorage();
+        const events = storage.listEvents();
+
+        logger.info(`\n=== TRACK INFORMATION (${events.length} events) ===`);
+        if (events.length === 0) {
+            logger.info('No loitering events found.');
+        } else {
+            events.forEach((event: any, index: number) => {
+                const trackLength = event.track?.length || 0;
+                const trackDuration = trackLength > 1 ?
+                    Math.round((event.track[0].timestamp - event.track[trackLength - 1].timestamp) / 60) : 0;
+
+                logger.info(`${index + 1}. ${event.icao}:`);
+                logger.info(`   Track points: ${trackLength}`);
+                logger.info(`   Track duration: ~${trackDuration} minutes`);
+                if (trackLength > 1) {
+                    logger.info(`   First point: ${new Date(event.track[trackLength - 1].timestamp * 1000).toISOString()}`);
+                    logger.info(`   Last point: ${new Date(event.track[0].timestamp * 1000).toISOString()}`);
+                }
                 logger.info('');
             });
         }
