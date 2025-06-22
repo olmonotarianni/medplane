@@ -1,0 +1,785 @@
+[
+  {
+    "icao": "0180b4",
+    "callsign": "MNS401",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.685409,
+        "longitude": 10.672984,
+        "timestamp": 1750592499.3,
+        "altitude": 30675,
+        "speed": 455.7,
+        "heading": 158.5,
+        "verticalRate": 1664
+      },
+      {
+        "latitude": 35.720718,
+        "longitude": 10.65588,
+        "timestamp": 1750592485.7,
+        "altitude": 30125,
+        "speed": 457,
+        "heading": 158.43,
+        "verticalRate": 1728
+      }
+    ]
+  },
+  {
+    "icao": "4ba9cb",
+    "callsign": "THY8DA",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 34.823262,
+        "longitude": 10.769634,
+        "timestamp": 1750592489.6,
+        "altitude": 39000,
+        "speed": 507.6,
+        "heading": 69.35,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "4892c5",
+    "callsign": "ENT5195",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.0047,
+        "longitude": 11.043364,
+        "timestamp": 1750592499.9,
+        "altitude": 25650,
+        "speed": 413,
+        "heading": 199.22,
+        "verticalRate": -1472
+      },
+      {
+        "latitude": 37.023743,
+        "longitude": 11.051603,
+        "timestamp": 1750592489.6,
+        "altitude": 25900,
+        "speed": 417.1,
+        "heading": 199.17,
+        "verticalRate": -1216
+      }
+    ]
+  },
+  {
+    "icao": "49d421",
+    "callsign": "TVS2860",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (460.4 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.141571,
+        "longitude": 11.28518,
+        "timestamp": 1750592499.6,
+        "altitude": 31625,
+        "speed": 460.4,
+        "heading": 197.96,
+        "verticalRate": -3072
+      },
+      {
+        "latitude": 37.16051,
+        "longitude": 11.292751,
+        "timestamp": 1750592489.9,
+        "altitude": 32100,
+        "speed": 458.6,
+        "heading": 197.64,
+        "verticalRate": -3008
+      }
+    ]
+  },
+  {
+    "icao": "01806b",
+    "callsign": "LAA311",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (359.2 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 33.635925,
+        "longitude": 12.268702,
+        "timestamp": 1750592494.3,
+        "altitude": 19000,
+        "speed": 359.2,
+        "heading": 115.21,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 33.638718,
+        "longitude": 12.261639,
+        "timestamp": 1750592489.5,
+        "altitude": 19000,
+        "speed": 360.5,
+        "heading": 115.29,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "a235a5",
+    "callsign": "LXC41",
+    "is_monitored": true,
+    "is_loitering": false,
+    "not_monitored_reason": null,
+    "track": [
+      {
+        "latitude": 36.322849,
+        "longitude": 13.099735,
+        "timestamp": 1750592500,
+        "altitude": 9500,
+        "speed": 170.7,
+        "heading": 308.82,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.317915,
+        "longitude": 13.107391,
+        "timestamp": 1750592489.9,
+        "altitude": 9500,
+        "speed": 170.9,
+        "heading": 308.35,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "02ac26",
+    "callsign": "TUX1301",
+    "is_monitored": true,
+    "is_loitering": false,
+    "not_monitored_reason": null,
+    "track": [
+      {
+        "latitude": 36.254929,
+        "longitude": 13.103542,
+        "timestamp": 1750592499.9,
+        "altitude": 18000,
+        "speed": 239.6,
+        "heading": 286.24,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.251862,
+        "longitude": 13.116589,
+        "timestamp": 1750592489.9,
+        "altitude": 18000,
+        "speed": 236.4,
+        "heading": 286.21,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "4010dd",
+    "callsign": "EFW1LS",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (452.2 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.074854,
+        "longitude": 13.273574,
+        "timestamp": 1750592499.9,
+        "altitude": 25925,
+        "speed": 452.2,
+        "heading": 323.81,
+        "verticalRate": 1408
+      },
+      {
+        "latitude": 37.057938,
+        "longitude": 13.289016,
+        "timestamp": 1750592490,
+        "altitude": 25725,
+        "speed": 452.2,
+        "heading": 323.81,
+        "verticalRate": 1088
+      }
+    ]
+  },
+  {
+    "icao": "471841",
+    "callsign": "JSD948",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (422.8 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.277542,
+        "longitude": 13.541485,
+        "timestamp": 1750592499.4,
+        "altitude": 38950,
+        "speed": 422.8,
+        "heading": 150.22,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 37.293184,
+        "longitude": 13.53032,
+        "timestamp": 1750592490,
+        "altitude": 38950,
+        "speed": 423.7,
+        "heading": 150.29,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "740744",
+    "callsign": "RJA109",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (438.1 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.29068,
+        "longitude": 13.725243,
+        "timestamp": 1750592499.9,
+        "altitude": 36000,
+        "speed": 438.1,
+        "heading": 279.59,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.287283,
+        "longitude": 13.749974,
+        "timestamp": 1750592490,
+        "altitude": 36000,
+        "speed": 438.3,
+        "heading": 279.72,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "8965f3",
+    "callsign": "ETD6HZ",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (506.3 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.860772,
+        "longitude": 13.82869,
+        "timestamp": 1750592499.9,
+        "altitude": 36975,
+        "speed": 506.3,
+        "heading": 96.58,
+        "verticalRate": 32
+      },
+      {
+        "latitude": 35.863285,
+        "longitude": 13.802393,
+        "timestamp": 1750592489.9,
+        "altitude": 37000,
+        "speed": 505.3,
+        "heading": 96.59,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "4ca90a",
+    "callsign": "ITY1739",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.796265,
+        "longitude": 14.018146,
+        "timestamp": 1750592500,
+        "altitude": 21950,
+        "speed": 394.8,
+        "heading": 126.35,
+        "verticalRate": -1984
+      },
+      {
+        "latitude": 37.808424,
+        "longitude": 13.999985,
+        "timestamp": 1750592490,
+        "altitude": 22250,
+        "speed": 398.8,
+        "heading": 135.41,
+        "verticalRate": -1536
+      }
+    ]
+  },
+  {
+    "icao": "4d21a2",
+    "callsign": "KMM395",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (470.0 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.026998,
+        "longitude": 14.03587,
+        "timestamp": 1750592500,
+        "altitude": 29350,
+        "speed": 470,
+        "heading": 153.05,
+        "verticalRate": -2112
+      },
+      {
+        "latitude": 37.046539,
+        "longitude": 14.023463,
+        "timestamp": 1750592490,
+        "altitude": 29725,
+        "speed": 473.6,
+        "heading": 153,
+        "verticalRate": -2240
+      }
+    ]
+  },
+  {
+    "icao": "06a0a5",
+    "callsign": "QTR71W",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (471.6 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.349548,
+        "longitude": 14.033146,
+        "timestamp": 1750592499.8,
+        "altitude": 37975,
+        "speed": 471.6,
+        "heading": 272.8,
+        "verticalRate": -64
+      },
+      {
+        "latitude": 36.348499,
+        "longitude": 14.059812,
+        "timestamp": 1750592489.8,
+        "altitude": 37975,
+        "speed": 471.6,
+        "heading": 272.8,
+        "verticalRate": 32
+      }
+    ]
+  },
+  {
+    "icao": "4a3243",
+    "callsign": "DAH4063",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (464.3 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.814778,
+        "longitude": 14.1605,
+        "timestamp": 1750592499.8,
+        "altitude": 36000,
+        "speed": 464.3,
+        "heading": 276.8,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 35.812225,
+        "longitude": 14.186726,
+        "timestamp": 1750592490,
+        "altitude": 36000,
+        "speed": 463.3,
+        "heading": 276.82,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "49d508",
+    "callsign": "PAV12E",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.773231,
+        "longitude": 14.272972,
+        "timestamp": 1750592500,
+        "altitude": 12725,
+        "speed": 336.2,
+        "heading": 137.53,
+        "verticalRate": -2816
+      },
+      {
+        "latitude": 37.784042,
+        "longitude": 14.259553,
+        "timestamp": 1750592489.9,
+        "altitude": 13175,
+        "speed": 340.1,
+        "heading": 134.88,
+        "verticalRate": -2752
+      }
+    ]
+  },
+  {
+    "icao": "aadf38",
+    "callsign": "N8X",
+    "is_monitored": true,
+    "is_loitering": false,
+    "not_monitored_reason": null,
+    "track": [
+      {
+        "latitude": 35.990021,
+        "longitude": 14.321651,
+        "timestamp": 1750592499.8,
+        "altitude": 10800,
+        "speed": 290.4,
+        "heading": 320.17,
+        "verticalRate": 2368
+      },
+      {
+        "latitude": 35.979666,
+        "longitude": 14.332249,
+        "timestamp": 1750592489.9,
+        "altitude": 10150,
+        "speed": 281.2,
+        "heading": 320.19,
+        "verticalRate": 4480
+      }
+    ]
+  },
+  {
+    "icao": "4d2422",
+    "callsign": "WZZ65UH",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.849224,
+        "longitude": 14.493957,
+        "timestamp": 1750592489.5,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "300602",
+    "callsign": "",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.784822,
+        "longitude": 14.67869,
+        "timestamp": 1750592472.4,
+        "altitude": 5350,
+        "speed": 137.4,
+        "heading": 240.82,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "4ba9d0",
+    "callsign": "THY597",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.500667,
+        "longitude": 14.84044,
+        "timestamp": 1750592500,
+        "altitude": 35000,
+        "speed": 481.4,
+        "heading": 209.49,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 37.520187,
+        "longitude": 14.854217,
+        "timestamp": 1750592490,
+        "altitude": 35000,
+        "speed": 481.4,
+        "heading": 209.49,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "4bb066",
+    "callsign": "THY3YL",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (464.4 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.082443,
+        "longitude": 14.941635,
+        "timestamp": 1750592499.9,
+        "altitude": 39000,
+        "speed": 464.4,
+        "heading": 62,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.072464,
+        "longitude": 14.918575,
+        "timestamp": 1750592489.9,
+        "altitude": 39000,
+        "speed": 463,
+        "heading": 62.05,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "4d23ec",
+    "callsign": "EWG2UX",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.461365,
+        "longitude": 15.001831,
+        "timestamp": 1750592496,
+        "altitude": 700,
+        "speed": 127.9,
+        "heading": 83.26,
+        "verticalRate": -896
+      },
+      {
+        "latitude": 37.461136,
+        "longitude": 14.999435,
+        "timestamp": 1750592489.8,
+        "altitude": 725,
+        "speed": 127.9,
+        "heading": 83.26,
+        "verticalRate": -896
+      }
+    ]
+  },
+  {
+    "icao": "320037",
+    "callsign": "DRAGO142",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 37.771545,
+        "longitude": 15.041744,
+        "timestamp": 1750592499.4,
+        "altitude": 6275,
+        "speed": 0.7,
+        "heading": 0,
+        "verticalRate": 64
+      },
+      {
+        "latitude": 37.771545,
+        "longitude": 15.041744,
+        "timestamp": 1750592489.9,
+        "altitude": 6250,
+        "speed": 0.7,
+        "heading": 0,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "896533",
+    "callsign": "FDB1502",
+    "is_monitored": true,
+    "is_loitering": false,
+    "not_monitored_reason": null,
+    "track": [
+      {
+        "latitude": 37.482139,
+        "longitude": 15.186569,
+        "timestamp": 1750592499.9,
+        "altitude": 3300,
+        "speed": 233.1,
+        "heading": 80.62,
+        "verticalRate": 4032
+      },
+      {
+        "latitude": 37.480362,
+        "longitude": 15.173288,
+        "timestamp": 1750592490,
+        "altitude": 2750,
+        "speed": 238.6,
+        "heading": 80.1,
+        "verticalRate": 2432
+      }
+    ]
+  },
+  {
+    "icao": "01015c",
+    "callsign": "MSR767",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (452.9 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.058365,
+        "longitude": 15.329876,
+        "timestamp": 1750592499.8,
+        "altitude": 40000,
+        "speed": 452.9,
+        "heading": 280.69,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.054289,
+        "longitude": 15.356257,
+        "timestamp": 1750592489.6,
+        "altitude": 40000,
+        "speed": 452.9,
+        "heading": 280.69,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "8963ce",
+    "callsign": "ETD8NY",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (529.3 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.05998,
+        "longitude": 16.113338,
+        "timestamp": 1750592499.9,
+        "altitude": 37000,
+        "speed": 529.3,
+        "heading": 105.9,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 35.066895,
+        "longitude": 16.083872,
+        "timestamp": 1750592489.6,
+        "altitude": 37000,
+        "speed": 529.3,
+        "heading": 105.9,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "346319",
+    "callsign": "SWT661P",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (420.6 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.988663,
+        "longitude": 16.779629,
+        "timestamp": 1750592499.9,
+        "altitude": 40000,
+        "speed": 420.6,
+        "heading": 292.36,
+        "verticalRate": 64
+      },
+      {
+        "latitude": 37.981226,
+        "longitude": 16.802454,
+        "timestamp": 1750592490,
+        "altitude": 40000,
+        "speed": 421,
+        "heading": 292.48,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "710063",
+    "callsign": "SVA110",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (518.3 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.963348,
+        "longitude": 16.878214,
+        "timestamp": 1750592499.9,
+        "altitude": 35000,
+        "speed": 518.3,
+        "heading": 141.03,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 37.982064,
+        "longitude": 16.859118,
+        "timestamp": 1750592489.7,
+        "altitude": 35000,
+        "speed": 518.5,
+        "heading": 141.18,
+        "verticalRate": -64
+      }
+    ]
+  },
+  {
+    "icao": "0201af",
+    "callsign": "CNSNP",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (500.8 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.645126,
+        "longitude": 17.39645,
+        "timestamp": 1750592500,
+        "altitude": 41000,
+        "speed": 500.8,
+        "heading": 111.8,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 36.653603,
+        "longitude": 17.370028,
+        "timestamp": 1750592490,
+        "altitude": 41000,
+        "speed": 500.5,
+        "heading": 111.7,
+        "verticalRate": 0
+      }
+    ]
+  },
+  {
+    "icao": "896464",
+    "callsign": "ETD98V",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (512.9 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 37.126877,
+        "longitude": 17.88808,
+        "timestamp": 1750592499.9,
+        "altitude": 37000,
+        "speed": 513.4,
+        "heading": 150.09,
+        "verticalRate": 0
+      },
+      {
+        "latitude": 37.147243,
+        "longitude": 17.873502,
+        "timestamp": 1750592489.7,
+        "altitude": 37000,
+        "speed": 512.9,
+        "heading": 150.19,
+        "verticalRate": 0
+      }
+    ]
+  }
+]

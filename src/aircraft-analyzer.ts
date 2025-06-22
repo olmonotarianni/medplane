@@ -1,5 +1,5 @@
 import { MONITORING_THRESHOLDS, SICILY_CHANNEL_BOUNDS } from './config';
-import { Aircraft, Position } from './types';
+import { Aircraft, Position, ExtendedPosition } from './types';
 import { areIntersecting, GeoUtils } from './utils';
 
 export interface AircraftAnalysisResult {
@@ -21,28 +21,43 @@ export class AircraftAnalyzer {
     // Minimum distance from coast (km) to be considered over the sea
     private static readonly MIN_DISTANCE_FROM_COAST_KM = MONITORING_THRESHOLDS.coast.minDistance;
 
-    private isInSicilyChannel(position: Position): boolean {
+    /**
+     * Checks if a position meets all monitoring requirements
+     * @param position The position to check (must include altitude and speed)
+     * @returns true if the position meets all monitoring requirements
+     */
+    private static meetsMonitoringRequirements(position: ExtendedPosition): boolean {
+        const inArea = AircraftAnalyzer.isInSicilyChannel(position);
+        const inAltitudeRange = AircraftAnalyzer.isInTargetAltitude(position.altitude);
+        const inSpeedRange = AircraftAnalyzer.isInTargetSpeed(position.speed);
+        const overSea = AircraftAnalyzer.isOverSea(position);
+
+        return inArea && inAltitudeRange && inSpeedRange && overSea;
+    }
+
+    private static isInSicilyChannel(position: Position): boolean {
         return position.latitude >= SICILY_CHANNEL_BOUNDS.minLat &&
             position.latitude <= SICILY_CHANNEL_BOUNDS.maxLat &&
             position.longitude >= SICILY_CHANNEL_BOUNDS.minLon &&
             position.longitude <= SICILY_CHANNEL_BOUNDS.maxLon;
     }
 
-    private isInTargetAltitude(altitude: number): boolean {
+    private static isInTargetAltitude(altitude: number): boolean {
         return altitude >= AircraftAnalyzer.ALTITUDE_RANGE.min &&
             altitude <= AircraftAnalyzer.ALTITUDE_RANGE.max;
     }
 
-    private isInTargetSpeed(speed: number): boolean {
+    private static isInTargetSpeed(speed: number): boolean {
         return speed >= AircraftAnalyzer.SPEED_RANGE.min &&
             speed <= AircraftAnalyzer.SPEED_RANGE.max;
     }
 
-    private isOverSea(position: Position): boolean {
+    private static isOverSea(position: Position): boolean {
         // Use GeoUtils.minDistanceToCoastline to determine if over sea
         const distance = GeoUtils.minDistanceToCoastline(position);
         return distance !== null && distance >= AircraftAnalyzer.MIN_DISTANCE_FROM_COAST_KM;
     }
+
     /**
      * Analyzes an aircraft and returns its monitoring and loitering status.
      * Does not mutate the input aircraft object.
@@ -72,10 +87,10 @@ export class AircraftAnalyzer {
         }
 
         // Monitoring status logic
-        const inArea = this.isInSicilyChannel(latestPosition);
-        const inAltitudeRange = this.isInTargetAltitude(latestPosition.altitude);
-        const inSpeedRange = this.isInTargetSpeed(latestPosition.speed);
-        const overSea = this.isOverSea(latestPosition);
+        const inArea = AircraftAnalyzer.isInSicilyChannel(latestPosition);
+        const inAltitudeRange = AircraftAnalyzer.isInTargetAltitude(latestPosition.altitude);
+        const inSpeedRange = AircraftAnalyzer.isInTargetSpeed(latestPosition.speed);
+        const overSea = AircraftAnalyzer.isOverSea(latestPosition);
 
         if (!overSea) {
             return {
@@ -132,7 +147,24 @@ export class AircraftAnalyzer {
         for (let i = 0; i < segments.length - 2; i++) {
             for (let j = i + 2; j < segments.length; j++) {
                 if (areIntersecting(segments[i], segments[j])) {
-                    return true;
+                    // Check if both segment endpoints meet monitoring requirements
+                    // We need to check both start and end points of both segments
+                    const pointsToCheck = [
+                        segments[i].start,
+                        segments[i].end,
+                        segments[j].start,
+                        segments[j].end
+                    ];
+
+                    // All four points must meet monitoring requirements for this to be a valid loitering intersection
+                    const allPointsValid = pointsToCheck.every(point =>
+                        AircraftAnalyzer.meetsMonitoringRequirements(point)
+                    );
+
+                    if (allPointsValid) {
+                        return true;
+                    }
+                    // If not all points are valid, continue checking other intersections
                 }
             }
         }
