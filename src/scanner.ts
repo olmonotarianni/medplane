@@ -48,7 +48,7 @@ export class AircraftScanner extends EventEmitter {
             const arr = Array.from(this.aircraft.values());
             atomicWriteFileSync(AIRCRAFT_FILE, JSON.stringify(arr, null, 2));
         } catch (err) {
-            logger.error('Failed to save aircraft states to disk:', err);
+            logger.error({ err }, 'Failed to save aircraft states to disk');
         }
     }
 
@@ -61,7 +61,7 @@ export class AircraftScanner extends EventEmitter {
                 logger.info(`Loaded ${arr.length} aircraft states from disk.`);
             }
         } catch (err) {
-            logger.error('Failed to load aircraft states from disk:', err);
+            logger.error({ err }, 'Failed to load aircraft states from disk');
         }
     }
 
@@ -270,7 +270,7 @@ export class AircraftScanner extends EventEmitter {
             logger.info(`🚨 New loitering event detected: ${aircraft.icao} (${event.track.length} track points)`);
             try {
                 await this.telegramNotifier.sendNotification({
-                    markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click [here](https://medplane.gufoe.it/loitering/${event.id}) to see the event details`
+                    markdown: `🚨 **Loitering aircraft detected: ${aircraft.icao}**\n\nPlease click  here to see the event details:\nhttps://medplane.gufoe.it/loitering/${event.id}`
                 });
             } catch (error) {
                 logger.error('Failed to send Telegram notification:', error);

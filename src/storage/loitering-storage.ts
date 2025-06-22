@@ -38,7 +38,7 @@ class LoiteringStorage {
             const arr = Array.from(this.events.values());
             atomicWriteFileSync(EVENTS_FILE, JSON.stringify(arr, null, 2));
         } catch (err) {
-            logger.error('Failed to save loitering events to disk:', err);
+            logger.error({ err }, 'Failed to save loitering events to disk');
         }
     }
 
@@ -51,7 +51,7 @@ class LoiteringStorage {
                 logger.info(`Loaded ${arr.length} loitering events from disk.`);
             }
         } catch (err) {
-            logger.error('Failed to load loitering events from disk:', err);
+            logger.error({ err }, 'Failed to load loitering events from disk');
         }
     }
 
