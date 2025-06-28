@@ -34,7 +34,6 @@ export interface LoiteringEvent {
     callsign: string | null;
     firstDetected: number;  // Timestamp of first detection
     lastUpdated: number;    // Timestamp of last update
-    detectionCount: number; // Number of times detected loitering
     intersectionPoints: Array<{
         segments?: { start: Position, end: Position }[];
         timestamp: number;

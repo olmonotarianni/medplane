@@ -29,8 +29,8 @@ export class AircraftScanner extends EventEmitter {
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 10000; // 10 seconds default update interval
     private loiteringStorage = getLoiteringStorage();
-    private readonly INACTIVITY_THRESHOLD_MS = 5 * 60 * 1000; // 5 minutes of inactivity
-    private readonly TRACK_RETENTION_MS = 20 * 60 * 1000; // 20 minutes of track retention
+    private readonly INACTIVITY_THRESHOLD_MS = 30 * 60 * 1000; // 5 minutes of inactivity
+    private readonly TRACK_RETENTION_MS = 60 * 60 * 1000; // 20 minutes of track retention
     private running = false;
     private telegramNotifier: TelegramNotifier;
 
@@ -196,57 +196,42 @@ export class AircraftScanner extends EventEmitter {
         const isNewEvent = !event;
         const TRACK_WINDOW_MS = 30 * 60 * 1000; // 30 minutes
 
+        // Get all intersections for this aircraft
+        const intersections = AircraftAnalyzer.getIntersections(aircraft);
+        if (intersections.length === 0) {
+            // No intersections, do not create/update event
+            return;
+        }
+
+        const latestPosition = aircraft.track[0];
+        if (!latestPosition) return;
+
         if (event) {
             // Update existing event
             event.lastUpdated = now;
-            event.detectionCount += 1;
-
+            event.intersectionPoints = intersections;
+            event.track = aircraft.track;
             // Update aircraft state with latest position
-            const latestPosition = aircraft.track[0];
-            if (latestPosition) {
-                event.aircraftState = {
-                    altitude: latestPosition.altitude,
-                    speed: latestPosition.speed,
-                    heading: latestPosition.heading,
-                    verticalRate: latestPosition.verticalRate,
-                    position: {
-                        latitude: latestPosition.latitude,
-                        longitude: latestPosition.longitude
-                    }
-                };
-            }
-
-            // Only update the track if within 20 minutes after firstDetected
-            if (now <= event.firstDetected + TRACK_WINDOW_MS) {
-                const windowStart = (event.firstDetected - TRACK_WINDOW_MS) / 1000; // seconds
-                const windowEnd = (event.firstDetected + TRACK_WINDOW_MS) / 1000; // seconds
-                event.track = aircraft.track.filter(point =>
-                    point.timestamp >= windowStart && point.timestamp <= windowEnd
-                );
-                logger.debug(`Updated loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
-            } else {
-                logger.debug(`Loitering event for ${aircraft.icao} is now outside update window; track not updated.`);
-            }
+            event.aircraftState = {
+                altitude: latestPosition.altitude,
+                speed: latestPosition.speed,
+                heading: latestPosition.heading,
+                verticalRate: latestPosition.verticalRate,
+                position: {
+                    latitude: latestPosition.latitude,
+                    longitude: latestPosition.longitude
+                }
+            };
+            logger.debug(`Updated loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
         } else {
             // Create new event
-            const latestPosition = aircraft.track[0];
-            if (!latestPosition) return;
-
-            const firstDetected = now;
-            const windowStart = (firstDetected - TRACK_WINDOW_MS) / 1000; // seconds
-            const windowEnd = (firstDetected + TRACK_WINDOW_MS) / 1000; // seconds
-            const track = aircraft.track.filter(point =>
-                point.timestamp >= windowStart && point.timestamp <= windowEnd
-            );
-
             event = {
                 id: aircraft.icao, // Use ICAO as the ID
                 icao: aircraft.icao,
                 callsign: aircraft.callsign,
-                firstDetected,
+                firstDetected: now,
                 lastUpdated: now,
-                detectionCount: 1,
-                intersectionPoints: [], // We don't need intersection points for basic loitering detection
+                intersectionPoints: intersections,
                 aircraftState: {
                     altitude: latestPosition.altitude,
                     speed: latestPosition.speed,
@@ -257,7 +242,7 @@ export class AircraftScanner extends EventEmitter {
                         longitude: latestPosition.longitude
                     }
                 },
-                track
+                track: aircraft.track
             };
             logger.debug(`Created new loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
         }

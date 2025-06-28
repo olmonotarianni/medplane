@@ -13,7 +13,7 @@ const mockProvider: ScannerProvider = {
 // Create a loitering aircraft with intersecting path
 function createLoiteringAircraft(): Aircraft {
     // Create a simple track that forms an "X" pattern
-    // Using obvious coordinates for easy debugging
+    // Using coordinates within Sicily Channel monitoring area (lat 33-38, lon 10-18)
     const now = Date.now() / 1000;
     return {
         icao: "LOITER1",
@@ -23,24 +23,24 @@ function createLoiteringAircraft(): Aircraft {
         not_monitored_reason: null,
         track: [
             // First segment: top-left to bottom-right
-            { latitude: 42.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 41.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
             // Second segment: top-right to bottom-left
-            { latitude: 42.0, longitude: 15.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 41.5, longitude: 14.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 36.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 35.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
             // Third segment: back to start
-            { latitude: 41.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 41.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 42.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 }
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 }
         ]
     };
 }
 
 // Test the loitering event creation functionality directly
 export function testLoiteringEventCreation(): void {
-    logger.debug('Testing loitering event creation...');
+    logger.info('=== TESTING LOITERING EVENT CREATION ===');
 
     // Clear any existing events
     const loiteringStorage = getLoiteringStorage();
@@ -51,7 +51,7 @@ export function testLoiteringEventCreation(): void {
 
     // Create a loitering aircraft and update it through the scanner
     const aircraft = createLoiteringAircraft();
-    logger.debug('Initial aircraft state:', {
+    logger.info('Initial aircraft state:', {
         icao: aircraft.icao,
         callsign: aircraft.callsign,
         is_loitering: aircraft.is_loitering,
@@ -65,7 +65,7 @@ export function testLoiteringEventCreation(): void {
     scanner.updateAircraft(aircraft);
 
     // Check if the aircraft is now detected as loitering
-    logger.debug('After scanner update:', {
+    logger.info('After scanner update:', {
         icao: aircraft.icao,
         callsign: aircraft.callsign,
         is_loitering: aircraft.is_loitering
@@ -73,46 +73,62 @@ export function testLoiteringEventCreation(): void {
 
     // Check if a loitering event was created
     const events = loiteringStorage.listEvents();
-    logger.debug(`Loitering events created: ${events.length}`);
+    logger.info(`Loitering events created: ${events.length}`);
 
     events.forEach((event: LoiteringEvent) => {
-        logger.debug('Loitering event:', {
+        logger.info('Loitering event details:', {
             id: event.id,
             icao: event.icao,
             callsign: event.callsign,
             firstDetected: new Date(event.firstDetected).toISOString(),
             lastUpdated: new Date(event.lastUpdated).toISOString(),
-            detectionCount: event.detectionCount,
             intersectionPoints: event.intersectionPoints.length,
             track_length: event.track.length
         });
+
+        // Verify intersection points
+        if (!event.intersectionPoints || event.intersectionPoints.length === 0) {
+            logger.warn('⚠️  No intersection points recorded in event!');
+        } else {
+            logger.info(`✅ Event has ${event.intersectionPoints.length} intersection points.`);
+        }
+
     });
 
-    // Create a new aircraft with the same ICAO to test updating existing events
+    // Test updating existing events
     if (events.length > 0) {
-        logger.debug('\nTesting event update...');
-        const updatedAircraft = createLoiteringAircraft();
-        scanner.updateAircraft(updatedAircraft);
+        logger.info('\n=== TESTING EVENT UPDATE ===');
 
-        // Check if the event was updated
-        const updatedEvents = loiteringStorage.listEvents();
-        if (updatedEvents.length > 0) {
-            const updatedEvent = updatedEvents[0];
-            logger.debug('Updated event:', {
-                id: updatedEvent.id,
-                icao: updatedEvent.icao,
-                detectionCount: updatedEvent.detectionCount
-            });
-        }
+        // Wait a bit to simulate time passing
+        setTimeout(() => {
+            const updatedAircraft = createLoiteringAircraft();
+            scanner.updateAircraft(updatedAircraft);
+
+            // Check if the event was updated
+            const updatedEvents = loiteringStorage.listEvents();
+            if (updatedEvents.length > 0) {
+                const updatedEvent = updatedEvents[0];
+                logger.info('Updated event:', {
+                    id: updatedEvent.id,
+                    icao: updatedEvent.icao,
+                    lastUpdated: new Date(updatedEvent.lastUpdated).toISOString()
+                });
+
+                // Check if track was updated properly
+                const trackDuration = updatedEvent.track.length > 1 ?
+                    (updatedEvent.track[0].timestamp - updatedEvent.track[updatedEvent.track.length - 1].timestamp) / 60 : 0;
+                logger.info(`Updated track duration: ${trackDuration.toFixed(1)} minutes`);
+            }
+        }, 1000);
     }
 
-    logger.debug('\nLoitering event test complete.');
+    logger.info('\n=== LOITERING EVENT TEST COMPLETE ===');
 }
 
 // Helper function to check if the aircraft track has intersecting segments
 function checkIntersections(track: any[]): void {
     if (track.length < 4) {
-        logger.debug('Track too short to have intersections');
+        logger.info('Track too short to have intersections');
         return;
     }
 
@@ -126,21 +142,21 @@ function checkIntersections(track: any[]): void {
     }
 
     // Check all non-adjacent segment pairs for intersections
-    logger.debug('Checking for intersecting segments...');
+    logger.info('Checking for intersecting segments...');
     let foundIntersection = false;
 
     for (let i = 0; i < segments.length - 2; i++) {
         for (let j = i + 2; j < segments.length; j++) {
             if (areIntersecting(segments[i], segments[j])) {
-                logger.debug(`Intersection found between segments ${i} and ${j}:`);
-                logger.debug('Segment 1:', JSON.stringify(segments[i]));
-                logger.debug('Segment 2:', JSON.stringify(segments[j]));
+                logger.info(`✅ Intersection found between segments ${i} and ${j}:`);
+                logger.info('Segment 1:', JSON.stringify(segments[i]));
+                logger.info('Segment 2:', JSON.stringify(segments[j]));
                 foundIntersection = true;
             }
         }
     }
 
     if (!foundIntersection) {
-        logger.debug('No intersecting segments found in the track');
+        logger.warn('⚠️  No intersecting segments found in the track');
     }
 }

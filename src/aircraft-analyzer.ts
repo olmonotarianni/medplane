@@ -15,8 +15,8 @@ export interface AircraftAnalysisResult {
  */
 export class AircraftAnalyzer {
     // Altitude and speed ranges
-    private static readonly ALTITUDE_RANGE = { min: 1000, max: 25000 }; // feet
-    private static readonly SPEED_RANGE = { min: 150, max: 300 }; // knots
+    private static readonly ALTITUDE_RANGE = { min: 10, max: 25000 }; // feet
+    private static readonly SPEED_RANGE = { min: 10, max: 300 }; // knots
 
     // Minimum distance from coast (km) to be considered over the sea
     private static readonly MIN_DISTANCE_FROM_COAST_KM = MONITORING_THRESHOLDS.coast.minDistance;
@@ -170,5 +170,44 @@ export class AircraftAnalyzer {
         }
 
         return false;
+    }
+
+    /**
+     * Returns all intersection points (with segment info and timestamp) for a given aircraft track.
+     * Only includes intersections where all segment endpoints meet monitoring requirements.
+     */
+    static getIntersections(aircraft: Aircraft): Array<{ segments: { start: ExtendedPosition, end: ExtendedPosition }[], timestamp: number }> {
+        const intersections: Array<{ segments: { start: ExtendedPosition, end: ExtendedPosition }[], timestamp: number }> = [];
+        const segments = aircraft.track.slice(1).map((point, i) => ({
+            start: aircraft.track[i],
+            end: point
+        }));
+        for (let i = 0; i < segments.length - 2; i++) {
+            for (let j = i + 2; j < segments.length; j++) {
+                if (areIntersecting(segments[i], segments[j])) {
+                    const pointsToCheck = [
+                        segments[i].start,
+                        segments[i].end,
+                        segments[j].start,
+                        segments[j].end
+                    ];
+                    const allPointsValid = pointsToCheck.every(point =>
+                        AircraftAnalyzer.meetsMonitoringRequirements(point)
+                    );
+                    if (allPointsValid) {
+                        // Use the newer of the two segment endpoints as the timestamp
+                        const timestamp = Math.max(
+                            segments[i].end.timestamp,
+                            segments[j].end.timestamp
+                        );
+                        intersections.push({
+                            segments: [segments[i], segments[j]],
+                            timestamp
+                        });
+                    }
+                }
+            }
+        }
+        return intersections;
     }
 }
