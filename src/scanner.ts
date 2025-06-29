@@ -250,7 +250,7 @@ export class AircraftScanner extends EventEmitter {
                         longitude: latestPosition.longitude
                     }
                 },
-                track: aircraft.track
+                track: [...aircraft.track]
             };
             logger.debug(`Created new loitering event for ${aircraft.icao} with ${event.track.length} track points (windowed)`);
         }
