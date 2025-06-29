@@ -218,7 +218,8 @@ export class AircraftScanner extends EventEmitter {
             // Update existing event
             event.lastUpdated = now;
             event.intersectionPoints = intersections;
-            event.track = aircraft.track;
+            // Add new track points to the event track, but keep the oldest points (new points are at the beginning of the array)
+            event.track = [...aircraft.track].concat(event.track.filter(point => !aircraft.track.some(p => p.timestamp === point.timestamp)));
             // Update aircraft state with latest position
             event.aircraftState = {
                 altitude: latestPosition.altitude,
