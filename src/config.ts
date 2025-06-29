@@ -8,19 +8,18 @@ export const SICILY_CHANNEL_BOUNDS = {
 
 // Aircraft monitoring thresholds
 export const MONITORING_THRESHOLDS = {
+    // Altitude in feet
     altitude: {
-        min: 5000,  // feet
+        min: 100,
         max: 25000
     },
+    // Speed in knots
     speed: {
-        min: 100,   // knots
+        min: 50,
         max: 300
     },
+    // Minimum distance from coast in km
     coast: {
-        minDistance: 5 // km from coast
-    },
-    loitering: {
-        maxRadius: 30,        // km
-        minDuration: 5 * 60   // seconds (5 minutes)
+        minDistance: 8
     }
 } as const;

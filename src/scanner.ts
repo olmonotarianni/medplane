@@ -29,8 +29,16 @@ export class AircraftScanner extends EventEmitter {
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 10000; // 10 seconds default update interval
     private loiteringStorage = getLoiteringStorage();
-    private readonly INACTIVITY_THRESHOLD_MS = 30 * 60 * 1000; // 5 minutes of inactivity
-    private readonly TRACK_RETENTION_MS = 60 * 60 * 1000; // 20 minutes of track retention
+
+    /** The maximum inactivity time for an aircraft; if an aircraft is inactive for more than this time, it will be considered inactive and removed from the map */
+    private readonly INACTIVITY_THRESHOLD_MS = 20 * 60 * 1000;
+
+    /** The maximum time to keep track of an aircraft; data points older than this time will be removed from the track */
+    private readonly TRACK_RETENTION_MS = 30 * 60 * 1000;
+
+    /** The maximum inactivity time for a single event; if an event is inactive for more than this time, it will be considered a new event */
+    private readonly SINGLE_EVENT_INACTIVITY_MS = 10 * 60 * 1000;
+
     private running = false;
     private telegramNotifier: TelegramNotifier;
 
@@ -191,10 +199,10 @@ export class AircraftScanner extends EventEmitter {
 
     private async handleLoiteringDetection(aircraft: Aircraft): Promise<void> {
         // Check if we already have an event for this aircraft
-        let event = this.loiteringStorage.getEventByIcao(aircraft.icao);
+        let event = this.loiteringStorage.getLatestEventByIcao(aircraft.icao);
         const now = Date.now();
         const isNewEvent = !event;
-        const TRACK_WINDOW_MS = 30 * 60 * 1000; // 30 minutes
+
 
         // Get all intersections for this aircraft
         const intersections = AircraftAnalyzer.getIntersections(aircraft);
@@ -206,7 +214,7 @@ export class AircraftScanner extends EventEmitter {
         const latestPosition = aircraft.track[0];
         if (!latestPosition) return;
 
-        if (event) {
+        if (event && event.lastUpdated > now - this.SINGLE_EVENT_INACTIVITY_MS) {
             // Update existing event
             event.lastUpdated = now;
             event.intersectionPoints = intersections;
@@ -226,7 +234,7 @@ export class AircraftScanner extends EventEmitter {
         } else {
             // Create new event
             event = {
-                id: aircraft.icao, // Use ICAO as the ID
+                id: Math.random().toString(36).substring(2, 15),
                 icao: aircraft.icao,
                 callsign: aircraft.callsign,
                 firstDetected: now,
@@ -267,7 +275,7 @@ export class AircraftScanner extends EventEmitter {
         return this.loiteringStorage.listEvents();
     }
 
-    public getLoiteringEvent(icao: string): LoiteringEvent | undefined {
-        return this.loiteringStorage.getEventByIcao(icao);
+    public getLoiteringEvent(id: string): LoiteringEvent | undefined {
+        return this.loiteringStorage.getEvent(id);
     }
 }

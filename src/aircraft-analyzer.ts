@@ -14,26 +14,55 @@ export interface AircraftAnalysisResult {
  * All methods are pure and return new values or results, making the class stateless and easy to test.
  */
 export class AircraftAnalyzer {
-    // Altitude and speed ranges
-    private static readonly ALTITUDE_RANGE = { min: 10, max: 25000 }; // feet
-    private static readonly SPEED_RANGE = { min: 10, max: 300 }; // knots
-
-    // Minimum distance from coast (km) to be considered over the sea
-    private static readonly MIN_DISTANCE_FROM_COAST_KM = MONITORING_THRESHOLDS.coast.minDistance;
 
     /**
-     * Checks if a position meets all monitoring requirements
+     * Checks if a position meets all monitoring requirements and returns the result with reason
      * @param position The position to check (must include altitude and speed)
-     * @returns true if the position meets all monitoring requirements
+     * @returns Object with is_monitored status and reason
      */
-    private static meetsMonitoringRequirements(position: ExtendedPosition): boolean {
+    private static checkMonitoringRequirements(position: ExtendedPosition): { is_monitored: boolean; not_monitored_reason: string | null } {
         const inArea = AircraftAnalyzer.isInSicilyChannel(position);
         const inAltitudeRange = AircraftAnalyzer.isInTargetAltitude(position.altitude);
         const inSpeedRange = AircraftAnalyzer.isInTargetSpeed(position.speed);
         const overSea = AircraftAnalyzer.isOverSea(position);
 
-        return inArea && inAltitudeRange && inSpeedRange && overSea;
+        if (!inArea) {
+            return {
+                is_monitored: false,
+                not_monitored_reason: 'Aircraft is outside the Sicily Channel monitoring area.'
+            };
+        }
+        if (!overSea) {
+            return {
+                is_monitored: false,
+                not_monitored_reason: 'Aircraft is over land or too close to coast.'
+            };
+        }
+        if (!inSpeedRange) {
+            const speed = position.speed;
+            return {
+                is_monitored: false,
+                not_monitored_reason: speed < MONITORING_THRESHOLDS.speed.min
+                    ? `Aircraft speed (${speed.toFixed(1)} knots) is too slow (minimum: ${MONITORING_THRESHOLDS.speed.min} knots).`
+                    : `Aircraft speed (${speed.toFixed(1)} knots) is too fast (maximum: ${MONITORING_THRESHOLDS.speed.max} knots).`
+            };
+        }
+        if (!inAltitudeRange) {
+            const altitude = position.altitude;
+            return {
+                is_monitored: false,
+                not_monitored_reason: altitude < MONITORING_THRESHOLDS.altitude.min
+                    ? `Aircraft altitude (${altitude.toFixed(1)} feet) is too low (minimum: ${MONITORING_THRESHOLDS.altitude.min} feet).`
+                    : `Aircraft altitude (${altitude.toFixed(1)} feet) is too high (maximum: ${MONITORING_THRESHOLDS.altitude.max} feet).`
+            };
+        }
+
+        return {
+            is_monitored: true,
+            not_monitored_reason: null
+        };
     }
+
 
     private static isInSicilyChannel(position: Position): boolean {
         return position.latitude >= SICILY_CHANNEL_BOUNDS.minLat &&
@@ -43,19 +72,19 @@ export class AircraftAnalyzer {
     }
 
     private static isInTargetAltitude(altitude: number): boolean {
-        return altitude >= AircraftAnalyzer.ALTITUDE_RANGE.min &&
-            altitude <= AircraftAnalyzer.ALTITUDE_RANGE.max;
+        return altitude >= MONITORING_THRESHOLDS.altitude.min &&
+            altitude <= MONITORING_THRESHOLDS.altitude.max;
     }
 
     private static isInTargetSpeed(speed: number): boolean {
-        return speed >= AircraftAnalyzer.SPEED_RANGE.min &&
-            speed <= AircraftAnalyzer.SPEED_RANGE.max;
+        return speed >= MONITORING_THRESHOLDS.speed.min &&
+            speed <= MONITORING_THRESHOLDS.speed.max;
     }
 
     private static isOverSea(position: Position): boolean {
         // Use GeoUtils.minDistanceToCoastline to determine if over sea
         const distance = GeoUtils.minDistanceToCoastline(position);
-        return distance !== null && distance >= AircraftAnalyzer.MIN_DISTANCE_FROM_COAST_KM;
+        return distance !== null && distance >= MONITORING_THRESHOLDS.coast.minDistance;
     }
 
     /**
@@ -76,7 +105,6 @@ export class AircraftAnalyzer {
         //     };
         // }
 
-
         const latestPosition = aircraft.track[0];
         if (!latestPosition) {
             return {
@@ -86,43 +114,12 @@ export class AircraftAnalyzer {
             };
         }
 
-        // Monitoring status logic
-        const inArea = AircraftAnalyzer.isInSicilyChannel(latestPosition);
-        const inAltitudeRange = AircraftAnalyzer.isInTargetAltitude(latestPosition.altitude);
-        const inSpeedRange = AircraftAnalyzer.isInTargetSpeed(latestPosition.speed);
-        const overSea = AircraftAnalyzer.isOverSea(latestPosition);
-
-        if (!overSea) {
+        // Check monitoring requirements
+        const monitoringCheck = AircraftAnalyzer.checkMonitoringRequirements(latestPosition);
+        if (!monitoringCheck.is_monitored) {
             return {
                 is_monitored: false,
-                not_monitored_reason: 'Aircraft is over land or too close to coast.',
-                is_loitering: false,
-            };
-        }
-        if (!inArea) {
-            return {
-                is_monitored: false,
-                not_monitored_reason: 'Aircraft is outside the Sicily Channel monitoring area.',
-                is_loitering: false,
-            };
-        }
-        if (!inSpeedRange) {
-            const speed = latestPosition.speed;
-            return {
-                is_monitored: false,
-                not_monitored_reason: speed < AircraftAnalyzer.SPEED_RANGE.min
-                    ? `Aircraft speed (${speed.toFixed(1)} knots) is too slow (minimum: ${AircraftAnalyzer.SPEED_RANGE.min} knots).`
-                    : `Aircraft speed (${speed.toFixed(1)} knots) is too fast (maximum: ${AircraftAnalyzer.SPEED_RANGE.max} knots).`,
-                is_loitering: false,
-            };
-        }
-        if (!inAltitudeRange) {
-            const altitude = latestPosition.altitude;
-            return {
-                is_monitored: false,
-                not_monitored_reason: altitude < AircraftAnalyzer.ALTITUDE_RANGE.min
-                    ? `Aircraft altitude (${altitude.toFixed(1)} feet) is too low (minimum: ${AircraftAnalyzer.ALTITUDE_RANGE.min} feet).`
-                    : `Aircraft altitude (${altitude.toFixed(1)} feet) is too high (maximum: ${AircraftAnalyzer.ALTITUDE_RANGE.max} feet).`,
+                not_monitored_reason: monitoringCheck.not_monitored_reason,
                 is_loitering: false,
             };
         }
@@ -137,39 +134,8 @@ export class AircraftAnalyzer {
     }
 
     static hasIntersectingTrack(aircraft: Aircraft): boolean {
-        // Convert track points to segments
-        const segments = aircraft.track.slice(1).map((point, i) => ({
-            start: aircraft.track[i],
-            end: point
-        }));
-
-        // Check if any non-adjacent segments intersect
-        for (let i = 0; i < segments.length - 2; i++) {
-            for (let j = i + 2; j < segments.length; j++) {
-                if (areIntersecting(segments[i], segments[j])) {
-                    // Check if both segment endpoints meet monitoring requirements
-                    // We need to check both start and end points of both segments
-                    const pointsToCheck = [
-                        segments[i].start,
-                        segments[i].end,
-                        segments[j].start,
-                        segments[j].end
-                    ];
-
-                    // All four points must meet monitoring requirements for this to be a valid loitering intersection
-                    const allPointsValid = pointsToCheck.every(point =>
-                        AircraftAnalyzer.meetsMonitoringRequirements(point)
-                    );
-
-                    if (allPointsValid) {
-                        return true;
-                    }
-                    // If not all points are valid, continue checking other intersections
-                }
-            }
-        }
-
-        return false;
+        const intersections = AircraftAnalyzer.getIntersections(aircraft);
+        return intersections.length > 0;
     }
 
     /**
@@ -192,7 +158,7 @@ export class AircraftAnalyzer {
                         segments[j].end
                     ];
                     const allPointsValid = pointsToCheck.every(point =>
-                        AircraftAnalyzer.meetsMonitoringRequirements(point)
+                        AircraftAnalyzer.checkMonitoringRequirements(point).is_monitored
                     );
                     if (allPointsValid) {
                         // Use the newer of the two segment endpoints as the timestamp

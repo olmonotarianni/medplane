@@ -64,8 +64,13 @@ class LoiteringStorage {
         return this.events.get(id);
     }
 
-    public getEventByIcao(icao: string): LoiteringEvent | undefined {
-        return Array.from(this.events.values()).find(event => event.icao === icao);
+    private getEventsByIcao(icao: string): LoiteringEvent[] {
+        return Array.from(this.events.values()).filter(event => event.icao === icao);
+    }
+
+    public getLatestEventByIcao(icao: string): LoiteringEvent | undefined {
+        const events = this.getEventsByIcao(icao);
+        return events.sort((a, b) => b.lastUpdated - a.lastUpdated)[0];
     }
 
     public listEvents(): LoiteringEvent[] {
