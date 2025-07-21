@@ -1,13 +1,13 @@
-import { EventEmitter } from 'events';
-import { AircraftAnalyzer } from './aircraft-analyzer';
-import { SICILY_CHANNEL_BOUNDS } from './config';
-import { ScannerProvider } from './providers/base-provider';
-import { Aircraft, ExtendedPosition, LoiteringEvent } from './types';
-import { getLoiteringStorage } from './storage/loitering-storage';
-import { TelegramNotifier } from './notifications/telegram-notifier';
+
 import * as fs from 'fs';
 import * as path from 'path';
+import { AircraftAnalyzer } from './aircraft-analyzer';
+import { SICILY_CHANNEL_BOUNDS } from './config';
 import { logger } from './logger';
+import { TelegramNotifier } from './notifications/telegram-notifier';
+import { ScannerProvider } from './providers/base-provider';
+import { getLoiteringStorage } from './storage/loitering-storage';
+import { Aircraft, LoiteringEvent } from './types';
 
 const STORAGE_DIR = path.join(process.cwd(), 'storage');
 const AIRCRAFT_FILE = path.join(STORAGE_DIR, 'aircraft-states.json');
@@ -24,7 +24,7 @@ function atomicWriteFileSync(filePath: string, data: string) {
     fs.renameSync(tmpPath, filePath);
 }
 
-export class AircraftScanner extends EventEmitter {
+export class AircraftScanner {
     private aircraft: Map<string, Aircraft> = new Map();
     private analyzer: AircraftAnalyzer;
     private updateIntervalMs = 15000; // 10 seconds default update interval
@@ -43,7 +43,6 @@ export class AircraftScanner extends EventEmitter {
     private telegramNotifier: TelegramNotifier;
 
     constructor(private provider: ScannerProvider) {
-        super();
         this.analyzer = new AircraftAnalyzer();
         this.telegramNotifier = TelegramNotifier.getInstance();
         ensureStorageDir();
@@ -117,42 +116,31 @@ export class AircraftScanner extends EventEmitter {
     }
 
     private async scan(): Promise<void> {
-        try {
-            const result = await this.provider.scan(SICILY_CHANNEL_BOUNDS);
+        const result = await this.provider.scan(SICILY_CHANNEL_BOUNDS);
 
-            // Update aircraft data and check for interesting patterns
-            result.aircraft.forEach(scanAc => {
-                // Convert ScanAircraft to Aircraft (single-point track, default fields)
-                const aircraft: Aircraft = {
-                    icao: scanAc.icao,
-                    callsign: scanAc.callsign,
-                    is_monitored: false,
-                    is_loitering: false,
-                    not_monitored_reason: null,
-                    track: [{
-                        latitude: scanAc.latitude,
-                        longitude: scanAc.longitude,
-                        timestamp: scanAc.timestamp,
-                        altitude: scanAc.altitude,
-                        speed: scanAc.speed,
-                        heading: scanAc.heading,
-                        verticalRate: scanAc.verticalRate,
-                        distanceToCoast: scanAc.distanceToCoast
-                    }]
-                };
-                this.updateAircraft(aircraft);
-            });
+        // Update aircraft data and check for interesting patterns
+        result.aircraft.forEach(scanAc => {
+            // Convert ScanAircraft to Aircraft (single-point track, default fields)
+            const aircraft: Aircraft = {
+                icao: scanAc.icao,
+                callsign: scanAc.callsign,
+                is_monitored: false,
+                is_loitering: false,
+                not_monitored_reason: null,
+                track: [{
+                    latitude: scanAc.latitude,
+                    longitude: scanAc.longitude,
+                    timestamp: scanAc.timestamp,
+                    altitude: scanAc.altitude,
+                    speed: scanAc.speed,
+                    heading: scanAc.heading,
+                    verticalRate: scanAc.verticalRate,
+                    distanceToCoast: scanAc.distanceToCoast
+                }]
+            };
+            this.updateAircraft(aircraft);
+        });
 
-            this.emit('scan', result.aircraft);
-        } catch (error) {
-            logger.error('Error scanning aircraft:', error);
-            if (!String(error).includes('429')) {
-                this.telegramNotifier.sendNotification({
-                    markdown: `🚨 **Scanner error:**\n\n${error}`
-                });
-            }
-            this.emit('error', error);
-        }
     }
 
     public updateAircraft(aircraft: Aircraft): void {
@@ -189,7 +177,6 @@ export class AircraftScanner extends EventEmitter {
         // If loitering is detected (new or continued)
         if (tracked.is_loitering) {
             this.handleLoiteringDetection(tracked);
-            this.emit('loiteringAircraft', tracked);
         }
     }
 

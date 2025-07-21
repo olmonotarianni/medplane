@@ -15,20 +15,6 @@ export class App {
 
         // Set up server components
         this.server.setScanner(this.scanner);
-
-        // Set up aircraft detection logging
-        this.setupAircraftLogging();
-    }
-
-    private setupAircraftLogging(): void {
-        this.scanner.on('interestingAircraft', (aircraft) => {
-            logger.debug('Interesting aircraft detected:');
-            logger.debug(`ICAO: ${aircraft.icao}`);
-            logger.debug(`Callsign: ${aircraft.callsign || 'unknown'}`);
-            logger.debug(`Position: ${aircraft.position.latitude}, ${aircraft.position.longitude}`);
-            logger.debug(`Altitude: ${aircraft.altitude}ft, Speed: ${aircraft.speed}kts`);
-            logger.debug('---');
-        });
     }
 
     public start(): void {
