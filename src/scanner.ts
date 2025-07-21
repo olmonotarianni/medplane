@@ -146,9 +146,11 @@ export class AircraftScanner extends EventEmitter {
             this.emit('scan', result.aircraft);
         } catch (error) {
             logger.error('Error scanning aircraft:', error);
-            this.telegramNotifier.sendNotification({
-                markdown: `🚨 **Scanner error:**\n\n${error}`
-            });
+            if (!String(error).includes('429')) {
+                this.telegramNotifier.sendNotification({
+                    markdown: `🚨 **Scanner error:**\n\n${error}`
+                });
+            }
             this.emit('error', error);
         }
     }
