@@ -12,6 +12,7 @@ export interface ExtendedPosition extends Position {
     speed: number;
     heading: number;
     verticalRate: number;
+    distanceToCoast: number;
 }
 
 export interface Aircraft {

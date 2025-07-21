@@ -134,7 +134,8 @@ export class AircraftScanner extends EventEmitter {
                         altitude: scanAc.altitude,
                         speed: scanAc.speed,
                         heading: scanAc.heading,
-                        verticalRate: scanAc.verticalRate
+                        verticalRate: scanAc.verticalRate,
+                        distanceToCoast: scanAc.distanceToCoast
                     }]
                 };
                 this.updateAircraft(aircraft);

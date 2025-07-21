@@ -8,6 +8,10 @@ export const OPENSKY_PASSWORD = '';
 // Test positions for coast distance calculations
 export const TEST_POSITIONS = [
     {
+        name: "Test Point 0 (Should be sea)",
+        position: { latitude: 0, longitude: 0 }
+    },
+    {
         name: "Test Point 1 (Should be sea)",
         position: { latitude: 36.0652, longitude: 11.4255 }
     },

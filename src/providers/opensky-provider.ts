@@ -1,6 +1,7 @@
 import { Aircraft } from '../types';
 import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
 import { logger } from '../logger';
+import { GeoUtils } from 'utils';
 
 // OpenSky Network API aircraft state
 type AircraftState = [
@@ -142,7 +143,8 @@ export class OpenSkyProvider implements ScannerProvider {
                         altitude: state[7],
                         speed: state[9],
                         heading: state[10],
-                        verticalRate: state[11]
+                        verticalRate: state[11],
+                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: state[6], longitude: state[5] }) || 0
                     };
                 })
                 .filter((aircraft): aircraft is ScanAircraft => aircraft !== null)

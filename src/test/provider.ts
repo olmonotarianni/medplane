@@ -25,6 +25,7 @@ export async function runProviderTest(): Promise<void> {
             logger.debug('Speed:', aircraft.speed);
             logger.debug('Heading:', aircraft.heading);
             logger.debug('Vertical Rate:', aircraft.verticalRate);
+            logger.debug('Distance to Coast:', aircraft.distanceToCoast);
         });
     } catch (error) {
         logger.error('\nTest failed:', error);

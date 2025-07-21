@@ -1,6 +1,7 @@
 import { AircraftAnalyzer } from '../aircraft-analyzer';
 import { Aircraft, ExtendedPosition, Position } from '../types';
 import { logger } from '../logger';
+import { GeoUtils } from 'utils';
 
 
 function generateAircraft(points: Position[]): Aircraft {
@@ -19,7 +20,8 @@ function generateAircraft(points: Position[]): Aircraft {
                 altitude: 10000,
                 speed: 250,
                 heading: 0,
-                verticalRate: 0
+                verticalRate: 0,
+                distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: pt.latitude, longitude: pt.longitude }) || 0
             }
             return position;
         })
@@ -42,7 +44,8 @@ function generateAircraftWithCustomParams(points: Position[], altitude: number, 
                 altitude: altitude,
                 speed: speed,
                 heading: 0,
-                verticalRate: 0
+                verticalRate: 0,
+                distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: pt.latitude, longitude: pt.longitude }) || 0
             }
             return position;
         })

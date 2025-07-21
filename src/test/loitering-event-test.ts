@@ -23,17 +23,17 @@ function createLoiteringAircraft(): Aircraft {
         not_monitored_reason: null,
         track: [
             // First segment: top-left to bottom-right
-            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
             // Second segment: top-right to bottom-left
-            { latitude: 36.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 35.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
+            { latitude: 36.0, longitude: 14.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 35.5, longitude: 13.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
             // Third segment: back to start
-            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 },
-            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0 }
+            { latitude: 35.0, longitude: 13.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 35.5, longitude: 12.5, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 },
+            { latitude: 36.0, longitude: 12.0, timestamp: now, altitude: 10000, speed: 200, heading: 90, verticalRate: 0, distanceToCoast: 0 }
         ]
     };
 }

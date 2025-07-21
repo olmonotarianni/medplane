@@ -292,6 +292,7 @@ function updateAircraftList(aircraft) {
                 <p><b>Position:</b> ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
                 <p><b>Heading:</b> ${latest.heading ?? '?'}°</p>
                 <p><b>Vertical Rate:</b> ${latest.verticalRate ?? '?'} ft/min</p>
+                <p><b>Distance to Coast:</b> ${latest.distanceToCoast ?? '?'} km</p>
                 <p><b>Last Update:</b> ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
                 ${ac.not_monitored_reason ? `<p><b>Reason:</b> ${ac.not_monitored_reason}</p>` : ''}
             </div>

@@ -1,6 +1,7 @@
-import { Aircraft, Position } from '../types';
+import { Aircraft, ExtendedPosition, Position } from '../types';
 import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
 import { logger } from '../logger';
+import { GeoUtils } from '../utils';
 
 // Internal types for adsb.fi API response
 interface AdsbFiAircraft {
@@ -86,7 +87,7 @@ export class AdsbFiProvider implements ScannerProvider {
             // Convert adsb.fi aircraft format to ScanAircraft (snapshot, no history)
             const aircraft: ScanAircraft[] = data.aircraft
                 .filter(a => a.lat !== undefined && a.lon !== undefined)
-                .map(a => {
+                .map((a): ScanAircraft => {
                     const seenPos = typeof a.seen === 'number' ? a.seen : undefined;
                     const positionTimestamp = seenPos !== undefined ? snapshotTimestamp - seenPos : snapshotTimestamp;
                     return {
@@ -98,7 +99,8 @@ export class AdsbFiProvider implements ScannerProvider {
                         altitude: typeof a.alt_baro === 'number' ? a.alt_baro : 0,
                         speed: a.gs || 0,
                         heading: a.track || 0,
-                        verticalRate: a.baro_rate || 0
+                        verticalRate: a.baro_rate || 0,
+                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: a.lat!, longitude: a.lon! }) || 0
                     };
                 })
                 .filter(ac =>

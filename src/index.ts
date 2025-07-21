@@ -17,6 +17,7 @@ import { logger } from './logger';
 
     // Check command line arguments for test modes
     if (process.argv.includes('--test-coast-distance')) {
+        logger.level = 'debug';
         runCoastDistanceTests();
         process.exit(0);
     } else if (process.argv.includes('--test-airdata-provider')) {

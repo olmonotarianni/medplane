@@ -191,15 +191,43 @@ export class GeoUtils {
 
         // First check if we're over land
         const isLand = this.isOverLand(position);
-
-        // If we're over land, distance to coast is 0
         if (isLand) {
             return 0;
         }
 
-        // If we're over sea, we're at least 5km from coast (due to the 2km5 coastline data)
-        // This is a simplification, but it works for our use case
-        return 5;
+        let minDistance = Infinity;
+        for (const feature of coastlineGeojson.features) {
+            if (!feature?.geometry) continue;
+
+            if (isPolygonGeometry(feature.geometry)) {
+                // Polygon: coordinates is LineStringCoordinates[] (array of rings)
+                const rings = feature.geometry.coordinates as import("./types").LineStringCoordinates[];
+                for (const ring of rings) {
+                    for (const coord of ring) {
+                        const [lon, lat] = coord;
+                        const dist = this.calculateDistance(position, { latitude: lat, longitude: lon });
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                        }
+                    }
+                }
+            } else if (isMultiPolygonGeometry(feature.geometry)) {
+                // MultiPolygon: coordinates is PolygonCoordinates[] (array of polygons)
+                const polygons = feature.geometry.coordinates as import("./types").PolygonCoordinates[];
+                for (const polygon of polygons) {
+                    for (const ring of polygon) {
+                        for (const coord of ring) {
+                            const [lon, lat] = coord;
+                            const dist = this.calculateDistance(position, { latitude: lat, longitude: lon });
+                            if (dist < minDistance) {
+                                minDistance = dist;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return minDistance !== Infinity ? minDistance : null;
     }
 }
 
