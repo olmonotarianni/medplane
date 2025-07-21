@@ -190,7 +190,7 @@ function updateAircraft(data) {
             <p>Speed: ${latest.speed}kts</p>
             <p>Heading: ${latest.heading}°</p>
             <p>Vertical Rate: ${latest.verticalRate}ft/min</p>
-            <p>Distance to Coast: ${latest.distanceToCoast}km</p>
+            <p>Distance to Coast: ${latest.distanceToCoast?.toFixed(0) ?? '?'} km</p>
             <p>Last Update: ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
             ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
             ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : `<p class="unmonitored">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
@@ -293,7 +293,7 @@ function updateAircraftList(aircraft) {
                 <p><b>Position:</b> ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
                 <p><b>Heading:</b> ${latest.heading ?? '?'}°</p>
                 <p><b>Vertical Rate:</b> ${latest.verticalRate ?? '?'} ft/min</p>
-                <p><b>Distance to Coast:</b> ${latest.distanceToCoast ?? '?'} km</p>
+                <p><b>Distance to Coast:</b> ${latest.distanceToCoast?.toFixed(0) ?? '?'} km</p>
                 <p><b>Last Update:</b> ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
                 ${ac.not_monitored_reason ? `<p><b>Reason:</b> ${ac.not_monitored_reason}</p>` : ''}
             </div>
