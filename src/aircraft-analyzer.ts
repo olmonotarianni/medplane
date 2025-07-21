@@ -24,7 +24,7 @@ export class AircraftAnalyzer {
         const inArea = AircraftAnalyzer.isInSicilyChannel(position);
         const inAltitudeRange = AircraftAnalyzer.isInTargetAltitude(position.altitude);
         const inSpeedRange = AircraftAnalyzer.isInTargetSpeed(position.speed);
-        const overSea = AircraftAnalyzer.isOverSea(position);
+        const overSea = position.distanceToCoast > MONITORING_THRESHOLDS.coast.minDistance;
 
         if (!inArea) {
             return {
@@ -81,11 +81,6 @@ export class AircraftAnalyzer {
             speed <= MONITORING_THRESHOLDS.speed.max;
     }
 
-    private static isOverSea(position: Position): boolean {
-        // Use GeoUtils.minDistanceToCoastline to determine if over sea
-        const distance = GeoUtils.minDistanceToCoastline(position);
-        return distance !== null && distance >= MONITORING_THRESHOLDS.coast.minDistance;
-    }
 
     /**
      * Analyzes an aircraft and returns its monitoring and loitering status.
