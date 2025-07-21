@@ -86,9 +86,11 @@ export class AircraftScanner extends EventEmitter {
                 this.cleanupInactiveAircraft();
             } catch (error) {
                 logger.error('Error in scanner:', error);
-                this.telegramNotifier.sendNotification({
-                    markdown: `🚨 **Scanner error:**\n\n${error}`
-                });
+                if (!String(error).includes('429')) {
+                    this.telegramNotifier.sendNotification({
+                        markdown: `🚨 **Scanner error:**\n\n${error}`
+                    });
+                }
             } finally {
                 await new Promise(resolve => setTimeout(resolve, this.updateIntervalMs));
             }
