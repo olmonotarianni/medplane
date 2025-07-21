@@ -27,7 +27,7 @@ function atomicWriteFileSync(filePath: string, data: string) {
 export class AircraftScanner extends EventEmitter {
     private aircraft: Map<string, Aircraft> = new Map();
     private analyzer: AircraftAnalyzer;
-    private updateIntervalMs = 10000; // 10 seconds default update interval
+    private updateIntervalMs = 15000; // 10 seconds default update interval
     private loiteringStorage = getLoiteringStorage();
 
     /** The maximum inactivity time for an aircraft; if an aircraft is inactive for more than this time, it will be considered inactive and removed from the map */
