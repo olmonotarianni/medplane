@@ -190,6 +190,7 @@ function updateAircraft(data) {
             <p>Speed: ${latest.speed}kts</p>
             <p>Heading: ${latest.heading}°</p>
             <p>Vertical Rate: ${latest.verticalRate}ft/min</p>
+            <p>Distance to Coast: ${latest.distanceToCoast}km</p>
             <p>Last Update: ${latest.timestamp ? new Date(latest.timestamp * 1000).toLocaleTimeString() : 'N/A'}</p>
             ${ac.is_loitering ? '<p class="highlight">Loitering Aircraft</p>' : ''}
             ${ac.is_monitored ? '<p class="monitored">Monitored Aircraft</p>' : `<p class="unmonitored">${ac.not_monitored_reason || 'Outside Monitoring Area'}</p>`}
