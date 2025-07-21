@@ -1,7 +1,7 @@
 import { Aircraft } from '../types';
 import { ScannerProvider, ScanResult, ScanAircraft } from './base-provider';
 import { logger } from '../logger';
-import { GeoUtils } from 'utils';
+import { GeoUtils } from '../utils';
 
 // OpenSky Network API aircraft state
 type AircraftState = [

@@ -1,7 +1,7 @@
 import { AircraftAnalyzer } from '../aircraft-analyzer';
 import { Aircraft, ExtendedPosition, Position } from '../types';
 import { logger } from '../logger';
-import { GeoUtils } from 'utils';
+import { GeoUtils } from '../utils';
 
 
 function generateAircraft(points: Position[]): Aircraft {
