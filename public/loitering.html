@@ -138,7 +138,7 @@
                     <p><span class="info-label">Callsign:</span> <span class="info-value">${event.callsign || 'Unknown'}</span></p>
                     <p><span class="info-label">First detected:</span> <span class="info-value">${date.toLocaleString()}</span></p>
                     <p><span class="info-label">Last updated:</span> <span class="info-value">${lastDate.toLocaleString()}</span></p>
-                    <p><span class="info-label">Detection count:</span> <span class="info-value">${event.detectionCount}</span></p>
+                    <p><span class="info-label">Info:</span> <span class="info-value">${event.aircraftState.info ?? 'N/A'}</span></p>
                 </div>
 
                 <div class="info-section">

@@ -100,7 +100,8 @@ export class AdsbFiProvider implements ScannerProvider {
                         speed: a.gs || 0,
                         heading: a.track || 0,
                         verticalRate: a.baro_rate || 0,
-                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: a.lat!, longitude: a.lon! }) || 0
+                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: a.lat!, longitude: a.lon! }) || 0,
+                        info: 'Reg.no: ' + a.r + ', Type: ' + a.t + ', Model: ' + a.desc
                     };
                 })
                 .filter(ac =>

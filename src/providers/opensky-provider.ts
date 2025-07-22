@@ -144,7 +144,8 @@ export class OpenSkyProvider implements ScannerProvider {
                         speed: state[9],
                         heading: state[10],
                         verticalRate: state[11],
-                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: state[6], longitude: state[5] }) || 0
+                        distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: state[6], longitude: state[5] }) || 0,
+                        info: 'N/A'
                     };
                 })
                 .filter((aircraft): aircraft is ScanAircraft => aircraft !== null)

@@ -3,6 +3,7 @@ import { ExtendedPosition } from '../types';
 export interface ScanAircraft extends ExtendedPosition {
     icao: string;
     callsign: string;
+    info: string;
 }
 
 export interface ScanResult {
