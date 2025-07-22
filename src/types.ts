@@ -17,6 +17,7 @@ export interface ExtendedPosition extends Position {
 
 export interface Aircraft {
     icao: string;
+    info: string;
     callsign: string | null;
     // Monitoring status (updated by the analyzer, tells whether the aircraft is eligible for loitering detection)
     is_monitored: boolean;

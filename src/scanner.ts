@@ -123,6 +123,7 @@ export class AircraftScanner {
             // Convert ScanAircraft to Aircraft (single-point track, default fields)
             const aircraft: Aircraft = {
                 icao: scanAc.icao,
+                info: scanAc.info,
                 callsign: scanAc.callsign,
                 is_monitored: false,
                 is_loitering: false,
