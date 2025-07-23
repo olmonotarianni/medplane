@@ -42,6 +42,7 @@ export interface LoiteringEvent {
     }>;
     // Aircraft state at time of detection
     aircraftState: {
+        info: string;
         altitude: number;
         speed: number;
         heading: number;

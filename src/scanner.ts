@@ -225,6 +225,7 @@ export class AircraftScanner {
                 speed: latestPosition.speed,
                 heading: latestPosition.heading,
                 verticalRate: latestPosition.verticalRate,
+                info: aircraft.info,
                 position: {
                     latitude: latestPosition.latitude,
                     longitude: latestPosition.longitude
