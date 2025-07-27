@@ -244,6 +244,7 @@ export class AircraftScanner {
                 aircraftState: {
                     altitude: latestPosition.altitude,
                     speed: latestPosition.speed,
+                    info: aircraft.info,
                     heading: latestPosition.heading,
                     verticalRate: latestPosition.verticalRate,
                     position: {
