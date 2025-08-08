@@ -101,7 +101,7 @@ export class AdsbFiProvider implements ScannerProvider {
                         heading: a.track || 0,
                         verticalRate: a.baro_rate || 0,
                         distanceToCoast: GeoUtils.minDistanceToCoastline({ latitude: a.lat!, longitude: a.lon! }) || 0,
-                        info: 'Reg.no: ' + a.r + ', Type: ' + a.t + ', Model: ' + a.desc
+                        info: 'Reg.no: ' + (a.r || 'N/A') + ', Type: ' + (a.t || 'N/A') + ', Model: ' + (a.desc || 'N/A')
                     };
                 })
                 .filter(ac =>

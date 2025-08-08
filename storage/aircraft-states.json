@@ -1,352 +1,3701 @@
 [
   {
-    "icao": "4ca90a",
-    "callsign": "ITY1702",
+    "icao": "0180b5",
+    "callsign": "BRQ081",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "not_monitored_reason": "Aircraft speed (441.4 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 37.452346,
-        "longitude": 14.895729,
-        "timestamp": 1751147535.7,
-        "altitude": 4950,
-        "speed": 243.6,
-        "heading": 263.4,
-        "verticalRate": 2816
+        "latitude": 32.810211,
+        "longitude": 15.294781,
+        "timestamp": 1754665484,
+        "altitude": 34675,
+        "speed": 441.4,
+        "heading": 274.55,
+        "verticalRate": -768,
+        "distanceToCoast": 49.32404032294182
+      },
+      {
+        "latitude": 32.807922,
+        "longitude": 15.329279,
+        "timestamp": 1754665470,
+        "altitude": 34900,
+        "speed": 452.4,
+        "heading": 274.56,
+        "verticalRate": -1408,
+        "distanceToCoast": 49.57505964119415
+      },
+      {
+        "latitude": 32.806014,
+        "longitude": 15.35827,
+        "timestamp": 1754665457.9,
+        "altitude": 35375,
+        "speed": 453.4,
+        "heading": 274.43,
+        "verticalRate": -3200,
+        "distanceToCoast": 49.94972976247677
+      },
+      {
+        "latitude": 32.80336,
+        "longitude": 15.397843,
+        "timestamp": 1754665441.9,
+        "altitude": 35975,
+        "speed": 450.4,
+        "heading": 274.58,
+        "verticalRate": -512,
+        "distanceToCoast": 50.68836356257065
+      },
+      {
+        "latitude": 32.800707,
+        "longitude": 15.436856,
+        "timestamp": 1754665426,
+        "altitude": 36000,
+        "speed": 449.4,
+        "heading": 274.59,
+        "verticalRate": 0,
+        "distanceToCoast": 51.665197351477616
+      },
+      {
+        "latitude": 32.797914,
+        "longitude": 15.477102,
+        "timestamp": 1754665410,
+        "altitude": 36000,
+        "speed": 449.5,
+        "heading": 274.72,
+        "verticalRate": 0,
+        "distanceToCoast": 52.91533797811711
+      },
+      {
+        "latitude": 32.795214,
+        "longitude": 15.516058,
+        "timestamp": 1754665393.7,
+        "altitude": 36000,
+        "speed": 449.5,
+        "heading": 274.72,
+        "verticalRate": 0,
+        "distanceToCoast": 54.349773776438106
+      },
+      {
+        "latitude": 32.792862,
+        "longitude": 15.550104,
+        "timestamp": 1754665380,
+        "altitude": 36000,
+        "speed": 449.5,
+        "heading": 274.72,
+        "verticalRate": 0,
+        "distanceToCoast": 55.77119152832986
+      },
+      {
+        "latitude": 32.790093,
+        "longitude": 15.589992,
+        "timestamp": 1754665363.7,
+        "altitude": 36000,
+        "speed": 449.5,
+        "heading": 274.72,
+        "verticalRate": 0,
+        "distanceToCoast": 57.617268344582335
+      },
+      {
+        "latitude": 32.789441,
+        "longitude": 15.599409,
+        "timestamp": 1754665359.9,
+        "altitude": 36000,
+        "speed": 450.5,
+        "heading": 274.71,
+        "verticalRate": 0,
+        "distanceToCoast": 58.08004724761001
+      },
+      {
+        "latitude": 32.786741,
+        "longitude": 15.63859,
+        "timestamp": 1754665343.9,
+        "altitude": 36000,
+        "speed": 450.5,
+        "heading": 274.71,
+        "verticalRate": 0,
+        "distanceToCoast": 60.10851827486289
+      },
+      {
+        "latitude": 32.78432,
+        "longitude": 15.672782,
+        "timestamp": 1754665330,
+        "altitude": 36000,
+        "speed": 450.5,
+        "heading": 274.71,
+        "verticalRate": 0,
+        "distanceToCoast": 61.9981693078604
+      },
+      {
+        "latitude": 32.782837,
+        "longitude": 15.694244,
+        "timestamp": 1754665322,
+        "altitude": 36000,
+        "speed": 450.5,
+        "heading": 274.71,
+        "verticalRate": 0,
+        "distanceToCoast": 63.241972082183025
+      },
+      {
+        "latitude": 32.780273,
+        "longitude": 15.731708,
+        "timestamp": 1754665306,
+        "altitude": 36000,
+        "speed": 450.5,
+        "heading": 274.71,
+        "verticalRate": 0,
+        "distanceToCoast": 65.50757603327318
+      },
+      {
+        "latitude": 32.777481,
+        "longitude": 15.771039,
+        "timestamp": 1754665290,
+        "altitude": 36000,
+        "speed": 450.8,
+        "heading": 275.09,
+        "verticalRate": 0,
+        "distanceToCoast": 67.99398443471634
+      },
+      {
+        "latitude": 32.774312,
+        "longitude": 15.812745,
+        "timestamp": 1754665273.9,
+        "altitude": 36000,
+        "speed": 450.7,
+        "heading": 274.96,
+        "verticalRate": 0,
+        "distanceToCoast": 70.73188212829567
+      },
+      {
+        "latitude": 32.771576,
+        "longitude": 15.851459,
+        "timestamp": 1754665257.9,
+        "altitude": 36000,
+        "speed": 451.6,
+        "heading": 274.83,
+        "verticalRate": 0,
+        "distanceToCoast": 73.38384331350387
+      },
+      {
+        "latitude": 32.768725,
+        "longitude": 15.890995,
+        "timestamp": 1754665241.9,
+        "altitude": 36000,
+        "speed": 451.6,
+        "heading": 274.83,
+        "verticalRate": 0,
+        "distanceToCoast": 76.17293949279572
+      },
+      {
+        "latitude": 32.767375,
+        "longitude": 15.909941,
+        "timestamp": 1754665233.6,
+        "altitude": 36000,
+        "speed": 451.7,
+        "heading": 274.95,
+        "verticalRate": 0,
+        "distanceToCoast": 77.5382342871674
+      },
+      {
+        "latitude": 32.765991,
+        "longitude": 15.929132,
+        "timestamp": 1754665226,
+        "altitude": 36000,
+        "speed": 451.7,
+        "heading": 274.95,
+        "verticalRate": 0,
+        "distanceToCoast": 78.93713439706521
       }
-    ]
+    ],
+    "info": "Reg.no: 5A-BAC, Type: A320, Model: N/A"
   },
   {
-    "icao": "LOITER1",
-    "callsign": "TEST123",
-    "is_monitored": true,
-    "is_loitering": false,
-    "not_monitored_reason": null,
-    "track": [
-      {
-        "latitude": 36,
-        "longitude": 12,
-        "timestamp": 1751147205.464,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 42,
-        "longitude": 13,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41.5,
-        "longitude": 13.5,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41,
-        "longitude": 14,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 42,
-        "longitude": 15,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41.5,
-        "longitude": 14.5,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41,
-        "longitude": 14,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41,
-        "longitude": 14,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 41.5,
-        "longitude": 13.5,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      },
-      {
-        "latitude": 42,
-        "longitude": 13,
-        "timestamp": 1751146782.313,
-        "altitude": 10000,
-        "speed": 200,
-        "heading": 90,
-        "verticalRate": 0
-      }
-    ]
-  },
-  {
-    "icao": "3c65c2",
-    "callsign": "DLH1326",
+    "icao": "010262",
+    "info": "Reg.no: SU-GFX, Type: A21N, Model: AIRBUS A-321neo",
+    "callsign": "MSR848",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (337.4 knots) is too fast (maximum: 300 knots).",
+    "not_monitored_reason": "Aircraft speed (475.2 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 37.406021,
-        "longitude": 10.436895,
-        "timestamp": 1751147535.7,
-        "altitude": 11050,
-        "speed": 337.4,
-        "heading": 177.28,
-        "verticalRate": -1088
-      }
-    ]
-  },
-  {
-    "icao": "02a1a3",
-    "callsign": "LBT723",
-    "is_monitored": true,
-    "is_loitering": false,
-    "not_monitored_reason": null,
-    "track": [
+        "latitude": 36.082127,
+        "longitude": 11.157843,
+        "timestamp": 1754665483.7,
+        "altitude": 34950,
+        "speed": 475.2,
+        "heading": 98.47,
+        "verticalRate": 0,
+        "distanceToCoast": 43.890174378148394
+      },
       {
-        "latitude": 36.923035,
-        "longitude": 10.449225,
-        "timestamp": 1751147535.9,
-        "altitude": 4575,
-        "speed": 294.6,
-        "heading": 171.02,
-        "verticalRate": -1664
-      }
-    ]
-  },
-  {
-    "icao": "49d2b7",
-    "callsign": "TVL5443",
-    "is_monitored": false,
-    "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (428.6 knots) is too fast (maximum: 300 knots).",
-    "track": [
+        "latitude": 36.086517,
+        "longitude": 11.121311,
+        "timestamp": 1754665470,
+        "altitude": 34950,
+        "speed": 475,
+        "heading": 98.35,
+        "verticalRate": 0,
+        "distanceToCoast": 42.12980101355167
+      },
       {
-        "latitude": 34.909244,
-        "longitude": 11.576614,
-        "timestamp": 1751147535.9,
-        "altitude": 25175,
-        "speed": 428.6,
-        "heading": 9.26,
-        "verticalRate": 1344
-      }
-    ]
-  },
-  {
-    "icao": "018097",
-    "callsign": "5ALEX",
-    "is_monitored": false,
-    "is_loitering": false,
-    "not_monitored_reason": "Aircraft altitude (28000.0 feet) is too high (maximum: 25000 feet).",
-    "track": [
+        "latitude": 36.090363,
+        "longitude": 11.089153,
+        "timestamp": 1754665458,
+        "altitude": 34975,
+        "speed": 474,
+        "heading": 98.37,
+        "verticalRate": 0,
+        "distanceToCoast": 40.740655932721396
+      },
       {
-        "latitude": 33.198542,
-        "longitude": 12.561353,
-        "timestamp": 1751147513.2,
-        "altitude": 28000,
-        "speed": 233.3,
-        "heading": 315,
-        "verticalRate": 0
-      }
-    ]
-  },
-  {
-    "icao": "4d22ab",
-    "callsign": "KMM467",
-    "is_monitored": false,
-    "is_loitering": false,
-    "not_monitored_reason": "Aircraft is over land or too close to coast.",
-    "track": [
+        "latitude": 36.095628,
+        "longitude": 11.045409,
+        "timestamp": 1754665441.7,
+        "altitude": 34950,
+        "speed": 474,
+        "heading": 98.37,
+        "verticalRate": 0,
+        "distanceToCoast": 39.12768887586469
+      },
       {
-        "latitude": 37.701913,
-        "longitude": 13.233211,
-        "timestamp": 1751147535.7,
+        "latitude": 36.100609,
+        "longitude": 11.00345,
+        "timestamp": 1754665426,
+        "altitude": 34950,
+        "speed": 474,
+        "heading": 98.37,
+        "verticalRate": 0,
+        "distanceToCoast": 37.90360085174904
+      },
+      {
+        "latitude": 36.105962,
+        "longitude": 10.958044,
+        "timestamp": 1754665409.7,
+        "altitude": 34975,
+        "speed": 472.9,
+        "heading": 98.27,
+        "verticalRate": -64,
+        "distanceToCoast": 36.97576704194022
+      },
+      {
+        "latitude": 36.11085,
+        "longitude": 10.91667,
+        "timestamp": 1754665394,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 36.519930542217516
+      },
+      {
+        "latitude": 36.115082,
+        "longitude": 10.88047,
+        "timestamp": 1754665380,
+        "altitude": 34975,
+        "speed": 472.9,
+        "heading": 98.27,
+        "verticalRate": 0,
+        "distanceToCoast": 34.90578200070974
+      },
+      {
+        "latitude": 36.120438,
+        "longitude": 10.834866,
+        "timestamp": 1754665363.8,
+        "altitude": 34975,
+        "speed": 472.9,
+        "heading": 98.27,
+        "verticalRate": 0,
+        "distanceToCoast": 31.54437018056494
+      },
+      {
+        "latitude": 36.121536,
+        "longitude": 10.825539,
+        "timestamp": 1754665359.5,
         "altitude": 35000,
-        "speed": 455,
-        "heading": 155.18,
-        "verticalRate": 0
+        "speed": 472.9,
+        "heading": 98.27,
+        "verticalRate": 0,
+        "distanceToCoast": 30.88050024073941
+      },
+      {
+        "latitude": 36.126399,
+        "longitude": 10.784074,
+        "timestamp": 1754665343.8,
+        "altitude": 35000,
+        "speed": 472.9,
+        "heading": 98.27,
+        "verticalRate": 0,
+        "distanceToCoast": 28.048121785123605
+      },
+      {
+        "latitude": 36.130821,
+        "longitude": 10.74644,
+        "timestamp": 1754665329.8,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 25.03336108504834
+      },
+      {
+        "latitude": 36.133195,
+        "longitude": 10.72587,
+        "timestamp": 1754665322,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 23.1673644275693
+      },
+      {
+        "latitude": 36.138502,
+        "longitude": 10.68023,
+        "timestamp": 1754665305.4,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 19.026894817341972
+      },
+      {
+        "latitude": 36.143111,
+        "longitude": 10.640668,
+        "timestamp": 1754665290,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 15.438138953116088
+      },
+      {
+        "latitude": 36.148185,
+        "longitude": 10.596606,
+        "timestamp": 1754665273.8,
+        "altitude": 34975,
+        "speed": 472.6,
+        "heading": 98.03,
+        "verticalRate": 0,
+        "distanceToCoast": 11.44266926048197
+      },
+      {
+        "latitude": 36.153305,
+        "longitude": 10.552139,
+        "timestamp": 1754665257.6,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 7.411883453910904
+      },
+      {
+        "latitude": 36.157961,
+        "longitude": 10.511637,
+        "timestamp": 1754665241.9,
+        "altitude": 34975,
+        "speed": 472.8,
+        "heading": 98.15,
+        "verticalRate": 0,
+        "distanceToCoast": 3.7449097839065844
+      },
+      {
+        "latitude": 36.160492,
+        "longitude": 10.489597,
+        "timestamp": 1754665233.7,
+        "altitude": 34975,
+        "speed": 473.6,
+        "heading": 98.01,
+        "verticalRate": 0,
+        "distanceToCoast": 1.7601796277164807
+      },
+      {
+        "latitude": 36.162827,
+        "longitude": 10.468998,
+        "timestamp": 1754665225.9,
+        "altitude": 34975,
+        "speed": 473.5,
+        "heading": 97.89,
+        "verticalRate": 0,
+        "distanceToCoast": 0
       }
     ]
   },
   {
-    "icao": "346384",
-    "callsign": "ETD104",
+    "icao": "0180b6",
+    "info": "Reg.no: 5A-BAE, Type: A320, Model: N/A",
+    "callsign": "BRQ144",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (488.3 knots) is too fast (maximum: 300 knots).",
+    "not_monitored_reason": "Aircraft speed (446.3 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 36.303909,
-        "longitude": 13.394566,
-        "timestamp": 1751147535.9,
-        "altitude": 37000,
-        "speed": 488.3,
-        "heading": 99.19,
-        "verticalRate": 384
+        "latitude": 34.074702,
+        "longitude": 11.439743,
+        "timestamp": 1754665483.6,
+        "altitude": 32425,
+        "speed": 446.3,
+        "heading": 160.23,
+        "verticalRate": -896,
+        "distanceToCoast": 45.0453135089657
+      },
+      {
+        "latitude": 34.100631,
+        "longitude": 11.428585,
+        "timestamp": 1754665469.9,
+        "altitude": 32625,
+        "speed": 445.4,
+        "heading": 160.18,
+        "verticalRate": -960,
+        "distanceToCoast": 46.14441537249178
+      },
+      {
+        "latitude": 34.125778,
+        "longitude": 11.417654,
+        "timestamp": 1754665457.2,
+        "altitude": 32800,
+        "speed": 446.3,
+        "heading": 160.23,
+        "verticalRate": -1024,
+        "distanceToCoast": 47.36865557154388
+      },
+      {
+        "latitude": 34.154755,
+        "longitude": 11.405098,
+        "timestamp": 1754665442,
+        "altitude": 33000,
+        "speed": 446.7,
+        "heading": 160.1,
+        "verticalRate": -192,
+        "distanceToCoast": 48.96837765185041
+      },
+      {
+        "latitude": 34.185962,
+        "longitude": 11.391506,
+        "timestamp": 1754665426,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 50.889661459563605
+      },
+      {
+        "latitude": 34.217571,
+        "longitude": 11.377773,
+        "timestamp": 1754665409.7,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 52.99215032052486
+      },
+      {
+        "latitude": 34.248825,
+        "longitude": 11.364123,
+        "timestamp": 1754665393.9,
+        "altitude": 33000,
+        "speed": 444.4,
+        "heading": 160.14,
+        "verticalRate": 0,
+        "distanceToCoast": 49.42580386088823
+      },
+      {
+        "latitude": 34.276108,
+        "longitude": 11.35224,
+        "timestamp": 1754665380,
+        "altitude": 33000,
+        "speed": 444.4,
+        "heading": 160.14,
+        "verticalRate": 0,
+        "distanceToCoast": 46.33119328946294
+      },
+      {
+        "latitude": 34.308953,
+        "longitude": 11.337891,
+        "timestamp": 1754665362.5,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 42.62919077782286
+      },
+      {
+        "latitude": 34.31488,
+        "longitude": 11.335312,
+        "timestamp": 1754665359.5,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 41.9652746093557
+      },
+      {
+        "latitude": 34.346466,
+        "longitude": 11.321467,
+        "timestamp": 1754665344,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 38.44323479995698
+      },
+      {
+        "latitude": 34.373753,
+        "longitude": 11.309566,
+        "timestamp": 1754665329.8,
+        "altitude": 33000,
+        "speed": 445.7,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 35.43980781621893
+      },
+      {
+        "latitude": 34.387756,
+        "longitude": 11.303418,
+        "timestamp": 1754665321.8,
+        "altitude": 33000,
+        "speed": 444.8,
+        "heading": 160.02,
+        "verticalRate": 64,
+        "distanceToCoast": 33.911913853998016
+      },
+      {
+        "latitude": 34.418444,
+        "longitude": 11.289997,
+        "timestamp": 1754665306,
+        "altitude": 33000,
+        "speed": 443.5,
+        "heading": 160.09,
+        "verticalRate": 0,
+        "distanceToCoast": 30.614018058429803
+      },
+      {
+        "latitude": 34.450424,
+        "longitude": 11.276065,
+        "timestamp": 1754665289.8,
+        "altitude": 33000,
+        "speed": 438.1,
+        "heading": 160.12,
+        "verticalRate": 0,
+        "distanceToCoast": 27.270932869284668
+      },
+      {
+        "latitude": 34.48073,
+        "longitude": 11.262817,
+        "timestamp": 1754665274,
+        "altitude": 33000,
+        "speed": 434,
+        "heading": 160.06,
+        "verticalRate": 0,
+        "distanceToCoast": 23.840206667247312
+      },
+      {
+        "latitude": 34.509613,
+        "longitude": 11.250168,
+        "timestamp": 1754665258,
+        "altitude": 33000,
+        "speed": 430.9,
+        "heading": 160.05,
+        "verticalRate": 0,
+        "distanceToCoast": 20.533672113382842
+      },
+      {
+        "latitude": 34.540457,
+        "longitude": 11.236668,
+        "timestamp": 1754665241.9,
+        "altitude": 33000,
+        "speed": 431.8,
+        "heading": 160.1,
+        "verticalRate": 0,
+        "distanceToCoast": 17.050550236050597
+      },
+      {
+        "latitude": 34.555389,
+        "longitude": 11.230101,
+        "timestamp": 1754665233.6,
+        "altitude": 33000,
+        "speed": 430.9,
+        "heading": 160.05,
+        "verticalRate": 0,
+        "distanceToCoast": 15.389712197657403
+      },
+      {
+        "latitude": 34.569626,
+        "longitude": 11.223879,
+        "timestamp": 1754665226,
+        "altitude": 33000,
+        "speed": 430.9,
+        "heading": 160.05,
+        "verticalRate": 0,
+        "distanceToCoast": 13.833034568043947
       }
     ]
   },
   {
-    "icao": "02a181",
-    "callsign": "TAR216",
+    "icao": "7105af",
+    "info": "Reg.no: HZ-AR28, Type: B78X, Model: BOEING 787-10 Dreamliner",
+    "callsign": "SVA375",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "not_monitored_reason": "Aircraft speed (473.2 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 37.801941,
-        "longitude": 13.504476,
-        "timestamp": 1751147536,
-        "altitude": 37025,
-        "speed": 431.1,
-        "heading": 69.21,
-        "verticalRate": 0
+        "latitude": 36.127469,
+        "longitude": 10.906093,
+        "timestamp": 1754665483.7,
+        "altitude": 37975,
+        "speed": 473.2,
+        "heading": 278.51,
+        "verticalRate": 352,
+        "distanceToCoast": 37.57635600083409
+      },
+      {
+        "latitude": 36.123184,
+        "longitude": 10.941582,
+        "timestamp": 1754665469.8,
+        "altitude": 37975,
+        "speed": 473.1,
+        "heading": 278.39,
+        "verticalRate": -96,
+        "distanceToCoast": 38.38552467419205
+      },
+      {
+        "latitude": 36.119339,
+        "longitude": 10.973568,
+        "timestamp": 1754665458,
+        "altitude": 37975,
+        "speed": 472.1,
+        "heading": 278.4,
+        "verticalRate": 96,
+        "distanceToCoast": 38.83396854223136
+      },
+      {
+        "latitude": 36.114166,
+        "longitude": 11.016712,
+        "timestamp": 1754665441.6,
+        "altitude": 38000,
+        "speed": 472.1,
+        "heading": 278.4,
+        "verticalRate": 64,
+        "distanceToCoast": 39.77114949091672
+      },
+      {
+        "latitude": 36.109039,
+        "longitude": 11.059227,
+        "timestamp": 1754665426,
+        "altitude": 38000,
+        "speed": 471.1,
+        "heading": 278.42,
+        "verticalRate": -96,
+        "distanceToCoast": 41.03993933260393
+      },
+      {
+        "latitude": 36.10405,
+        "longitude": 11.100655,
+        "timestamp": 1754665410,
+        "altitude": 38000,
+        "speed": 470.1,
+        "heading": 278.44,
+        "verticalRate": 96,
+        "distanceToCoast": 42.58009431118742
+      },
+      {
+        "latitude": 36.098877,
+        "longitude": 11.143112,
+        "timestamp": 1754665394,
+        "altitude": 38000,
+        "speed": 470.2,
+        "heading": 278.56,
+        "verticalRate": -64,
+        "distanceToCoast": 44.431018133806425
+      },
+      {
+        "latitude": 36.094299,
+        "longitude": 11.180763,
+        "timestamp": 1754665379.7,
+        "altitude": 38000,
+        "speed": 470.2,
+        "heading": 278.56,
+        "verticalRate": 96,
+        "distanceToCoast": 46.282029188972565
+      },
+      {
+        "latitude": 36.089157,
+        "longitude": 11.222885,
+        "timestamp": 1754665364,
+        "altitude": 38000,
+        "speed": 470.2,
+        "heading": 278.56,
+        "verticalRate": 0,
+        "distanceToCoast": 48.5551426543885
+      },
+      {
+        "latitude": 36.087891,
+        "longitude": 11.233234,
+        "timestamp": 1754665360,
+        "altitude": 38000,
+        "speed": 470.2,
+        "heading": 278.56,
+        "verticalRate": 32,
+        "distanceToCoast": 49.14319557355048
+      },
+      {
+        "latitude": 36.08264,
+        "longitude": 11.276472,
+        "timestamp": 1754665343.7,
+        "altitude": 38000,
+        "speed": 470.2,
+        "heading": 278.56,
+        "verticalRate": 96,
+        "distanceToCoast": 51.71649150581151
+      },
+      {
+        "latitude": 36.078171,
+        "longitude": 11.312529,
+        "timestamp": 1754665330,
+        "altitude": 37975,
+        "speed": 470.4,
+        "heading": 278.68,
+        "verticalRate": 128,
+        "distanceToCoast": 53.9825916404396
+      },
+      {
+        "latitude": 36.075485,
+        "longitude": 11.334515,
+        "timestamp": 1754665321.8,
+        "altitude": 38000,
+        "speed": 470.4,
+        "heading": 278.68,
+        "verticalRate": 0,
+        "distanceToCoast": 55.41704087467244
+      },
+      {
+        "latitude": 36.070267,
+        "longitude": 11.376457,
+        "timestamp": 1754665306,
+        "altitude": 37975,
+        "speed": 471.4,
+        "heading": 278.66,
+        "verticalRate": 160,
+        "distanceToCoast": 58.07386506949182
+      },
+      {
+        "latitude": 36.065043,
+        "longitude": 11.418652,
+        "timestamp": 1754665290,
+        "altitude": 38000,
+        "speed": 471.5,
+        "heading": 278.78,
+        "verticalRate": 32,
+        "distanceToCoast": 59.60789313245138
+      },
+      {
+        "latitude": 36.059738,
+        "longitude": 11.46143,
+        "timestamp": 1754665273.9,
+        "altitude": 38000,
+        "speed": 471.4,
+        "heading": 278.66,
+        "verticalRate": 192,
+        "distanceToCoast": 61.37004677072969
+      },
+      {
+        "latitude": 36.054565,
+        "longitude": 11.503944,
+        "timestamp": 1754665257.9,
+        "altitude": 38000,
+        "speed": 470.8,
+        "heading": 278.18,
+        "verticalRate": 0,
+        "distanceToCoast": 63.319851461049915
+      },
+      {
+        "latitude": 36.049634,
+        "longitude": 11.547215,
+        "timestamp": 1754665241.7,
+        "altitude": 38000,
+        "speed": 469.7,
+        "heading": 278.08,
+        "verticalRate": -64,
+        "distanceToCoast": 65.50784500892277
+      },
+      {
+        "latitude": 36.047167,
+        "longitude": 11.568428,
+        "timestamp": 1754665233.9,
+        "altitude": 38000,
+        "speed": 469.8,
+        "heading": 278.2,
+        "verticalRate": 96,
+        "distanceToCoast": 66.6355055017974
+      },
+      {
+        "latitude": 36.044746,
+        "longitude": 11.589057,
+        "timestamp": 1754665225.9,
+        "altitude": 38000,
+        "speed": 469,
+        "heading": 278.34,
+        "verticalRate": -160,
+        "distanceToCoast": 67.76533753869202
       }
     ]
   },
   {
-    "icao": "3c56a9",
-    "callsign": "GEC8300",
+    "icao": "710415",
+    "info": "Reg.no: HZ-AR23, Type: B789, Model: BOEING 787-9 Dreamliner",
+    "callsign": "SVA231",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "not_monitored_reason": "Aircraft speed (471.2 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 37.58367,
-        "longitude": 13.668007,
-        "timestamp": 1751147535.9,
-        "altitude": 33050,
-        "speed": 468.1,
-        "heading": 162.34,
-        "verticalRate": -1984
+        "latitude": 35.934036,
+        "longitude": 12.51297,
+        "timestamp": 1754665484,
+        "altitude": 37975,
+        "speed": 471.2,
+        "heading": 277.68,
+        "verticalRate": -64,
+        "distanceToCoast": 99.75739184973635
+      },
+      {
+        "latitude": 35.929962,
+        "longitude": 12.550163,
+        "timestamp": 1754665470,
+        "altitude": 37975,
+        "speed": 471.2,
+        "heading": 277.68,
+        "verticalRate": -64,
+        "distanceToCoast": 101.594324447523
+      },
+      {
+        "latitude": 35.926392,
+        "longitude": 12.58255,
+        "timestamp": 1754665457.7,
+        "altitude": 37975,
+        "speed": 471.2,
+        "heading": 277.68,
+        "verticalRate": -128,
+        "distanceToCoast": 103.25878821819292
+      },
+      {
+        "latitude": 35.921802,
+        "longitude": 12.624284,
+        "timestamp": 1754665442,
+        "altitude": 38000,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": 128,
+        "distanceToCoast": 105.48393408302834
+      },
+      {
+        "latitude": 35.916962,
+        "longitude": 12.668152,
+        "timestamp": 1754665425.9,
+        "altitude": 38000,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": -64,
+        "distanceToCoast": 107.91731823031512
+      },
+      {
+        "latitude": 35.912351,
+        "longitude": 12.709838,
+        "timestamp": 1754665409.8,
+        "altitude": 37975,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": -64,
+        "distanceToCoast": 110.31341859782034
+      },
+      {
+        "latitude": 35.907557,
+        "longitude": 12.752906,
+        "timestamp": 1754665393.6,
+        "altitude": 37975,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": 0,
+        "distanceToCoast": 112.87078122093999
+      },
+      {
+        "latitude": 35.903458,
+        "longitude": 12.789803,
+        "timestamp": 1754665380,
+        "altitude": 38000,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": 96,
+        "distanceToCoast": 115.12080217379564
+      },
+      {
+        "latitude": 35.898712,
+        "longitude": 12.832031,
+        "timestamp": 1754665363.8,
+        "altitude": 37975,
+        "speed": 471.4,
+        "heading": 277.8,
+        "verticalRate": -32,
+        "distanceToCoast": 117.7643331520941
+      },
+      {
+        "latitude": 35.897548,
+        "longitude": 12.842667,
+        "timestamp": 1754665359.9,
+        "altitude": 37975,
+        "speed": 471.5,
+        "heading": 277.92,
+        "verticalRate": -32,
+        "distanceToCoast": 118.43751999357693
+      },
+      {
+        "latitude": 35.892706,
+        "longitude": 12.885736,
+        "timestamp": 1754665343.8,
+        "altitude": 38000,
+        "speed": 471.5,
+        "heading": 277.92,
+        "verticalRate": 160,
+        "distanceToCoast": 118.11356518743958
+      },
+      {
+        "latitude": 35.888517,
+        "longitude": 12.922961,
+        "timestamp": 1754665330,
+        "altitude": 38000,
+        "speed": 471.5,
+        "heading": 277.92,
+        "verticalRate": -32,
+        "distanceToCoast": 114.89633292759521
+      },
+      {
+        "latitude": 35.886108,
+        "longitude": 12.943954,
+        "timestamp": 1754665322,
+        "altitude": 37975,
+        "speed": 471.5,
+        "heading": 277.92,
+        "verticalRate": 0,
+        "distanceToCoast": 113.08702171268366
+      },
+      {
+        "latitude": 35.881394,
+        "longitude": 12.985665,
+        "timestamp": 1754665306,
+        "altitude": 38000,
+        "speed": 471.5,
+        "heading": 277.92,
+        "verticalRate": -64,
+        "distanceToCoast": 109.50009087908364
+      },
+      {
+        "latitude": 35.87646,
+        "longitude": 13.028675,
+        "timestamp": 1754665289.9,
+        "altitude": 37975,
+        "speed": 471.6,
+        "heading": 278.04,
+        "verticalRate": -64,
+        "distanceToCoast": 105.81748218888757
+      },
+      {
+        "latitude": 35.871597,
+        "longitude": 13.071442,
+        "timestamp": 1754665273.9,
+        "altitude": 37975,
+        "speed": 471.6,
+        "heading": 278.04,
+        "verticalRate": 0,
+        "distanceToCoast": 102.17081104343985
+      },
+      {
+        "latitude": 35.866745,
+        "longitude": 13.113441,
+        "timestamp": 1754665258,
+        "altitude": 37975,
+        "speed": 472.6,
+        "heading": 278.03,
+        "verticalRate": 64,
+        "distanceToCoast": 98.60897155313872
+      },
+      {
+        "latitude": 35.861893,
+        "longitude": 13.156013,
+        "timestamp": 1754665242,
+        "altitude": 37975,
+        "speed": 472.6,
+        "heading": 278.03,
+        "verticalRate": 64,
+        "distanceToCoast": 95.01652548299269
+      },
+      {
+        "latitude": 35.859422,
+        "longitude": 13.177516,
+        "timestamp": 1754665234,
+        "altitude": 38000,
+        "speed": 472.6,
+        "heading": 278.03,
+        "verticalRate": -64,
+        "distanceToCoast": 93.21080679414341
+      },
+      {
+        "latitude": 35.856995,
+        "longitude": 13.198586,
+        "timestamp": 1754665226,
+        "altitude": 37975,
+        "speed": 472.6,
+        "heading": 278.03,
+        "verticalRate": -64,
+        "distanceToCoast": 91.44744103844472
       }
     ]
   },
   {
-    "icao": "407e45",
-    "callsign": "EXS86DU",
-    "is_monitored": false,
-    "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (342.5 knots) is too fast (maximum: 300 knots).",
-    "track": [
-      {
-        "latitude": 35.953364,
-        "longitude": 14.189602,
-        "timestamp": 1751147536,
-        "altitude": 13450,
-        "speed": 342.5,
-        "heading": 326.31,
-        "verticalRate": 2240
-      }
-    ]
-  },
-  {
-    "icao": "01026b",
-    "callsign": "SVI1552",
+    "icao": "4d2215",
+    "info": "Reg.no: 9H-QBS, Type: B738, Model: BOEING 737-800",
+    "callsign": "RYR337K",
     "is_monitored": false,
     "is_loitering": false,
     "not_monitored_reason": "Aircraft speed (454.9 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 36.305206,
-        "longitude": 14.548937,
-        "timestamp": 1751147535.8,
-        "altitude": 37025,
+        "latitude": 36.529312,
+        "longitude": 13.687763,
+        "timestamp": 1754665241.7,
+        "altitude": 26850,
         "speed": 454.9,
-        "heading": 96.44,
-        "verticalRate": -64
+        "heading": 327.11,
+        "verticalRate": 1600,
+        "distanceToCoast": 65.22177042195014
+      },
+      {
+        "latitude": 36.515579,
+        "longitude": 13.69875,
+        "timestamp": 1754665233.9,
+        "altitude": 26650,
+        "speed": 453.5,
+        "heading": 327.15,
+        "verticalRate": 1536,
+        "distanceToCoast": 65.68939465523734
+      },
+      {
+        "latitude": 36.501796,
+        "longitude": 13.70971,
+        "timestamp": 1754665226,
+        "altitude": 26475,
+        "speed": 450.8,
+        "heading": 327.23,
+        "verticalRate": 1408,
+        "distanceToCoast": 63.89150893002404
       }
     ]
   },
   {
-    "icao": "71002b",
-    "callsign": "SVA374",
+    "icao": "4d2397",
+    "info": "Reg.no: 9H-MSA, Type: A320, Model: AIRBUS A-320",
+    "callsign": "MNS502",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (498.0 knots) is too fast (maximum: 300 knots).",
+    "not_monitored_reason": "Aircraft speed (471.5 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 35.732162,
-        "longitude": 14.98661,
-        "timestamp": 1751147536,
-        "altitude": 39000,
-        "speed": 498,
-        "heading": 97.27,
-        "verticalRate": 96
+        "latitude": 34.321289,
+        "longitude": 14.659996,
+        "timestamp": 1754665483.9,
+        "altitude": 26600,
+        "speed": 471.5,
+        "heading": 25.1,
+        "verticalRate": 1088,
+        "distanceToCoast": 165.95931394614325
+      },
+      {
+        "latitude": 34.293451,
+        "longitude": 14.644318,
+        "timestamp": 1754665470,
+        "altitude": 26375,
+        "speed": 469.7,
+        "heading": 25.2,
+        "verticalRate": 768,
+        "distanceToCoast": 168.9532788864256
+      },
+      {
+        "latitude": 34.270501,
+        "longitude": 14.63047,
+        "timestamp": 1754665458,
+        "altitude": 26300,
+        "speed": 466.5,
+        "heading": 29.26,
+        "verticalRate": 320,
+        "distanceToCoast": 171.42863893056054
+      },
+      {
+        "latitude": 34.241501,
+        "longitude": 14.608621,
+        "timestamp": 1754665442,
+        "altitude": 26125,
+        "speed": 463.1,
+        "heading": 35.51,
+        "verticalRate": 768,
+        "distanceToCoast": 174.55597433710585
+      },
+      {
+        "latitude": 34.213806,
+        "longitude": 14.582781,
+        "timestamp": 1754665425.7,
+        "altitude": 25875,
+        "speed": 461.2,
+        "heading": 39.28,
+        "verticalRate": 960,
+        "distanceToCoast": 172.22894249949098
+      },
+      {
+        "latitude": 34.187897,
+        "longitude": 14.557333,
+        "timestamp": 1754665410,
+        "altitude": 25600,
+        "speed": 459.2,
+        "heading": 39.17,
+        "verticalRate": 1152,
+        "distanceToCoast": 168.98186913485895
+      },
+      {
+        "latitude": 34.161118,
+        "longitude": 14.531044,
+        "timestamp": 1754665394,
+        "altitude": 25325,
+        "speed": 457,
+        "heading": 39.23,
+        "verticalRate": 896,
+        "distanceToCoast": 165.6468374518742
+      },
+      {
+        "latitude": 34.138,
+        "longitude": 14.508343,
+        "timestamp": 1754665380,
+        "altitude": 25100,
+        "speed": 454.2,
+        "heading": 39.19,
+        "verticalRate": 832,
+        "distanceToCoast": 162.63965185817628
+      },
+      {
+        "latitude": 34.112502,
+        "longitude": 14.483356,
+        "timestamp": 1754665363.9,
+        "altitude": 24825,
+        "speed": 452.8,
+        "heading": 39.17,
+        "verticalRate": 1152,
+        "distanceToCoast": 159.11656904909503
+      },
+      {
+        "latitude": 34.106003,
+        "longitude": 14.476954,
+        "timestamp": 1754665360,
+        "altitude": 24750,
+        "speed": 452,
+        "heading": 39.25,
+        "verticalRate": 1152,
+        "distanceToCoast": 158.2182918888424
+      },
+      {
+        "latitude": 34.080002,
+        "longitude": 14.45145,
+        "timestamp": 1754665344,
+        "altitude": 24525,
+        "speed": 449.2,
+        "heading": 39.22,
+        "verticalRate": 896,
+        "distanceToCoast": 154.63248254561321
+      },
+      {
+        "latitude": 34.057617,
+        "longitude": 14.429589,
+        "timestamp": 1754665330,
+        "altitude": 24300,
+        "speed": 447.1,
+        "heading": 39.1,
+        "verticalRate": 896,
+        "distanceToCoast": 151.5541503554897
+      },
+      {
+        "latitude": 34.044722,
+        "longitude": 14.416981,
+        "timestamp": 1754665322,
+        "altitude": 24175,
+        "speed": 445,
+        "heading": 39.16,
+        "verticalRate": 960,
+        "distanceToCoast": 149.78267357512834
+      },
+      {
+        "latitude": 34.019072,
+        "longitude": 14.391918,
+        "timestamp": 1754665305.9,
+        "altitude": 23875,
+        "speed": 443.5,
+        "heading": 39.14,
+        "verticalRate": 960,
+        "distanceToCoast": 146.26493810653338
+      },
+      {
+        "latitude": 33.99408,
+        "longitude": 14.367483,
+        "timestamp": 1754665290,
+        "altitude": 23650,
+        "speed": 439.3,
+        "heading": 39.09,
+        "verticalRate": 1088,
+        "distanceToCoast": 142.844305274503
+      },
+      {
+        "latitude": 33.968749,
+        "longitude": 14.342766,
+        "timestamp": 1754665274,
+        "altitude": 23375,
+        "speed": 436.5,
+        "heading": 39.05,
+        "verticalRate": 1024,
+        "distanceToCoast": 139.38696779934835
+      },
+      {
+        "latitude": 33.942819,
+        "longitude": 14.317474,
+        "timestamp": 1754665257.8,
+        "altitude": 23075,
+        "speed": 434.3,
+        "heading": 39.11,
+        "verticalRate": 1216,
+        "distanceToCoast": 135.85716981392312
+      },
+      {
+        "latitude": 33.91864,
+        "longitude": 14.293942,
+        "timestamp": 1754665242,
+        "altitude": 22750,
+        "speed": 432.3,
+        "heading": 38.99,
+        "verticalRate": 1088,
+        "distanceToCoast": 132.57624866500385
+      },
+      {
+        "latitude": 33.905671,
+        "longitude": 14.281368,
+        "timestamp": 1754665233.7,
+        "altitude": 22625,
+        "speed": 430.9,
+        "heading": 38.97,
+        "verticalRate": 960,
+        "distanceToCoast": 130.8216946162908
+      },
+      {
+        "latitude": 33.894058,
+        "longitude": 14.270119,
+        "timestamp": 1754665226,
+        "altitude": 22500,
+        "speed": 428.7,
+        "heading": 39.04,
+        "verticalRate": 896,
+        "distanceToCoast": 129.25320756729812
       }
     ]
   },
   {
-    "icao": "46b8b1",
-    "callsign": "AEE734",
+    "icao": "471db5",
+    "info": "Reg.no: HA-LGN, Type: A21N, Model: AIRBUS A-321neo",
+    "callsign": "WZZ2436",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (505.2 knots) is too fast (maximum: 300 knots).",
+    "not_monitored_reason": "Aircraft speed (373.0 knots) is too fast (maximum: 300 knots).",
     "track": [
       {
-        "latitude": 37.866521,
-        "longitude": 17.757369,
-        "timestamp": 1751147535.7,
-        "altitude": 35975,
-        "speed": 505.2,
-        "heading": 258.47,
-        "verticalRate": 0
+        "latitude": 36.214708,
+        "longitude": 14.478929,
+        "timestamp": 1754665484,
+        "altitude": 17100,
+        "speed": 373,
+        "heading": 16.83,
+        "verticalRate": 1920,
+        "distanceToCoast": 23.21951738715382
+      },
+      {
+        "latitude": 36.191895,
+        "longitude": 14.470367,
+        "timestamp": 1754665470,
+        "altitude": 16650,
+        "speed": 372,
+        "heading": 16.88,
+        "verticalRate": 1920,
+        "distanceToCoast": 20.76915722050681
+      },
+      {
+        "latitude": 36.171524,
+        "longitude": 14.4627,
+        "timestamp": 1754665457.9,
+        "altitude": 16275,
+        "speed": 371.1,
+        "heading": 16.92,
+        "verticalRate": 1792,
+        "distanceToCoast": 18.62591406394344
+      },
+      {
+        "latitude": 36.145718,
+        "longitude": 14.453099,
+        "timestamp": 1754665442,
+        "altitude": 15800,
+        "speed": 367.6,
+        "heading": 16.76,
+        "verticalRate": 1792,
+        "distanceToCoast": 16.00897175335917
+      },
+      {
+        "latitude": 36.119649,
+        "longitude": 14.443398,
+        "timestamp": 1754665426,
+        "altitude": 15325,
+        "speed": 364.5,
+        "heading": 16.74,
+        "verticalRate": 1792,
+        "distanceToCoast": 13.525514724201978
+      },
+      {
+        "latitude": 36.09407,
+        "longitude": 14.433918,
+        "timestamp": 1754665410,
+        "altitude": 14825,
+        "speed": 361.3,
+        "heading": 16.73,
+        "verticalRate": 1920,
+        "distanceToCoast": 11.350817933801505
+      },
+      {
+        "latitude": 36.068627,
+        "longitude": 14.424523,
+        "timestamp": 1754665394,
+        "altitude": 14375,
+        "speed": 357.2,
+        "heading": 16.76,
+        "verticalRate": 1536,
+        "distanceToCoast": 9.070170923519466
+      },
+      {
+        "latitude": 36.046515,
+        "longitude": 14.416342,
+        "timestamp": 1754665379.9,
+        "altitude": 14025,
+        "speed": 350.9,
+        "heading": 16.73,
+        "verticalRate": 1408,
+        "distanceToCoast": 6.6423737400646505
+      },
+      {
+        "latitude": 36.021051,
+        "longitude": 14.406875,
+        "timestamp": 1754665363.8,
+        "altitude": 13550,
+        "speed": 345.5,
+        "heading": 16.65,
+        "verticalRate": 1728,
+        "distanceToCoast": 4.0595821589996435
+      },
+      {
+        "latitude": 36.015558,
+        "longitude": 14.404829,
+        "timestamp": 1754665359.9,
+        "altitude": 13425,
+        "speed": 344.5,
+        "heading": 16.7,
+        "verticalRate": 1856,
+        "distanceToCoast": 3.5787708081222176
+      },
+      {
+        "latitude": 35.991348,
+        "longitude": 14.395924,
+        "timestamp": 1754665344,
+        "altitude": 12900,
+        "speed": 341.4,
+        "heading": 16.68,
+        "verticalRate": 2176,
+        "distanceToCoast": 2.5228515609477733
+      },
+      {
+        "latitude": 35.970076,
+        "longitude": 14.388116,
+        "timestamp": 1754665330,
+        "altitude": 12350,
+        "speed": 339.5,
+        "heading": 16.78,
+        "verticalRate": 2432,
+        "distanceToCoast": 3.4301741024561507
+      },
+      {
+        "latitude": 35.957611,
+        "longitude": 14.383507,
+        "timestamp": 1754665322,
+        "altitude": 12000,
+        "speed": 339.5,
+        "heading": 16.78,
+        "verticalRate": 2752,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.933812,
+        "longitude": 14.374675,
+        "timestamp": 1754665305.9,
+        "altitude": 11400,
+        "speed": 338.5,
+        "heading": 16.83,
+        "verticalRate": 1984,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.909838,
+        "longitude": 14.365793,
+        "timestamp": 1754665289.9,
+        "altitude": 10975,
+        "speed": 329,
+        "heading": 16.78,
+        "verticalRate": 1216,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.887399,
+        "longitude": 14.357553,
+        "timestamp": 1754665274,
+        "altitude": 10650,
+        "speed": 314.2,
+        "heading": 16.65,
+        "verticalRate": 1024,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.865147,
+        "longitude": 14.34943,
+        "timestamp": 1754665258,
+        "altitude": 10400,
+        "speed": 299.3,
+        "heading": 16.5,
+        "verticalRate": 960,
+        "distanceToCoast": 1.0065999263185799
+      },
+      {
+        "latitude": 35.844432,
+        "longitude": 14.341892,
+        "timestamp": 1754665242,
+        "altitude": 10000,
+        "speed": 285.7,
+        "heading": 16.47,
+        "verticalRate": 1984,
+        "distanceToCoast": 2.8481403948551214
+      },
+      {
+        "latitude": 35.834376,
+        "longitude": 14.33821,
+        "timestamp": 1754665233.9,
+        "altitude": 9700,
+        "speed": 282.8,
+        "heading": 16.64,
+        "verticalRate": 2880,
+        "distanceToCoast": 3.964491870983837
+      },
+      {
+        "latitude": 35.824539,
+        "longitude": 14.334583,
+        "timestamp": 1754665226,
+        "altitude": 9300,
+        "speed": 285.3,
+        "heading": 16.91,
+        "verticalRate": 3200,
+        "distanceToCoast": 5.0785568779262675
       }
     ]
   },
   {
-    "icao": "0180b5",
-    "callsign": "MNS503",
+    "icao": "4d23ec",
+    "info": "Reg.no: 9H-MLO, Type: A320, Model: AIRBUS A-320",
+    "callsign": "EWG9690",
     "is_monitored": false,
     "is_loitering": false,
-    "not_monitored_reason": "Aircraft speed (439.4 knots) is too fast (maximum: 300 knots).",
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
     "track": [
       {
-        "latitude": 33.545915,
-        "longitude": 17.79871,
-        "timestamp": 1751147535.4,
-        "altitude": 34025,
-        "speed": 439.4,
-        "heading": 260.17,
-        "verticalRate": 0
+        "latitude": 35.84641,
+        "longitude": 14.495832,
+        "timestamp": 1754665484,
+        "altitude": 0,
+        "speed": 8.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.845933,
+        "longitude": 14.495364,
+        "timestamp": 1754665469.7,
+        "altitude": 0,
+        "speed": 9.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.845491,
+        "longitude": 14.495481,
+        "timestamp": 1754665457.6,
+        "altitude": 0,
+        "speed": 8.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.844967,
+        "longitude": 14.495773,
+        "timestamp": 1754665441.6,
+        "altitude": 0,
+        "speed": 8.8,
+        "heading": 134.61,
+        "verticalRate": -128,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.844502,
+        "longitude": 14.495204,
+        "timestamp": 1754665425.7,
+        "altitude": 0,
+        "speed": 13.2,
+        "heading": 134.61,
+        "verticalRate": -128,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.84515,
+        "longitude": 14.493098,
+        "timestamp": 1754665410,
+        "altitude": 0,
+        "speed": 34.5,
+        "heading": 134.61,
+        "verticalRate": -128,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847621,
+        "longitude": 14.489798,
+        "timestamp": 1754665394,
+        "altitude": 0,
+        "speed": 73,
+        "heading": 134.61,
+        "verticalRate": -128,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851927,
+        "longitude": 14.48448,
+        "timestamp": 1754665379.8,
+        "altitude": 75,
+        "speed": 122.3,
+        "heading": 134.67,
+        "verticalRate": -128,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859096,
+        "longitude": 14.475598,
+        "timestamp": 1754665363.8,
+        "altitude": 250,
+        "speed": 140.7,
+        "heading": 134.71,
+        "verticalRate": -640,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.860748,
+        "longitude": 14.473572,
+        "timestamp": 1754665360,
+        "altitude": 300,
+        "speed": 140,
+        "heading": 135,
+        "verticalRate": -704,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.86821,
+        "longitude": 14.464245,
+        "timestamp": 1754665344,
+        "altitude": 500,
+        "speed": 140,
+        "heading": 134.42,
+        "verticalRate": -832,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.874551,
+        "longitude": 14.456372,
+        "timestamp": 1754665329.8,
+        "altitude": 650,
+        "speed": 140,
+        "heading": 135,
+        "verticalRate": -704,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.878189,
+        "longitude": 14.451885,
+        "timestamp": 1754665322,
+        "altitude": 750,
+        "speed": 141.4,
+        "heading": 135,
+        "verticalRate": -576,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.885559,
+        "longitude": 14.44273,
+        "timestamp": 1754665306,
+        "altitude": 925,
+        "speed": 142.8,
+        "heading": 134.43,
+        "verticalRate": -640,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.893032,
+        "longitude": 14.433464,
+        "timestamp": 1754665290,
+        "altitude": 1100,
+        "speed": 147.1,
+        "heading": 134.45,
+        "verticalRate": -768,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.90076,
+        "longitude": 14.423822,
+        "timestamp": 1754665274,
+        "altitude": 1300,
+        "speed": 148.5,
+        "heading": 135,
+        "verticalRate": -832,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.908676,
+        "longitude": 14.414005,
+        "timestamp": 1754665258,
+        "altitude": 1550,
+        "speed": 153.4,
+        "heading": 134.74,
+        "verticalRate": -768,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.91687,
+        "longitude": 14.40382,
+        "timestamp": 1754665242,
+        "altitude": 1750,
+        "speed": 161.2,
+        "heading": 135,
+        "verticalRate": -832,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.92115,
+        "longitude": 14.398518,
+        "timestamp": 1754665233.9,
+        "altitude": 1850,
+        "speed": 162.6,
+        "heading": 134.5,
+        "verticalRate": -768,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.925568,
+        "longitude": 14.392948,
+        "timestamp": 1754665225.7,
+        "altitude": 1975,
+        "speed": 167.6,
+        "heading": 134.76,
+        "verticalRate": -896,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "0a0044",
+    "info": "Reg.no: 7T-VJV, Type: A332, Model: AIRBUS A-330-200",
+    "callsign": "DAH4079",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (458.0 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.852875,
+        "longitude": 13.757744,
+        "timestamp": 1754665483.9,
+        "altitude": 40000,
+        "speed": 458,
+        "heading": 276.52,
+        "verticalRate": 0,
+        "distanceToCoast": 44.12535815105196
+      },
+      {
+        "latitude": 35.849552,
+        "longitude": 13.793686,
+        "timestamp": 1754665470,
+        "altitude": 40000,
+        "speed": 458,
+        "heading": 276.52,
+        "verticalRate": 0,
+        "distanceToCoast": 41.48840864875495
+      },
+      {
+        "latitude": 35.846666,
+        "longitude": 13.82495,
+        "timestamp": 1754665457.8,
+        "altitude": 40000,
+        "speed": 458,
+        "heading": 276.52,
+        "verticalRate": 0,
+        "distanceToCoast": 39.26988811852269
+      },
+      {
+        "latitude": 35.842758,
+        "longitude": 13.866405,
+        "timestamp": 1754665442,
+        "altitude": 40000,
+        "speed": 458,
+        "heading": 276.52,
+        "verticalRate": 0,
+        "distanceToCoast": 36.46482442251976
+      },
+      {
+        "latitude": 35.838867,
+        "longitude": 13.907948,
+        "timestamp": 1754665426,
+        "altitude": 40000,
+        "speed": 458.1,
+        "heading": 276.64,
+        "verticalRate": 0,
+        "distanceToCoast": 33.83736554983575
+      },
+      {
+        "latitude": 35.834885,
+        "longitude": 13.950405,
+        "timestamp": 1754665410,
+        "altitude": 40000,
+        "speed": 459.1,
+        "heading": 276.63,
+        "verticalRate": 0,
+        "distanceToCoast": 31.392474387684704
+      },
+      {
+        "latitude": 35.831071,
+        "longitude": 13.990621,
+        "timestamp": 1754665394,
+        "altitude": 40000,
+        "speed": 459.1,
+        "heading": 276.63,
+        "verticalRate": 0,
+        "distanceToCoast": 29.3587830315178
+      },
+      {
+        "latitude": 35.82758,
+        "longitude": 14.027028,
+        "timestamp": 1754665379.8,
+        "altitude": 40000,
+        "speed": 459.1,
+        "heading": 276.63,
+        "verticalRate": 0,
+        "distanceToCoast": 27.80652363445307
+      },
+      {
+        "latitude": 35.823623,
+        "longitude": 14.068578,
+        "timestamp": 1754665364,
+        "altitude": 40000,
+        "speed": 459.2,
+        "heading": 276.75,
+        "verticalRate": 0,
+        "distanceToCoast": 25.0016861788627
+      },
+      {
+        "latitude": 35.822662,
+        "longitude": 14.078693,
+        "timestamp": 1754665360,
+        "altitude": 40000,
+        "speed": 460.2,
+        "heading": 276.74,
+        "verticalRate": 0,
+        "distanceToCoast": 24.133549868289716
+      },
+      {
+        "latitude": 35.818549,
+        "longitude": 14.121581,
+        "timestamp": 1754665343.9,
+        "altitude": 40000,
+        "speed": 460.2,
+        "heading": 276.74,
+        "verticalRate": 64,
+        "distanceToCoast": 20.501805585332352
+      },
+      {
+        "latitude": 35.815155,
+        "longitude": 14.157028,
+        "timestamp": 1754665330,
+        "altitude": 40000,
+        "speed": 460.2,
+        "heading": 276.74,
+        "verticalRate": 0,
+        "distanceToCoast": 17.584096940319323
+      },
+      {
+        "latitude": 35.813149,
+        "longitude": 14.17774,
+        "timestamp": 1754665321.9,
+        "altitude": 40000,
+        "speed": 460.2,
+        "heading": 276.74,
+        "verticalRate": 0,
+        "distanceToCoast": 15.933617268699988
+      },
+      {
+        "latitude": 35.809099,
+        "longitude": 14.219873,
+        "timestamp": 1754665305.8,
+        "altitude": 40000,
+        "speed": 459.2,
+        "heading": 276.75,
+        "verticalRate": 0,
+        "distanceToCoast": 12.771553537612242
+      },
+      {
+        "latitude": 35.80513,
+        "longitude": 14.260597,
+        "timestamp": 1754665290,
+        "altitude": 40000,
+        "speed": 459.2,
+        "heading": 276.75,
+        "verticalRate": 0,
+        "distanceToCoast": 10.161822204993113
+      },
+      {
+        "latitude": 35.801056,
+        "longitude": 14.302311,
+        "timestamp": 1754665273.9,
+        "altitude": 40000,
+        "speed": 459.3,
+        "heading": 276.88,
+        "verticalRate": 0,
+        "distanceToCoast": 8.385345578306412
+      },
+      {
+        "latitude": 35.796982,
+        "longitude": 14.344139,
+        "timestamp": 1754665257.9,
+        "altitude": 40000,
+        "speed": 458.3,
+        "heading": 276.89,
+        "verticalRate": 0,
+        "distanceToCoast": 8.127800156544469
+      },
+      {
+        "latitude": 35.792999,
+        "longitude": 14.384766,
+        "timestamp": 1754665241.8,
+        "altitude": 40000,
+        "speed": 458.3,
+        "heading": 276.89,
+        "verticalRate": 0,
+        "distanceToCoast": 9.465545936095287
+      },
+      {
+        "latitude": 35.791031,
+        "longitude": 14.404907,
+        "timestamp": 1754665233.9,
+        "altitude": 40000,
+        "speed": 457.3,
+        "heading": 276.91,
+        "verticalRate": 0,
+        "distanceToCoast": 10.552002182794606
+      },
+      {
+        "latitude": 35.789017,
+        "longitude": 14.425507,
+        "timestamp": 1754665226,
+        "altitude": 40000,
+        "speed": 457.3,
+        "heading": 276.91,
+        "verticalRate": 0,
+        "distanceToCoast": 9.708418863737242
+      }
+    ]
+  },
+  {
+    "icao": "7448a6",
+    "info": "Reg.no: JY-REF, Type: E295, Model: N/A",
+    "callsign": "RJA522",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (464.5 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 34.354019,
+        "longitude": 15.003681,
+        "timestamp": 1754665483.6,
+        "altitude": 31625,
+        "speed": 464.5,
+        "heading": 85.43,
+        "verticalRate": 640,
+        "distanceToCoast": 167.53630780148248
+      },
+      {
+        "latitude": 34.35173,
+        "longitude": 14.969657,
+        "timestamp": 1754665470,
+        "altitude": 31475,
+        "speed": 462.6,
+        "heading": 85.29,
+        "verticalRate": 704,
+        "distanceToCoast": 167.01398225140653
+      },
+      {
+        "latitude": 34.349593,
+        "longitude": 14.938316,
+        "timestamp": 1754665458,
+        "altitude": 31350,
+        "speed": 460.6,
+        "heading": 85.27,
+        "verticalRate": 640,
+        "distanceToCoast": 166.58570875614922
+      },
+      {
+        "latitude": 34.346846,
+        "longitude": 14.89769,
+        "timestamp": 1754665441.8,
+        "altitude": 31175,
+        "speed": 457.5,
+        "heading": 85.36,
+        "verticalRate": 640,
+        "distanceToCoast": 166.09973384147747
+      },
+      {
+        "latitude": 34.344131,
+        "longitude": 14.857327,
+        "timestamp": 1754665426,
+        "altitude": 31000,
+        "speed": 454.5,
+        "heading": 85.33,
+        "verticalRate": 704,
+        "distanceToCoast": 165.6961369912111
+      },
+      {
+        "latitude": 34.341431,
+        "longitude": 14.816913,
+        "timestamp": 1754665410,
+        "altitude": 30850,
+        "speed": 452.4,
+        "heading": 85.44,
+        "verticalRate": 640,
+        "distanceToCoast": 165.37127059895005
+      },
+      {
+        "latitude": 34.338776,
+        "longitude": 14.777004,
+        "timestamp": 1754665394,
+        "altitude": 30650,
+        "speed": 449.6,
+        "heading": 85.15,
+        "verticalRate": 704,
+        "distanceToCoast": 165.12948214491067
+      },
+      {
+        "latitude": 34.335297,
+        "longitude": 14.742139,
+        "timestamp": 1754665380,
+        "altitude": 30500,
+        "speed": 449.5,
+        "heading": 78.19,
+        "verticalRate": 640,
+        "distanceToCoast": 165.11187071121148
+      },
+      {
+        "latitude": 34.324631,
+        "longitude": 14.704023,
+        "timestamp": 1754665363.9,
+        "altitude": 30325,
+        "speed": 450.4,
+        "heading": 64.06,
+        "verticalRate": 640,
+        "distanceToCoast": 165.92301390928532
+      },
+      {
+        "latitude": 34.32074,
+        "longitude": 14.695111,
+        "timestamp": 1754665360,
+        "altitude": 30275,
+        "speed": 450.6,
+        "heading": 60.19,
+        "verticalRate": 640,
+        "distanceToCoast": 166.27848528183063
+      },
+      {
+        "latitude": 34.301102,
+        "longitude": 14.663105,
+        "timestamp": 1754665344,
+        "altitude": 30125,
+        "speed": 447,
+        "heading": 46.27,
+        "verticalRate": 576,
+        "distanceToCoast": 168.21861525080712
+      },
+      {
+        "latitude": 34.280502,
+        "longitude": 14.638497,
+        "timestamp": 1754665329.9,
+        "altitude": 29975,
+        "speed": 443.4,
+        "heading": 44.36,
+        "verticalRate": 640,
+        "distanceToCoast": 170.35894140886796
+      },
+      {
+        "latitude": 34.268738,
+        "longitude": 14.624652,
+        "timestamp": 1754665322,
+        "altitude": 29875,
+        "speed": 442,
+        "heading": 44.36,
+        "verticalRate": 704,
+        "distanceToCoast": 171.59699108697671
+      },
+      {
+        "latitude": 34.244934,
+        "longitude": 14.596626,
+        "timestamp": 1754665306,
+        "altitude": 29700,
+        "speed": 439.1,
+        "heading": 44.35,
+        "verticalRate": 704,
+        "distanceToCoast": 174.13309260301017
+      },
+      {
+        "latitude": 34.222275,
+        "longitude": 14.569945,
+        "timestamp": 1754665289.9,
+        "altitude": 29550,
+        "speed": 434.9,
+        "heading": 44.35,
+        "verticalRate": 640,
+        "distanceToCoast": 172.9468953872242
+      },
+      {
+        "latitude": 34.199043,
+        "longitude": 14.54258,
+        "timestamp": 1754665273.9,
+        "altitude": 29375,
+        "speed": 431.4,
+        "heading": 44.25,
+        "verticalRate": 640,
+        "distanceToCoast": 169.979348258896
+      },
+      {
+        "latitude": 34.176279,
+        "longitude": 14.515858,
+        "timestamp": 1754665258,
+        "altitude": 29200,
+        "speed": 427.1,
+        "heading": 44.24,
+        "verticalRate": 640,
+        "distanceToCoast": 166.8124932778273
+      },
+      {
+        "latitude": 34.154022,
+        "longitude": 14.489734,
+        "timestamp": 1754665242,
+        "altitude": 29025,
+        "speed": 422.9,
+        "heading": 44.23,
+        "verticalRate": 640,
+        "distanceToCoast": 163.58594457533908
+      },
+      {
+        "latitude": 34.143134,
+        "longitude": 14.476948,
+        "timestamp": 1754665234,
+        "altitude": 28950,
+        "speed": 420.8,
+        "heading": 44.33,
+        "verticalRate": 768,
+        "distanceToCoast": 162.01068739045942
+      },
+      {
+        "latitude": 34.131729,
+        "longitude": 14.463557,
+        "timestamp": 1754665225.8,
+        "altitude": 28850,
+        "speed": 418.6,
+        "heading": 44.23,
+        "verticalRate": 704,
+        "distanceToCoast": 160.36319232557085
+      }
+    ]
+  },
+  {
+    "icao": "300918",
+    "info": "Reg.no: I-ACMX, Type: C172, Model: CESSNA 172 Skyhawk",
+    "callsign": "IACMX",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.859455,
+        "longitude": 14.473228,
+        "timestamp": 1754665288.4,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859455,
+        "longitude": 14.473228,
+        "timestamp": 1754665288.4,
+        "altitude": 0,
+        "speed": 0.7,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859468,
+        "longitude": 14.47326,
+        "timestamp": 1754665273.8,
+        "altitude": 175,
+        "speed": 0.7,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859455,
+        "longitude": 14.473243,
+        "timestamp": 1754665256.1,
+        "altitude": 0,
+        "speed": 0.2,
+        "heading": 329.06,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859478,
+        "longitude": 14.473286,
+        "timestamp": 1754665241.9,
+        "altitude": 0,
+        "speed": 1.9,
+        "heading": 329.06,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859524,
+        "longitude": 14.473357,
+        "timestamp": 1754665233.9,
+        "altitude": 0,
+        "speed": 2.2,
+        "heading": 329.06,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.859547,
+        "longitude": 14.473472,
+        "timestamp": 1754665225.1,
+        "altitude": 0,
+        "speed": 2.8,
+        "heading": 329.06,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "4d2035",
+    "info": "Reg.no: 9H-NEH, Type: A20N, Model: AIRBUS A-320neo",
+    "callsign": "KMM515",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.851204,
+        "longitude": 14.489651,
+        "timestamp": 1754665392.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851205,
+        "longitude": 14.489652,
+        "timestamp": 1754665377.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851204,
+        "longitude": 14.489651,
+        "timestamp": 1754665362.8,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851205,
+        "longitude": 14.489652,
+        "timestamp": 1754665342.8,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851204,
+        "longitude": 14.489651,
+        "timestamp": 1754665327.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851205,
+        "longitude": 14.489637,
+        "timestamp": 1754665288,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851204,
+        "longitude": 14.489651,
+        "timestamp": 1754665272.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851205,
+        "longitude": 14.489652,
+        "timestamp": 1754665257.2,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851204,
+        "longitude": 14.489651,
+        "timestamp": 1754665241.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851205,
+        "longitude": 14.489652,
+        "timestamp": 1754665222.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "4d2381",
+    "info": "Reg.no: 9H-LQA, Type: ECHO, Model: TECNAM P-92 Echo",
+    "callsign": "9HLQA",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.867947,
+        "longitude": 14.495611,
+        "timestamp": 1754665482.9,
+        "altitude": 300,
+        "speed": 79,
+        "heading": 239,
+        "verticalRate": -155,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.87088,
+        "longitude": 14.499911,
+        "timestamp": 1754665469.3,
+        "altitude": 400,
+        "speed": 104,
+        "heading": 240,
+        "verticalRate": 307,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.871377,
+        "longitude": 14.506993,
+        "timestamp": 1754665457.5,
+        "altitude": 500,
+        "speed": 88,
+        "heading": 215,
+        "verticalRate": 7,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.876761,
+        "longitude": 14.510151,
+        "timestamp": 1754665442,
+        "altitude": 600,
+        "speed": 98,
+        "heading": 233,
+        "verticalRate": 608,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.879093,
+        "longitude": 14.51443,
+        "timestamp": 1754665425.9,
+        "altitude": 600,
+        "speed": 82,
+        "heading": 229,
+        "verticalRate": 446,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.882522,
+        "longitude": 14.520122,
+        "timestamp": 1754665410,
+        "altitude": 700,
+        "speed": 51,
+        "heading": 265,
+        "verticalRate": -1935,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.884275,
+        "longitude": 14.527309,
+        "timestamp": 1754665393.9,
+        "altitude": 800,
+        "speed": 39,
+        "heading": 317,
+        "verticalRate": 764,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.881721,
+        "longitude": 14.533447,
+        "timestamp": 1754665379.9,
+        "altitude": 1000,
+        "speed": 113,
+        "heading": 125,
+        "verticalRate": -317,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.881747,
+        "longitude": 14.543557,
+        "timestamp": 1754665363.3,
+        "altitude": 1100,
+        "speed": 78,
+        "heading": 138,
+        "verticalRate": -312,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.882599,
+        "longitude": 14.543097,
+        "timestamp": 1754665359.8,
+        "altitude": 1100,
+        "speed": 69,
+        "heading": 119,
+        "verticalRate": -313,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.887713,
+        "longitude": 14.539453,
+        "timestamp": 1754665343.4,
+        "altitude": 1200,
+        "speed": 92,
+        "heading": 34,
+        "verticalRate": 0,
+        "distanceToCoast": 3.807479366811478
+      },
+      {
+        "latitude": 35.88305,
+        "longitude": 14.531109,
+        "timestamp": 1754665329.3,
+        "altitude": 1200,
+        "speed": 83,
+        "heading": 32,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.880996,
+        "longitude": 14.530115,
+        "timestamp": 1754665321.7,
+        "altitude": 1200,
+        "speed": 77,
+        "heading": 32,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.883197,
+        "longitude": 14.512392,
+        "timestamp": 1754665305.7,
+        "altitude": 1200,
+        "speed": 79,
+        "heading": 51,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.872113,
+        "longitude": 14.518976,
+        "timestamp": 1754665289,
+        "altitude": 1200,
+        "speed": 87,
+        "heading": 61,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.873452,
+        "longitude": 14.508312,
+        "timestamp": 1754665273.3,
+        "altitude": 1200,
+        "speed": 91,
+        "heading": 83,
+        "verticalRate": 15,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.865894,
+        "longitude": 14.504334,
+        "timestamp": 1754665258,
+        "altitude": 1200,
+        "speed": 94,
+        "heading": 73,
+        "verticalRate": 299,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.864387,
+        "longitude": 14.501155,
+        "timestamp": 1754665242,
+        "altitude": 1200,
+        "speed": 90,
+        "heading": 76,
+        "verticalRate": 145,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.86438,
+        "longitude": 14.496638,
+        "timestamp": 1754665233,
+        "altitude": 1100,
+        "speed": 76,
+        "heading": 67,
+        "verticalRate": -289,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.864328,
+        "longitude": 14.493558,
+        "timestamp": 1754665226,
+        "altitude": 1100,
+        "speed": 71,
+        "heading": 62,
+        "verticalRate": -744,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "4cad10",
+    "info": "Reg.no: EI-HGX, Type: B38M, Model: BOEING 737 MAX 8",
+    "callsign": "RYR2184",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.848274,
+        "longitude": 14.488964,
+        "timestamp": 1754665484,
+        "altitude": 0,
+        "speed": 77,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850262,
+        "longitude": 14.486496,
+        "timestamp": 1754665469.7,
+        "altitude": 0,
+        "speed": 10.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850506,
+        "longitude": 14.486175,
+        "timestamp": 1754665457.9,
+        "altitude": 0,
+        "speed": 4.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850577,
+        "longitude": 14.486584,
+        "timestamp": 1754665441.8,
+        "altitude": 0,
+        "speed": 13.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850251,
+        "longitude": 14.487621,
+        "timestamp": 1754665426,
+        "altitude": 0,
+        "speed": 10.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850111,
+        "longitude": 14.488279,
+        "timestamp": 1754665409.8,
+        "altitude": 0,
+        "speed": 4.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850082,
+        "longitude": 14.48842,
+        "timestamp": 1754665394,
+        "altitude": 0,
+        "speed": 0.1,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850076,
+        "longitude": 14.488425,
+        "timestamp": 1754665379.9,
+        "altitude": 0,
+        "speed": 0.1,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850041,
+        "longitude": 14.488615,
+        "timestamp": 1754665363.8,
+        "altitude": 0,
+        "speed": 6.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.850006,
+        "longitude": 14.488761,
+        "timestamp": 1754665359.6,
+        "altitude": 0,
+        "speed": 7.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849831,
+        "longitude": 14.489565,
+        "timestamp": 1754665343.7,
+        "altitude": 0,
+        "speed": 9.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849545,
+        "longitude": 14.490266,
+        "timestamp": 1754665330,
+        "altitude": 0,
+        "speed": 10.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849308,
+        "longitude": 14.490675,
+        "timestamp": 1754665322,
+        "altitude": 0,
+        "speed": 11.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849087,
+        "longitude": 14.491537,
+        "timestamp": 1754665305.8,
+        "altitude": 0,
+        "speed": 10.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849401,
+        "longitude": 14.492296,
+        "timestamp": 1754665289.4,
+        "altitude": 0,
+        "speed": 9.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849075,
+        "longitude": 14.493056,
+        "timestamp": 1754665273.8,
+        "altitude": 0,
+        "speed": 9.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.848552,
+        "longitude": 14.493684,
+        "timestamp": 1754665257,
+        "altitude": 0,
+        "speed": 8.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.848482,
+        "longitude": 14.494269,
+        "timestamp": 1754665241,
+        "altitude": 0,
+        "speed": 5.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.848618,
+        "longitude": 14.494357,
+        "timestamp": 1754665233.6,
+        "altitude": 0,
+        "speed": 3.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.84868,
+        "longitude": 14.494488,
+        "timestamp": 1754665225.4,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "4cafb3",
+    "info": "Reg.no: EI-GSG, Type: B738, Model: BOEING 737-800",
+    "callsign": "RYR19KJ",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.849867,
+        "longitude": 14.489433,
+        "timestamp": 1754665483.9,
+        "altitude": 0,
+        "speed": 13.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849483,
+        "longitude": 14.490412,
+        "timestamp": 1754665469.9,
+        "altitude": 0,
+        "speed": 13.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849017,
+        "longitude": 14.491113,
+        "timestamp": 1754665457.6,
+        "altitude": 0,
+        "speed": 13.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.849419,
+        "longitude": 14.492097,
+        "timestamp": 1754665442,
+        "altitude": 0,
+        "speed": 12.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.848994,
+        "longitude": 14.493173,
+        "timestamp": 1754665426,
+        "altitude": 0,
+        "speed": 14.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.848206,
+        "longitude": 14.494143,
+        "timestamp": 1754665409.6,
+        "altitude": 0,
+        "speed": 15.5,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847481,
+        "longitude": 14.495028,
+        "timestamp": 1754665394,
+        "altitude": 0,
+        "speed": 11.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847004,
+        "longitude": 14.49563,
+        "timestamp": 1754665379.3,
+        "altitude": 0,
+        "speed": 7.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847004,
+        "longitude": 14.496197,
+        "timestamp": 1754665364,
+        "altitude": 0,
+        "speed": 4.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847015,
+        "longitude": 14.496303,
+        "timestamp": 1754665359.5,
+        "altitude": 0,
+        "speed": 3.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847187,
+        "longitude": 14.496403,
+        "timestamp": 1754665341.2,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.84719,
+        "longitude": 14.496372,
+        "timestamp": 1754665321.3,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847198,
+        "longitude": 14.496374,
+        "timestamp": 1754665271.2,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.84719,
+        "longitude": 14.496372,
+        "timestamp": 1754665256.7,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.847187,
+        "longitude": 14.496374,
+        "timestamp": 1754665241.1,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.84719,
+        "longitude": 14.496372,
+        "timestamp": 1754665225.1,
+        "altitude": 0,
+        "speed": 0,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "4ca701",
+    "info": "Reg.no: EI-EBD, Type: B738, Model: BOEING 737-800",
+    "callsign": "RYR1509",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (350.5 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.804117,
+        "longitude": 14.134203,
+        "timestamp": 1754665483.9,
+        "altitude": 11575,
+        "speed": 350.5,
+        "heading": 276.88,
+        "verticalRate": 2432,
+        "distanceToCoast": 19.9454700577486
+      },
+      {
+        "latitude": 35.801464,
+        "longitude": 14.161143,
+        "timestamp": 1754665469.7,
+        "altitude": 11025,
+        "speed": 346.6,
+        "heading": 276.96,
+        "verticalRate": 2240,
+        "distanceToCoast": 17.833506341012427
+      },
+      {
+        "latitude": 35.799179,
+        "longitude": 14.184322,
+        "timestamp": 1754665458,
+        "altitude": 10525,
+        "speed": 342.3,
+        "heading": 276.71,
+        "verticalRate": 3072,
+        "distanceToCoast": 16.092375356261748
+      },
+      {
+        "latitude": 35.79625,
+        "longitude": 14.214614,
+        "timestamp": 1754665442,
+        "altitude": 9725,
+        "speed": 341.6,
+        "heading": 277.06,
+        "verticalRate": 2496,
+        "distanceToCoast": 13.964824401156411
+      },
+      {
+        "latitude": 35.793137,
+        "longitude": 14.245949,
+        "timestamp": 1754665426,
+        "altitude": 9000,
+        "speed": 337.4,
+        "heading": 276.81,
+        "verticalRate": 2752,
+        "distanceToCoast": 12.038944372027398
+      },
+      {
+        "latitude": 35.790253,
+        "longitude": 14.275932,
+        "timestamp": 1754665409.8,
+        "altitude": 8350,
+        "speed": 328.2,
+        "heading": 276.65,
+        "verticalRate": 1920,
+        "distanceToCoast": 10.582645244067425
+      },
+      {
+        "latitude": 35.787552,
+        "longitude": 14.304314,
+        "timestamp": 1754665394,
+        "altitude": 8025,
+        "speed": 307.2,
+        "heading": 276.92,
+        "verticalRate": 1152,
+        "distanceToCoast": 9.715916352705406
+      },
+      {
+        "latitude": 35.784333,
+        "longitude": 14.328159,
+        "timestamp": 1754665379.7,
+        "altitude": 7700,
+        "speed": 285.5,
+        "heading": 283.99,
+        "verticalRate": 2432,
+        "distanceToCoast": 9.585366992451496
+      },
+      {
+        "latitude": 35.777815,
+        "longitude": 14.352118,
+        "timestamp": 1754665364,
+        "altitude": 6775,
+        "speed": 284.7,
+        "heading": 291.43,
+        "verticalRate": 3648,
+        "distanceToCoast": 10.30856427020503
+      },
+      {
+        "latitude": 35.775814,
+        "longitude": 14.358488,
+        "timestamp": 1754665360,
+        "altitude": 6550,
+        "speed": 285.2,
+        "heading": 291.17,
+        "verticalRate": 3072,
+        "distanceToCoast": 10.604825914418445
+      },
+      {
+        "latitude": 35.768412,
+        "longitude": 14.382564,
+        "timestamp": 1754665343.9,
+        "altitude": 5875,
+        "speed": 275.5,
+        "heading": 289.95,
+        "verticalRate": 1408,
+        "distanceToCoast": 11.930195561384418
+      },
+      {
+        "latitude": 35.762733,
+        "longitude": 14.4022,
+        "timestamp": 1754665330,
+        "altitude": 5600,
+        "speed": 252.4,
+        "heading": 288,
+        "verticalRate": 1856,
+        "distanceToCoast": 12.669390196703148
+      },
+      {
+        "latitude": 35.760269,
+        "longitude": 14.413033,
+        "timestamp": 1754665322,
+        "altitude": 5275,
+        "speed": 248.4,
+        "heading": 279.5,
+        "verticalRate": 2688,
+        "distanceToCoast": 11.912095375570361
+      },
+      {
+        "latitude": 35.761734,
+        "longitude": 14.435291,
+        "timestamp": 1754665306,
+        "altitude": 4500,
+        "speed": 249.7,
+        "heading": 245.39,
+        "verticalRate": 2368,
+        "distanceToCoast": 10.08891339889809
+      },
+      {
+        "latitude": 35.7706,
+        "longitude": 14.454618,
+        "timestamp": 1754665290,
+        "altitude": 4000,
+        "speed": 240.6,
+        "heading": 238.42,
+        "verticalRate": 1920,
+        "distanceToCoast": 8.08848472991081
+      },
+      {
+        "latitude": 35.77991,
+        "longitude": 14.473319,
+        "timestamp": 1754665274,
+        "altitude": 3500,
+        "speed": 240.1,
+        "heading": 238.63,
+        "verticalRate": 1856,
+        "distanceToCoast": 6.109746565136685
+      },
+      {
+        "latitude": 35.78936,
+        "longitude": 14.492252,
+        "timestamp": 1754665258,
+        "altitude": 2800,
+        "speed": 236.7,
+        "heading": 238.12,
+        "verticalRate": 3264,
+        "distanceToCoast": 4.105726932563953
+      },
+      {
+        "latitude": 35.799276,
+        "longitude": 14.509725,
+        "timestamp": 1754665242,
+        "altitude": 2050,
+        "speed": 233.5,
+        "heading": 223.26,
+        "verticalRate": 2176,
+        "distanceToCoast": 2.182901764461611
+      },
+      {
+        "latitude": 35.806119,
+        "longitude": 14.515628,
+        "timestamp": 1754665233.9,
+        "altitude": 1850,
+        "speed": 222.6,
+        "heading": 203.57,
+        "verticalRate": 1024,
+        "distanceToCoast": 1.3659839776855143
+      },
+      {
+        "latitude": 35.813965,
+        "longitude": 14.518261,
+        "timestamp": 1754665225.9,
+        "altitude": 1700,
+        "speed": 207.4,
+        "heading": 183.59,
+        "verticalRate": 1216,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "8964fb",
+    "info": "Reg.no: A6-BLV, Type: B789, Model: BOEING 787-9 Dreamliner",
+    "callsign": "ETD19N",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (462.5 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 36.039439,
+        "longitude": 15.283385,
+        "timestamp": 1754665483.9,
+        "altitude": 39975,
+        "speed": 462.5,
+        "heading": 280.34,
+        "verticalRate": 64,
+        "distanceToCoast": 66.05556181250235
+      },
+      {
+        "latitude": 36.033992,
+        "longitude": 15.320201,
+        "timestamp": 1754665469.5,
+        "altitude": 39975,
+        "speed": 462.5,
+        "heading": 280.34,
+        "verticalRate": 96,
+        "distanceToCoast": 69.07801360379982
+      },
+      {
+        "latitude": 36.02943,
+        "longitude": 15.350764,
+        "timestamp": 1754665457.7,
+        "altitude": 39975,
+        "speed": 462.7,
+        "heading": 280.46,
+        "verticalRate": -160,
+        "distanceToCoast": 71.60983642199902
+      },
+      {
+        "latitude": 36.023239,
+        "longitude": 15.392255,
+        "timestamp": 1754665442,
+        "altitude": 40000,
+        "speed": 462.7,
+        "heading": 280.46,
+        "verticalRate": -64,
+        "distanceToCoast": 75.07764040406042
+      },
+      {
+        "latitude": 36.016983,
+        "longitude": 15.434017,
+        "timestamp": 1754665426,
+        "altitude": 40000,
+        "speed": 462.7,
+        "heading": 280.46,
+        "verticalRate": 160,
+        "distanceToCoast": 77.20175415503373
+      },
+      {
+        "latitude": 36.010941,
+        "longitude": 15.474472,
+        "timestamp": 1754665410,
+        "altitude": 39975,
+        "speed": 462.7,
+        "heading": 280.46,
+        "verticalRate": 160,
+        "distanceToCoast": 79.36118413100755
+      },
+      {
+        "latitude": 36.004532,
+        "longitude": 15.517044,
+        "timestamp": 1754665394,
+        "altitude": 39975,
+        "speed": 462.7,
+        "heading": 280.46,
+        "verticalRate": 0,
+        "distanceToCoast": 81.75676676896441
+      },
+      {
+        "latitude": 35.998993,
+        "longitude": 15.553894,
+        "timestamp": 1754665379.8,
+        "altitude": 39975,
+        "speed": 463.9,
+        "heading": 280.56,
+        "verticalRate": -32,
+        "distanceToCoast": 83.91942766578559
+      },
+      {
+        "latitude": 35.992887,
+        "longitude": 15.594099,
+        "timestamp": 1754665364,
+        "altitude": 40000,
+        "speed": 463.9,
+        "heading": 280.56,
+        "verticalRate": 96,
+        "distanceToCoast": 86.37237695083273
+      },
+      {
+        "latitude": 35.991211,
+        "longitude": 15.604969,
+        "timestamp": 1754665359.8,
+        "altitude": 39975,
+        "speed": 463.9,
+        "heading": 280.56,
+        "verticalRate": -64,
+        "distanceToCoast": 87.05260918946894
+      },
+      {
+        "latitude": 35.985077,
+        "longitude": 15.645676,
+        "timestamp": 1754665344,
+        "altitude": 40000,
+        "speed": 462.9,
+        "heading": 280.58,
+        "verticalRate": 128,
+        "distanceToCoast": 89.63870006342809
+      },
+      {
+        "latitude": 35.979492,
+        "longitude": 15.682468,
+        "timestamp": 1754665330,
+        "altitude": 40000,
+        "speed": 462.9,
+        "heading": 280.58,
+        "verticalRate": 0,
+        "distanceToCoast": 92.04622661942858
+      },
+      {
+        "latitude": 35.976361,
+        "longitude": 15.702911,
+        "timestamp": 1754665322,
+        "altitude": 40000,
+        "speed": 462.9,
+        "heading": 280.58,
+        "verticalRate": -160,
+        "distanceToCoast": 93.4117813846277
+      },
+      {
+        "latitude": 35.970108,
+        "longitude": 15.744095,
+        "timestamp": 1754665306,
+        "altitude": 40000,
+        "speed": 461.9,
+        "heading": 280.6,
+        "verticalRate": 0,
+        "distanceToCoast": 96.20914093791657
+      },
+      {
+        "latitude": 35.963792,
+        "longitude": 15.785717,
+        "timestamp": 1754665290,
+        "altitude": 39975,
+        "speed": 461.9,
+        "heading": 280.6,
+        "verticalRate": 0,
+        "distanceToCoast": 99.10066606684401
+      },
+      {
+        "latitude": 35.957274,
+        "longitude": 15.828085,
+        "timestamp": 1754665273.9,
+        "altitude": 39975,
+        "speed": 462.1,
+        "heading": 280.73,
+        "verticalRate": 0,
+        "distanceToCoast": 102.11266067881486
+      },
+      {
+        "latitude": 35.950974,
+        "longitude": 15.869179,
+        "timestamp": 1754665257.8,
+        "altitude": 40000,
+        "speed": 463.1,
+        "heading": 280.7,
+        "verticalRate": 0,
+        "distanceToCoast": 104.97855926283671
+      },
+      {
+        "latitude": 35.944611,
+        "longitude": 15.910606,
+        "timestamp": 1754665241.6,
+        "altitude": 40000,
+        "speed": 463.1,
+        "heading": 280.7,
+        "verticalRate": 0,
+        "distanceToCoast": 107.87193670495546
+      },
+      {
+        "latitude": 35.941447,
+        "longitude": 15.931052,
+        "timestamp": 1754665233.8,
+        "altitude": 40000,
+        "speed": 463.1,
+        "heading": 280.7,
+        "verticalRate": 0,
+        "distanceToCoast": 109.32199254142654
+      },
+      {
+        "latitude": 35.938248,
+        "longitude": 15.952034,
+        "timestamp": 1754665226,
+        "altitude": 40000,
+        "speed": 462.1,
+        "heading": 280.73,
+        "verticalRate": 0,
+        "distanceToCoast": 110.81904065040864
+      }
+    ]
+  },
+  {
+    "icao": "43ed4b",
+    "info": "Reg.no: 2-WKTJ, Type: B350, Model: BEECHCRAFT Super King Air 350",
+    "callsign": "EAGLE2",
+    "is_monitored": true,
+    "is_loitering": false,
+    "not_monitored_reason": null,
+    "track": [
+      {
+        "latitude": 36.546753,
+        "longitude": 16.531849,
+        "timestamp": 1754665329.8,
+        "altitude": 5875,
+        "speed": 171.5,
+        "heading": 29.7,
+        "verticalRate": 0,
+        "distanceToCoast": 117.51084249484194
+      },
+      {
+        "latitude": 36.541351,
+        "longitude": 16.528015,
+        "timestamp": 1754665322,
+        "altitude": 5875,
+        "speed": 171.5,
+        "heading": 29.7,
+        "verticalRate": 0,
+        "distanceToCoast": 117.46534973847588
+      },
+      {
+        "latitude": 36.529541,
+        "longitude": 16.519775,
+        "timestamp": 1754665305.6,
+        "altitude": 5875,
+        "speed": 171.5,
+        "heading": 29.7,
+        "verticalRate": 0,
+        "distanceToCoast": 117.39116963086286
+      },
+      {
+        "latitude": 36.519196,
+        "longitude": 16.512508,
+        "timestamp": 1754665290,
+        "altitude": 5875,
+        "speed": 171.9,
+        "heading": 29.25,
+        "verticalRate": 0,
+        "distanceToCoast": 117.33793672477088
+      },
+      {
+        "latitude": 36.508127,
+        "longitude": 16.504854,
+        "timestamp": 1754665274,
+        "altitude": 5875,
+        "speed": 171.9,
+        "heading": 29.25,
+        "verticalRate": 0,
+        "distanceToCoast": 117.30681165744924
+      },
+      {
+        "latitude": 36.496902,
+        "longitude": 16.497116,
+        "timestamp": 1754665258,
+        "altitude": 5875,
+        "speed": 171.9,
+        "heading": 29.25,
+        "verticalRate": 0,
+        "distanceToCoast": 117.29417017468656
+      },
+      {
+        "latitude": 36.485549,
+        "longitude": 16.48931,
+        "timestamp": 1754665242,
+        "altitude": 5875,
+        "speed": 171.8,
+        "heading": 28.5,
+        "verticalRate": 0,
+        "distanceToCoast": 117.30040911397892
+      },
+      {
+        "latitude": 36.479963,
+        "longitude": 16.485453,
+        "timestamp": 1754665233.9,
+        "altitude": 5875,
+        "speed": 172.4,
+        "heading": 29.54,
+        "verticalRate": 0,
+        "distanceToCoast": 117.30865496564553
+      },
+      {
+        "latitude": 36.474472,
+        "longitude": 16.481609,
+        "timestamp": 1754665225.7,
+        "altitude": 5875,
+        "speed": 172.3,
+        "heading": 28.8,
+        "verticalRate": 0,
+        "distanceToCoast": 117.31683999445475
+      }
+    ]
+  },
+  {
+    "icao": "4cae61",
+    "info": "Reg.no: EI-IJL, Type: B38M, Model: BOEING 737 MAX 8",
+    "callsign": "RYR966W",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft is over land or too close to coast.",
+    "track": [
+      {
+        "latitude": 35.856617,
+        "longitude": 14.480915,
+        "timestamp": 1754665470,
+        "altitude": 0,
+        "speed": 0.1,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.856617,
+        "longitude": 14.481149,
+        "timestamp": 1754665456.6,
+        "altitude": 0,
+        "speed": 4.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.856617,
+        "longitude": 14.481525,
+        "timestamp": 1754665441.8,
+        "altitude": 0,
+        "speed": 6.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.85656,
+        "longitude": 14.482026,
+        "timestamp": 1754665425.5,
+        "altitude": 0,
+        "speed": 5.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.85614,
+        "longitude": 14.482143,
+        "timestamp": 1754665410,
+        "altitude": 0,
+        "speed": 8.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.855541,
+        "longitude": 14.482656,
+        "timestamp": 1754665394,
+        "altitude": 0,
+        "speed": 15.5,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.854731,
+        "longitude": 14.483662,
+        "timestamp": 1754665378.3,
+        "altitude": 0,
+        "speed": 15.5,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.853882,
+        "longitude": 14.48473,
+        "timestamp": 1754665363.9,
+        "altitude": 0,
+        "speed": 20.5,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.853614,
+        "longitude": 14.485065,
+        "timestamp": 1754665359.8,
+        "altitude": 0,
+        "speed": 19.5,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.852737,
+        "longitude": 14.486146,
+        "timestamp": 1754665343.3,
+        "altitude": 0,
+        "speed": 14.8,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.852159,
+        "longitude": 14.486862,
+        "timestamp": 1754665330,
+        "altitude": 0,
+        "speed": 11.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851902,
+        "longitude": 14.487176,
+        "timestamp": 1754665321.9,
+        "altitude": 0,
+        "speed": 7.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.851752,
+        "longitude": 14.48768,
+        "timestamp": 1754665305.2,
+        "altitude": 0,
+        "speed": 5.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      },
+      {
+        "latitude": 35.852124,
+        "longitude": 14.48806,
+        "timestamp": 1754665289.8,
+        "altitude": 0,
+        "speed": 4.2,
+        "heading": 0,
+        "verticalRate": 0,
+        "distanceToCoast": 0
+      }
+    ]
+  },
+  {
+    "icao": "0a0019",
+    "info": "Reg.no: 7T-VJK, Type: B738, Model: BOEING 737-800",
+    "callsign": "DAH4039",
+    "is_monitored": false,
+    "is_loitering": false,
+    "not_monitored_reason": "Aircraft speed (442.5 knots) is too fast (maximum: 300 knots).",
+    "track": [
+      {
+        "latitude": 35.546963,
+        "longitude": 16.661526,
+        "timestamp": 1754665484,
+        "altitude": 36000,
+        "speed": 442.5,
+        "heading": 278.19,
+        "verticalRate": 0,
+        "distanceToCoast": 186.6297068113673
+      },
+      {
+        "latitude": 35.542913,
+        "longitude": 16.696297,
+        "timestamp": 1754665470,
+        "altitude": 36000,
+        "speed": 442.5,
+        "heading": 278.19,
+        "verticalRate": 0,
+        "distanceToCoast": 189.23441594190928
+      },
+      {
+        "latitude": 35.539078,
+        "longitude": 16.728745,
+        "timestamp": 1754665457.7,
+        "altitude": 36000,
+        "speed": 442.5,
+        "heading": 278.19,
+        "verticalRate": 0,
+        "distanceToCoast": 191.68440478344635
+      },
+      {
+        "latitude": 35.53458,
+        "longitude": 16.766656,
+        "timestamp": 1754665441.8,
+        "altitude": 36000,
+        "speed": 442.7,
+        "heading": 278.31,
+        "verticalRate": 0,
+        "distanceToCoast": 194.56582869385193
+      },
+      {
+        "latitude": 35.529878,
+        "longitude": 16.806043,
+        "timestamp": 1754665426,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 197.58084724393902
+      },
+      {
+        "latitude": 35.525176,
+        "longitude": 16.845372,
+        "timestamp": 1754665410,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 200.6106399489219
+      },
+      {
+        "latitude": 35.520493,
+        "longitude": 16.884727,
+        "timestamp": 1754665394,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 203.65872965947815
+      },
+      {
+        "latitude": 35.516281,
+        "longitude": 16.919804,
+        "timestamp": 1754665379.8,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 206.39265699866715
+      },
+      {
+        "latitude": 35.511444,
+        "longitude": 16.95991,
+        "timestamp": 1754665363.7,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 209.53598102534858
+      },
+      {
+        "latitude": 35.510376,
+        "longitude": 16.968784,
+        "timestamp": 1754665360,
+        "altitude": 36000,
+        "speed": 441.7,
+        "heading": 278.33,
+        "verticalRate": 0,
+        "distanceToCoast": 210.23354986595558
       }
     ]
   }

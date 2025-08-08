@@ -9,6 +9,7 @@ function generateAircraft(points: Position[]): Aircraft {
     return {
         icao: 'TEST123',
         callsign: 'TEST',
+        info: 'Test aircraft for loitering detection',
         is_monitored: true,
         is_loitering: false,
         not_monitored_reason: null,
@@ -33,6 +34,7 @@ function generateAircraftWithCustomParams(points: Position[], altitude: number, 
     return {
         icao: 'TEST123',
         callsign: 'TEST',
+        info: 'Test aircraft for loitering detection with custom params',
         is_monitored: true,
         is_loitering: false,
         not_monitored_reason: null,

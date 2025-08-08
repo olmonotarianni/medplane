@@ -18,6 +18,7 @@ function createLoiteringAircraft(): Aircraft {
     return {
         icao: "LOITER1",
         callsign: "TEST123",
+        info: "Test loitering aircraft for event creation",
         is_monitored: true,
         is_loitering: false,
         not_monitored_reason: null,

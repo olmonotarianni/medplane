@@ -64,7 +64,12 @@ export class AircraftScanner {
             if (fs.existsSync(AIRCRAFT_FILE)) {
                 const data = fs.readFileSync(AIRCRAFT_FILE, 'utf-8');
                 const arr: Aircraft[] = JSON.parse(data);
-                this.aircraft = new Map(arr.map(ac => [ac.icao, ac]));
+                // Ensure all aircraft have the info field
+                const processedArr = arr.map(ac => ({
+                    ...ac,
+                    info: ac.info || 'Aircraft information not available'
+                }));
+                this.aircraft = new Map(processedArr.map(ac => [ac.icao, ac]));
                 logger.info(`Loaded ${arr.length} aircraft states from disk.`);
             }
         } catch (err) {
@@ -167,6 +172,7 @@ export class AircraftScanner {
                 this.saveAircraftToDisk();
             }
             tracked.callsign = aircraft.callsign;
+            tracked.info = aircraft.info;
         }
 
         // Analyze aircraft with the analyzer

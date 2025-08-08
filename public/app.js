@@ -185,6 +185,7 @@ function updateAircraft(data) {
         // Add popup with more detailed information
         marker.bindPopup(`
             <h3>${ac.callsign || 'Unknown'} (${ac.icao})</h3>
+            ${ac.info ? `<p><b>Aircraft Info:</b> ${ac.info}</p>` : ''}
             <p>Position: ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
             <p>Altitude: ${latest.altitude}ft</p>
             <p>Speed: ${latest.speed}kts</p>
@@ -290,6 +291,7 @@ function updateAircraftList(aircraft) {
                 </span>
             </div>
             <div class="aircraft-details">
+                ${ac.info ? `<p><b>Aircraft Info:</b> ${ac.info}</p>` : ''}
                 <p><b>Position:</b> ${latest.latitude?.toFixed(4)}, ${latest.longitude?.toFixed(4)}</p>
                 <p><b>Heading:</b> ${latest.heading ?? '?'}°</p>
                 <p><b>Vertical Rate:</b> ${latest.verticalRate ?? '?'} ft/min</p>
