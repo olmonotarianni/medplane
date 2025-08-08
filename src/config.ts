@@ -1,9 +1,9 @@
 // Sicily Channel monitoring area bounds
 export const SICILY_CHANNEL_BOUNDS = {
-    minLat: 33,
-    maxLat: 38,
-    minLon: 10,
-    maxLon: 18
+    minLat: 32.2429767,
+    maxLat: 36.5500941,
+    minLon: 10.0583451,
+    maxLon: 16.9922709
 } as const;
 
 // Aircraft monitoring thresholds
